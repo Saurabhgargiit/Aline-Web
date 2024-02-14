@@ -1,0 +1,49 @@
+//@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.font400 {
+  font-weight: 400;
+}
+
+.font600 {
+  font-weight: 600;
+}
+
+.font500 {
+  font-weight: 500;
+}
+
+.font700 {
+  font-weight: 700;
+}
+
+$sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
+
+@each $size in $sizes {
+  .font#{$size} {
+    font-size: #{$size}px;
+  }
+}
+
+//@@@@@@@@@@@@@@@@width@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.w-75 {
+  width: 75%;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.w-25 {
+  width: 25%;
+}
+
+//@@@@@@@@@@colors@@@@@@@@@@@@@@@@@@@@@@@
+
+$icon-color: #5f6368;
+$primaryText: #202124;
+$secondaryText: #3c4043;
+$backgroundheaderfooterColor: #01acc1;
+$backgroundhovering: #ffffff14;
+$primaryBorderSuttle: #dee2e6;
+$inputFieldBorder: #bdc1c6;

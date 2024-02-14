@@ -1,0 +1,28 @@
+@import "../../styles/styles.scss";
+
+.home-page-button-pos {
+    position: fixed;
+    right: 20px;
+    bottom: 70px;
+
+    .home-page-add-button {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $backgroundheaderfooterColor;
+
+        svg {
+            fill: white;
+            width: 26px;
+            height: 26px;
+
+            path {
+                stroke-width: 1.5;
+            }
+        }
+    }
+}
