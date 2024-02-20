@@ -8,8 +8,8 @@ function TreatmentInputs() {
     setName(() => value);
   };
   return (
-    <div className='patientDetailsTopContainer'>
-      <div className='patientDetailsContainer'>
+    <div className='patientAddEditTopContainer'>
+      <div className='patientAddEditContainer'>
         <div className='patient-detials-input-fields'>
           <label htmlFor='treatment-notes'>Treatment Notes-IPR,attachement,others</label>
           <input id='treatment-notes' type='text'></input>

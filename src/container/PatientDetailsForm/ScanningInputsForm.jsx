@@ -8,8 +8,8 @@ function ScanningInputsForm() {
     setName(() => value);
   };
   return (
-    <div className='patientDetailsTopContainer'>
-      <div className='patientDetailsContainer'>
+    <div className='patientAddEditTopContainer'>
+      <div className='patientAddEditContainer'>
         <div className='patient-detials-input-fields'>
           <label htmlFor='scanning-date'>Date of Scanning*</label>
           <input id='scanning-date' type='date'></input>
@@ -20,12 +20,7 @@ function ScanningInputsForm() {
         </div>
         <div className='patient-detials-input-fields'>
           <label htmlFor='patient-name'>Patient Name*</label>
-          <input
-            id='patient-name'
-            type='text'
-            value={name}
-            onChange={nameChangeHandler}
-          />
+          <input id='patient-name' type='text' value={name} onChange={nameChangeHandler} />
         </div>
         <div className='patient-detials-input-fields'>
           <label>Patient Photo</label>

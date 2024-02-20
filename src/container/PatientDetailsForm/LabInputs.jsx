@@ -8,8 +8,8 @@ function LabInputs() {
     setName(() => value);
   };
   return (
-    <div className='patientDetailsTopContainer'>
-      <div className='patientDetailsContainer'>
+    <div className='patientAddEditTopContainer'>
+      <div className='patientAddEditContainer'>
         <div className='patient-detials-input-fields'>
           <label htmlFor='upper-aligner-sets-no'>No. of Aligner Sets-Upper</label>
           <input id='upper-aligner-sets-no' type='number'></input>
