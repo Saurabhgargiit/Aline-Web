@@ -1,6 +1,6 @@
 @import '../../styles/styles.scss';
 
-.patientDetailsTopContainer {
+.patientAddEditTopContainer {
   position: relative;
   top: 56px;
   margin-bottom: 112px;
@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: center;
 
-  .patientDetailsContainer {
+  .patientAddEditContainer {
     width: 600px;
     border: 0.5px solid $primaryBorderSuttle;
     border-top: none;
