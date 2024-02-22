@@ -1,0 +1,13 @@
+.side-section-layout {
+    z-index: 999;
+    background-color: #fff;
+    height: 100%;
+    max-width: 375px;
+    width: 85%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    .side-section-container {
+        // width: 100%;
+    }
+}
