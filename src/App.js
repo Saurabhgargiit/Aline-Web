@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import './styles/styles.scss';
@@ -8,18 +9,21 @@ import HomeLayout from './container/Home/HomeLayout';
 import { useSelector } from 'react-redux';
 import PatientDetailsAddEditLayout from './container/PatientDetailsForm/PatientDetailsAddEditLayout';
 import PatientDetailsLayout from './container/PatientDetails/PatientDetailsLayout';
-import SideSectionLayout from './container/SideSection/SideSectionLayout';
 import Loader from './container/common/Loader/Loader';
+import Routers from './routers/routers';
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(true);
     return (
         <>
-            {/* <PatientDetailsAddEditLayout /> */}
-            {/* <PatientDetailsLayout /> */}
-            <Loader />
-            {loggedIn ? <HomeLayout /> : <LoginForm />}
-            <SideSectionLayout />
+            <BrowserRouter>
+                {/* <PatientDetailsAddEditLayout /> */}
+                {/* <PatientDetailsLayout /> */}
+                {/* <Loader /> */}
+                {/* <HomeLayout /> */}
+                {loggedIn ? <Routers /> : <LoginForm />}
+                {/* <SideSectionLayout /> */}
+            </BrowserRouter>
         </>
     );
 }
