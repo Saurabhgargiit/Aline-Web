@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './SideSectionLayout.scss';
 
-const SideSectionLayout = () => {
+const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
+    if (!open) return null;
     return (
         <div className='side-section-modal-container'>
             <aside className='side-section-layout'>
@@ -14,10 +15,14 @@ const SideSectionLayout = () => {
                     <nav className='side-links'>
                         <ul>
                             <li className='side-patients-link'>
-                                <Link to={'/home'}>Patient Details</Link>
+                                <Link to={'/home'} onClick={() => sideSectionShowHandler()}>
+                                    Patient Details
+                                </Link>
                             </li>
                             <li className='admin-link'>
-                                <Link to={'/home'}>Admin</Link>
+                                <Link to={'/admin'} onClick={() => sideSectionShowHandler()}>
+                                    Admin
+                                </Link>
                             </li>
                         </ul>
                     </nav>

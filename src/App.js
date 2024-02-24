@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import PatientDetailsAddEditLayout from './container/PatientDetailsForm/PatientDetailsAddEditLayout';
 import PatientDetailsLayout from './container/PatientDetails/PatientDetailsLayout';
 import Loader from './container/common/Loader/Loader';
-import Routers from './routers/routers';
+import SiteLayout from './container/SiteLayout/SiteLayout';
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(true);
@@ -21,7 +21,7 @@ function App() {
                 {/* <PatientDetailsLayout /> */}
                 {/* <Loader /> */}
                 {/* <HomeLayout /> */}
-                {loggedIn ? <Routers /> : <LoginForm />}
+                {loggedIn ? <SiteLayout /> : <LoginForm />}
                 {/* <SideSectionLayout /> */}
             </BrowserRouter>
         </>
