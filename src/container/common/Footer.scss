@@ -1,11 +1,11 @@
 @import '../../styles/styles.scss';
 
 .app-footer {
-    // bottom: 56px;
-    width: 100%;
-    height: 56px;
-    background-color: $backgroundheaderfooterColor;
-    position: fixed;
-    bottom: 0;
-    z-index: 999;
+  // bottom: 56px;
+  width: 100%;
+  height: 56px;
+  background-color: $backgroundheaderfooterColor;
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
 }

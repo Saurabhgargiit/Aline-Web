@@ -5,15 +5,13 @@ import PatientDetailsContainer from './PatientDetailsContainer';
 import './PatientDetailsLayout.scss';
 
 function PatientDetailsLayout() {
-  return (
-    <>
-      <Header title={'Patient Details'} />
-      <div className='patientDetailsLayout'>
-        <PatientDetailsContainer />
-      </div>
-      <Footer />
-    </>
-  );
+    return (
+        <>
+            <div className='patientDetailsLayout'>
+                <PatientDetailsContainer />
+            </div>
+        </>
+    );
 }
 
 export default PatientDetailsLayout;
