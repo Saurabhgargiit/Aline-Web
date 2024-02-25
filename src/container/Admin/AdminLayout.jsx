@@ -1,36 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import UserList from './UserList';
-import { Modal, ModalContent, ModalHeader, ModalFooter } from '../../components/Modal/Modal';
-import AddClinic from './AddClinic';
-import './AddClinic.scss';
+import AddClinicLayout from './AddClinic/AddClinicLayout';
+import { AddClinicContextProvider } from './AddClinic/Context/AddClinicContext';
+import AdminHeaderBar from './AdminHeaderBar/AdminHeaderBar';
 
 const AdminLayout = () => {
-    const [open, setOpen] = useState(false);
-    const addClinicHandler = () => {
-        setOpen((prevState) => !prevState);
-    };
-    const closeModalHandler = () => {
-        setOpen((prevState) => !prevState);
-    };
-
-    const createUserHandler = () => {};
     return (
-        <div className='top-bottom-position-container'>
-            <button onClick={addClinicHandler}>Add Clinic</button>
-            <UserList />
-            <Modal className='add-clinic-box' open={open}>
-                <ModalHeader title={'Add/Edit Clinic'} />
-                <ModalContent>
-                    <AddClinic />
-                </ModalContent>
-                <ModalFooter
-                    onClose={closeModalHandler}
-                    onSubmit={createUserHandler}
-                    close={'Close'}
-                    submit={'Create'}
-                />
-            </Modal>
-        </div>
+        <AddClinicContextProvider>
+            <div className='top-bottom-position-container'>
+                <AdminHeaderBar />
+                <UserList />
+                <AddClinicLayout />
+            </div>
+        </AddClinicContextProvider>
     );
 };
 

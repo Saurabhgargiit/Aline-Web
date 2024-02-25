@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../Button/Button';
 import './Modal.scss';
 
 export const Modal = ({ open, onClose, children, className }) => {
@@ -22,8 +23,8 @@ export const ModalContent = ({ children }) => {
 export const ModalFooter = ({ onClose, close, onSubmit, submit }) => {
     return (
         <div className='modalfooter p-4'>
-            <button onClick={onClose}>{close}</button>
-            <button onClick={onSubmit}>{submit}</button>
+            <Button onClickCallBk={onClose} title={close} />
+            <Button onClickCallBk={onSubmit} title={submit} type={'primary'} />
         </div>
     );
 };

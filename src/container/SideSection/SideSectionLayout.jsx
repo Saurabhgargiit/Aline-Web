@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './SideSectionLayout.scss';
+import Button from '../../components/Button/Button';
 
 const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
     if (!open) return null;
@@ -28,7 +29,7 @@ const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
                     </nav>
                     <div className='side-logout-container'>
                         <div className='side-email'>saurabhgarg.iitbhu@gmail.com</div>
-                        <button className='side-logout'>Logout</button>
+                        <Button title={'Logout'} />
                     </div>
                 </div>
             </aside>

@@ -7,8 +7,16 @@ $backgroundheaderfooterColor: #01acc1;
 $backgroundhovering: #ffffff14;
 $primaryBorderSuttle: #dee2e6;
 $inputFieldBorder: #bdc1c6;
+$rowBorderColor: #5f63684d;
+$whiteColor: #fff;
 
-$rowBorder: 1px solid #5f63684d;
+//Btn Colors
+$neutralBtnColor: #fff;
+$neutralBtnColorHover: #f0f0f5;
+$primaryBtnColor: $backgroundheaderfooterColor;
+$primaryBtnColorHover: #029aae;
+
+$rowBorder: 1px solid $rowBorderColor;
 
 //@@@@@@@ Common classes@@@@
 
@@ -49,7 +57,7 @@ $rowBorder: 1px solid #5f63684d;
 }
 
 .row-border {
-    border-bottom: 1px solid #5f63684d;
+    border-bottom: $rowBorder;
 }
 
 .displayFlex {
