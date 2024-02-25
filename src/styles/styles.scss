@@ -1,3 +1,15 @@
+//@@@@@@@@@@colors@@@@@@@@@@@@@@@@@@@@@@@
+
+$icon-color: #5f6368;
+$primaryText: #202124;
+$secondaryText: #3c4043;
+$backgroundheaderfooterColor: #01acc1;
+$backgroundhovering: #ffffff14;
+$primaryBorderSuttle: #dee2e6;
+$inputFieldBorder: #bdc1c6;
+
+$rowBorder: 1px solid #5f63684d;
+
 //@@@@@@@ Common classes@@@@
 
 .top-bottom-position-container {
@@ -18,6 +30,18 @@
     min-width: 100%;
 }
 
+.label-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+    input {
+        height: 2rem;
+        border: 1px solid $inputFieldBorder;
+        border-radius: 4px;
+    }
+}
+
 .center-position {
     display: flex;
     align-items: center;
@@ -25,8 +49,9 @@
 }
 
 .row-border {
-    border-bottom: 1px solid rgba(95, 99, 104, 0.3);
+    border-bottom: 1px solid #5f63684d;
 }
+
 .displayFlex {
     display: flex;
 }
@@ -83,12 +108,3 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
     justify-content: center;
     align-items: center;
 }
-//@@@@@@@@@@colors@@@@@@@@@@@@@@@@@@@@@@@
-
-$icon-color: #5f6368;
-$primaryText: #202124;
-$secondaryText: #3c4043;
-$backgroundheaderfooterColor: #01acc1;
-$backgroundhovering: #ffffff14;
-$primaryBorderSuttle: #dee2e6;
-$inputFieldBorder: #bdc1c6;
