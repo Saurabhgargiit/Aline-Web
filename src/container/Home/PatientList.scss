@@ -1,62 +1,53 @@
 @import '../../styles/styles.scss';
 
-.patientList {
-    position: relative;
-    top: 56px;
-    margin-bottom: 112px;
+.home-row-container {
+    gap: 0.75rem;
 
+    .img-container {
+        padding: 4px;
 
-    .row-container {
-        display: flex;
-        gap: 0.75rem;
-        border-bottom: 1px solid rgba(95, 99, 104, 0.3);
+        img {
+            width: 70px;
+            height: 70px;
+            border: 1px solid black;
+            border-radius: 2px;
+        }
+    }
 
-        .img-container {
-            padding: 4px;
+    .home-page-name-date {
+        width: 40%;
 
-            img {
-                width: 70px;
-                height: 70px;
-                border: 1px solid black;
-                border-radius: 2px;
+        .home-page-name {
+        }
+
+        .home-page-date {
+        }
+    }
+
+    .home-status {
+        margin: 0 auto;
+    }
+
+    .home-page-count {
+        color: $secondaryText;
+        text-align: right;
+        margin-right: 0.6rem;
+    }
+
+    .home-page-icons {
+        svg {
+            width: 20px;
+            height: auto;
+            margin: 0.6rem;
+
+            path {
+                fill: $icon-color;
             }
         }
 
-        .home-page-name-date {
-            width: 40%;
-
-            .home-page-name {}
-
-            .home-page-date {}
-        }
-
-        .home-status {
-            margin: 0 auto;
-
-        }
-
-        .home-page-count {
-            color: $secondaryText;
-            text-align: right;
-            margin-right: 0.6rem;
-
-        }
-
-        .home-page-icons {
-            svg {
-                width: 20px;
-                height: auto;
-                margin: 0.6rem;
-
-                path {
-                    fill: $icon-color;
-                }
-            }
-
-            .home-page-play {
-                width: 1.75rem;
-                margin-right: 0.3rem;
-            }
+        .home-page-play {
+            width: 1.75rem;
+            margin-right: 0.3rem;
         }
     }
 }

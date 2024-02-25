@@ -12,12 +12,10 @@ const SiteLayout = () => {
 
     return (
         <>
-            {
-                <SideSectionLayout
-                    open={showSideSection}
-                    sideSectionShowHandler={sideSectionShowHandler}
-                />
-            }
+            <SideSectionLayout
+                open={showSideSection}
+                sideSectionShowHandler={sideSectionShowHandler}
+            />
             <Header leftBtnHanlder={sideSectionShowHandler} />
             <Routers />
             <Footer />

@@ -5,7 +5,7 @@ import './SideSectionLayout.scss';
 const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
     if (!open) return null;
     return (
-        <div className='side-section-modal-container'>
+        <div className='modal-container displayFlex'>
             <aside className='side-section-layout'>
                 <div className='side-section-container'>
                     <div className='side-logo-and-web-name'>
@@ -20,7 +20,7 @@ const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
                                 </Link>
                             </li>
                             <li className='admin-link'>
-                                <Link to={'/admin'} onClick={() => sideSectionShowHandler()}>
+                                <Link to={'/users'} onClick={() => sideSectionShowHandler()}>
                                     Admin
                                 </Link>
                             </li>

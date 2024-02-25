@@ -70,7 +70,7 @@ const obj = [
 
 const PatientList = () => {
     const patientList = obj.map((el, i) => (
-        <div className='row-container' key={i}>
+        <div className='displayFlex home-row-container row-border' key={i}>
             <div className='img-container'>
                 <img src='https://d2rdbjk9w0dffy.cloudfront.net/assets/anonymous-user.jpeg'></img>
             </div>
@@ -97,9 +97,8 @@ const PatientList = () => {
             </div>
         </div>
     ));
-    console.log(patientList);
 
-    return <div className='patientList'>{patientList}</div>;
+    return <div className='top-bottom-position-container'>{patientList}</div>;
 };
 
 export default PatientList;

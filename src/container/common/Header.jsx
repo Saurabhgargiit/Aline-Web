@@ -13,7 +13,7 @@ const Header = ({ title, leftBtnHanlder }) => {
     const location = useLocation();
 
     const headerDetailsFn = () => {
-        if (location.pathname === '/home' || location.pathname === '/admin') {
+        if (location.pathname === '/home' || location.pathname === '/users') {
             setHeaderDetails((prevState) => {
                 return {
                     ...prevState,
@@ -23,7 +23,7 @@ const Header = ({ title, leftBtnHanlder }) => {
                             src={require('../../assets/icons/menuList.svg').default}
                         />
                     ),
-                    title: location.pathname === '/home' ? 'Patient Details' : 'Admin',
+                    title: location.pathname === '/home' ? 'Patient Details' : 'Users',
                 };
             });
             return;
