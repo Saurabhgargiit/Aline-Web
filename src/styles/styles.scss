@@ -5,10 +5,13 @@ $primaryText: #202124;
 $secondaryText: #3c4043;
 $backgroundheaderfooterColor: #01acc1;
 $backgroundhovering: #ffffff14;
-$primaryBorderSuttle: #dee2e6;
+$whiteColor: #fff;
+
+//Borders
+$darkBorder: #9c9db5;
 $inputFieldBorder: #bdc1c6;
 $rowBorderColor: #5f63684d;
-$whiteColor: #fff;
+$primaryBorderSuttle: #dee2e6;
 
 //Btn Colors
 $neutralBtnColor: #fff;
@@ -62,6 +65,14 @@ $rowBorder: 1px solid $rowBorderColor;
 
 .displayFlex {
     display: flex;
+}
+
+.noDisplay {
+    display: none;
+}
+
+.noVisible {
+    visibility: hidden;
 }
 
 //@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@
