@@ -1,13 +1,13 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import HomeLayout from '../container/Home/HomeLayout';
-import Admin from '../container/Admin/Admin';
+import AdminLayout from '../container/Admin/AdminLayout';
 
 const Routers = () => {
     return (
         <Routes>
             <Route path='/' element={<Navigate to={'/home'} />} />
             <Route path='/home' element={<HomeLayout />} />
-            <Route path='/admin' element={<Admin />} />
+            <Route path='/users' element={<AdminLayout />} />
         </Routes>
     );
 };

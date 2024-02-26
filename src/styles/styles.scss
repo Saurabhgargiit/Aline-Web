@@ -1,3 +1,80 @@
+//@@@@@@@@@@colors@@@@@@@@@@@@@@@@@@@@@@@
+
+$icon-color: #5f6368;
+$primaryText: #202124;
+$secondaryText: #3c4043;
+$backgroundheaderfooterColor: #01acc1;
+$backgroundhovering: #ffffff14;
+$whiteColor: #fff;
+
+//Borders
+$darkBorder: #9c9db5;
+$inputFieldBorder: #bdc1c6;
+$rowBorderColor: #5f63684d;
+$primaryBorderSuttle: #dee2e6;
+
+//Btn Colors
+$neutralBtnColor: #fff;
+$neutralBtnColorHover: #f0f0f5;
+$primaryBtnColor: $backgroundheaderfooterColor;
+$primaryBtnColorHover: #029aae;
+
+$rowBorder: 1px solid $rowBorderColor;
+
+//@@@@@@@ Common classes@@@@
+
+.top-bottom-position-container {
+    position: relative;
+    top: 56px;
+    margin-bottom: 112px;
+}
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(38, 39, 59, 0.8);
+    z-index: 1300;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.label-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+    input {
+        height: 2rem;
+        border: 1px solid $inputFieldBorder;
+        border-radius: 4px;
+    }
+}
+
+.center-position {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-border {
+    border-bottom: $rowBorder;
+}
+
+.displayFlex {
+    display: flex;
+}
+
+.noDisplay {
+    display: none;
+}
+
+.noVisible {
+    visibility: hidden;
+}
+
 //@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .font400 {
@@ -50,12 +127,3 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
     justify-content: center;
     align-items: center;
 }
-//@@@@@@@@@@colors@@@@@@@@@@@@@@@@@@@@@@@
-
-$icon-color: #5f6368;
-$primaryText: #202124;
-$secondaryText: #3c4043;
-$backgroundheaderfooterColor: #01acc1;
-$backgroundhovering: #ffffff14;
-$primaryBorderSuttle: #dee2e6;
-$inputFieldBorder: #bdc1c6;

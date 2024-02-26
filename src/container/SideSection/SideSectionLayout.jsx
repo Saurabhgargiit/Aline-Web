@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './SideSectionLayout.scss';
+import Button from '../../components/Button/Button';
 
 const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
     if (!open) return null;
     return (
-        <div className='side-section-modal-container'>
+        <div className='modal-container displayFlex'>
             <aside className='side-section-layout'>
                 <div className='side-section-container'>
                     <div className='side-logo-and-web-name'>
@@ -20,7 +21,7 @@ const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
                                 </Link>
                             </li>
                             <li className='admin-link'>
-                                <Link to={'/admin'} onClick={() => sideSectionShowHandler()}>
+                                <Link to={'/users'} onClick={() => sideSectionShowHandler()}>
                                     Admin
                                 </Link>
                             </li>
@@ -28,7 +29,7 @@ const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
                     </nav>
                     <div className='side-logout-container'>
                         <div className='side-email'>saurabhgarg.iitbhu@gmail.com</div>
-                        <button className='side-logout'>Logout</button>
+                        <Button title={'Logout'} />
                     </div>
                 </div>
             </aside>
