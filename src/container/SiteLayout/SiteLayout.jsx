@@ -5,7 +5,7 @@ import Footer from '../common/Footer';
 import Header from '../common/Header';
 import WithRouter from '../../hoc/withRouter';
 
-const SiteLayout = () => {
+const SiteLayout = ({ location, navigate }) => {
     const [showSideSection, setShowSideSection] = useState(false);
     const sideSectionShowHandler = useCallback(() => {
         setShowSideSection((prevState) => !prevState);

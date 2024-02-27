@@ -1,5 +1,5 @@
 import * as actionTypes from '../actionTypes';
-import { ApiRelativePaths } from '../../utils/globalURLs';
+import { ApiRelativePaths, _agent } from '../../utils/globalURLs';
 import axios from 'axios';
 
 const userUpdate = (userData) => {
@@ -22,10 +22,15 @@ const login = (loginData) => {
 
 export const getLoginData = (url_path, data) => {
     return (dispatch) => {
-        const urlPath = ApiRelativePaths[url_path];
-
+        const path = ApiRelativePaths[url_path];
+        // const generatedURL = _agent + path;
+        axios.defaults.baseURL = 'http://localhost:3001';
         axios
-            .post(urlPath, data)
+            .post(path, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
             .then((res) => {
                 data = {
                     result: 'success',
@@ -39,7 +44,7 @@ export const getLoginData = (url_path, data) => {
                 };
             })
             .then(() => {
-                dispatch(loginAction(data));
+                dispatch(loginAction(true));
             });
     };
 };
