@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 
-import { getLoginData } from '../../../store/actions/loginaction';
+import { getLoginData, loginAction } from '../../../store/actions/loginaction';
 import Loader from '../../common/Loader/Loader';
 import { ApiRelativePaths } from '../../../utils/globalURLs';
 import './LoginForm.scss';
@@ -37,7 +37,7 @@ const LoginForm = () => {
         };
 
         // dispatch(getLoginData('LOGIN_PATH', data));
-        // dispatch(loginAction(true));
+        dispatch(loginAction(true));
     };
 
     const submitHandler = (e) => {

@@ -10,6 +10,7 @@ const userUpdate = (userData) => {
 };
 
 export const loginAction = (loginInfo) => {
+    console.log(loginInfo);
     return {
         type: actionTypes.LOGIN,
         data: loginInfo,

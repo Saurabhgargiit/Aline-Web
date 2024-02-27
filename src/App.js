@@ -13,27 +13,27 @@ import { IS_AUTHENTICATED } from './utils/globalConstants';
 import { loginAction } from './store/actions/loginaction';
 
 function App() {
-    // const dispatch = useDispatch();
-    // const redCtx = useSelector((state) => state.login); //reduxContext
-    const [loggedIn, setLoggedIn] = useState(false);
+    const dispatch = useDispatch();
+    const redCtx = useSelector((state) => state); //reduxContext
+    // const [loggedIn, setLoggedIn] = useState(false);
 
-    // useEffect(() => {
-    //     if (
-    //         !!localStorage.getItem(IS_AUTHENTICATED) ||
-    //         localStorage.getItem(IS_AUTHENTICATED) === 'false'
-    //     ) {
-    //         dispatch(loginAction(false));
-    //     } else if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
-    //         dispatch(loginAction(true));
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (
+            !!localStorage.getItem(IS_AUTHENTICATED) ||
+            localStorage.getItem(IS_AUTHENTICATED) === 'false'
+        ) {
+            dispatch(loginAction(false));
+        } else if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
+            dispatch(loginAction(true));
+        }
+    }, []);
 
     return (
         <>
             <BrowserRouter>
                 {/* <Loader /> */}
 
-                {loggedIn ? <SiteLayout /> : <Authentication />}
+                {redCtx.loggedIn ? <SiteLayout /> : <Authentication />}
             </BrowserRouter>
         </>
     );

@@ -7,17 +7,17 @@ import WithRouter from '../../hoc/withRouter';
 import { clearStorage } from '../../utils/commonfunctions/commonfunctions';
 
 function Authentication({ location, navigate }) {
-    // useEffect(() => {
-    //     if (
-    //         !localStorage.getItem(IS_AUTHENTICATED) ||
-    //         localStorage.getItem(IS_AUTHENTICATED) === 'false'
-    //     ) {
-    //         clearStorage();
-    //         if (location.pathname !== '/forgotpassword') {
-    //             navigate('/login', { replace: true });
-    //         }
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (
+            !localStorage.getItem(IS_AUTHENTICATED) ||
+            localStorage.getItem(IS_AUTHENTICATED) === 'false'
+        ) {
+            clearStorage();
+            if (location.pathname !== '/forgotpassword') {
+                navigate('/login', { replace: true });
+            }
+        }
+    }, []);
 
     return (
         <Routes>

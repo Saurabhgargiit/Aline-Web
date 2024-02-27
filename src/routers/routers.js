@@ -8,6 +8,7 @@ const Routers = () => {
             <Route path='/' element={<Navigate to={'/home'} />} />
             <Route path='/home' element={<HomeLayout />} />
             <Route path='/users' element={<AdminLayout />} />
+            <Route path='/login' element={<Navigate to={'/home'} />} />
         </Routes>
     );
 };
