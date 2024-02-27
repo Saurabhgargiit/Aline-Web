@@ -36,8 +36,8 @@ const LoginForm = () => {
             password: pass,
         };
 
-        // dispatch(getLoginData('LOGIN_PATH', data));
-        dispatch(loginAction(true));
+        dispatch(getLoginData('LOGIN_PATH', data));
+        // dispatch(loginAction(true));
     };
 
     const submitHandler = (e) => {

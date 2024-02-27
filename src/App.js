@@ -14,7 +14,7 @@ import { loginAction } from './store/actions/loginaction';
 
 function App() {
     const dispatch = useDispatch();
-    const redCtx = useSelector((state) => state); //reduxContext
+    const redCtx = useSelector((state) => state.login); //reduxContext
     // const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
