@@ -1,6 +1,7 @@
 import * as actionTypes from '../actionTypes';
 import { ApiRelativePaths, _agent } from '../../utils/globalURLs';
 import axios from 'axios';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 const userUpdate = (userData) => {
     return {
@@ -9,21 +10,29 @@ const userUpdate = (userData) => {
     };
 };
 
-export const loginAction = (loginInfo) => {
+//isLoggedIn --> true/false whether user is loggedIn
+//fromLogin --> true --> if action is dispatched after proper login using username password
+//fromLogin --> false  --> if action is dispatched from app
+
+export const loginAction = (isLoggedIn, fromLogin, loginInfo = {}) => {
     console.log(loginInfo);
+    if (isLoggedIn && fromLogin) {
+        CommonUtils.saveTokens(loginInfo?.data);
+    }
+    const loggedInData = {
+        isLoggedIn: isLoggedIn,
+        loginErr: !isLoggedIn && fromLogin ? loginInfo : '',
+    };
     return {
         type: actionTypes.LOGIN,
-        data: loginInfo,
+        loggedInData: loggedInData,
     };
-};
-
-const login = (loginData) => {
-    // return sendHttpsRequest(loginData);
 };
 
 export const getLoginData = (url_path, data) => {
     return (dispatch) => {
         const path = ApiRelativePaths[url_path];
+
         // const generatedURL = _agent + path;
         axios.defaults.baseURL = 'http://localhost:3001';
         axios
@@ -33,19 +42,19 @@ export const getLoginData = (url_path, data) => {
                 },
             })
             .then((res) => {
-                data = {
+                console.log(res);
+                const finalRes = {
                     result: 'success',
-                    data: res.data,
+                    data: { ...res.data },
                 };
+                dispatch(loginAction(true, true, finalRes));
             })
             .catch((err) => {
-                data = {
+                const finalErr = {
                     result: 'error',
                     data: err.response?.data,
                 };
-            })
-            .then(() => {
-                dispatch(loginAction(true));
+                dispatch(loginAction(false, true, finalErr));
             });
     };
 };

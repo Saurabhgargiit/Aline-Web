@@ -9,31 +9,49 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Authentication from './container/Authentication/Authentication';
 import Loader from './container/common/Loader/Loader';
 import SiteLayout from './container/SiteLayout/SiteLayout';
-import { IS_AUTHENTICATED } from './utils/globalConstants';
+import { CommonConstants } from './utils/globalConstants';
 import { loginAction } from './store/actions/loginaction';
 
 function App() {
     const dispatch = useDispatch();
-    const redCtx = useSelector((state) => state.login); //reduxContext
-    // const [loggedIn, setLoggedIn] = useState(false);
+    const { IS_AUTHENTICATED } = CommonConstants;
+    // const fetchedDetails = useSelector((state) => state.login); //reduxContext
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
+    //Below code is to check if we have to login directly
     useEffect(() => {
-        if (
-            !!localStorage.getItem(IS_AUTHENTICATED) ||
-            localStorage.getItem(IS_AUTHENTICATED) === 'false'
-        ) {
-            dispatch(loginAction(false));
-        } else if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
-            dispatch(loginAction(true));
+        if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
+            // if (location.pathname !== '/forgotpassword') {
+            //     navigate('/login', { replace: true });
+            // }
+            // const access_token = localStorage.getItem(ACCESS_TOKEN);
+            // const refresh_token = localStorage.getItem(REFRESH_TOKEN);
+            // const finalRes = {
+            //     result: 'success',
+            //     data: { access_token: access_token, refresh_token: refresh_token },
+            // };
+            setIsLoggedIn(true);
+            // dispatch(loginAction(true, false));
         }
     }, []);
+    // console.log(fetchedDetails?.loggedIn);
+    //below code is
+    // useEffect(() => {
+    //     if (
+    //         fetchedDetails?.loggedInData?.loginInfo?.result === 'success' &&
+    //         fetchedDetails?.loggedInData?.loginInfo?.data !== undefined
+    //     ) {
+    //     }
+    // }, [fetchedDetails?.loggedInData]);
 
     return (
         <>
             <BrowserRouter>
                 {/* <Loader /> */}
+                {/* {isLoading?<Loader/>: } */}
 
-                {redCtx.loggedIn ? <SiteLayout /> : <Authentication />}
+                {isLoggedIn ? <SiteLayout /> : <Authentication setIsLoggedIn={setIsLoggedIn} />}
             </BrowserRouter>
         </>
     );

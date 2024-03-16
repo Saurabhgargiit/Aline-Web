@@ -30,7 +30,7 @@ const LoginForm = () => {
         if (value.length > 8) setPassValid(true);
     };
 
-    const fecthData = () => {
+    const fetchData = () => {
         let data = {
             email: email,
             password: pass,
@@ -44,7 +44,7 @@ const LoginForm = () => {
         e.preventDefault();
         if (emailVaild && passValid) {
             setLoading(true);
-            fecthData();
+            fetchData();
         }
     };
 
