@@ -6,7 +6,6 @@ const loginIntialState = {
 };
 
 const loginReducer = (state = loginIntialState, action) => {
-    console.log(action);
     switch (action.type) {
         case actionTypes.LOGIN:
             return {

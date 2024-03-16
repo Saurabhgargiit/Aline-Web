@@ -25,8 +25,6 @@ export const CommonUtils = {
         localStorage.setItem(USER_ROLE, data.role);
         localStorage.setItem(USER_ID, data.user_id);
         localStorage.setItem(IS_AUTHENTICATED, 'true');
-        localStorage.setItem(REFRESH_TOKEN_TIME, data.refreshtime);
-        localStorage.setItem(ACCESS_TOKEN_TIME, data.accesstime);
         localStorage.setItem(USER_EMAIL, data.email);
 
         // localStorage.setItem(
@@ -39,6 +37,8 @@ export const CommonUtils = {
     saveTokens: function (data) {
         localStorage.setItem(ACCESS_TOKEN, data.access_token);
         localStorage.setItem(REFRESH_TOKEN, data.refresh_token);
+        localStorage.setItem(REFRESH_TOKEN_TIME, +new Date());
+        localStorage.setItem(ACCESS_TOKEN_TIME, +new Date());
     },
 
     clearStorage: function () {
@@ -56,5 +56,13 @@ export const CommonUtils = {
     logout: function () {
         this.clearStorage();
         //navigate to be handled at function calling
+    },
+
+    //check refreshtoken validity
+    checkRefreshTokenValidity: function () {
+        const curTime = +new Date();
+        const refreshTokenSaveTime = localStorage.getItem(REFRESH_TOKEN_TIME);
+        //1 month time in ms 2,629,746,000
+        return curTime - refreshTokenSaveTime < 2629746000;
     },
 };

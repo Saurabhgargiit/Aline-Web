@@ -7,10 +7,12 @@ import {
 import { thunk } from 'redux-thunk';
 
 import loginReducer from './reducers/loginReducer';
+import userInfoReducer from './reducers/userreducer/userInforReducer';
 
 const createReducer = (asyncReducers) =>
     combineReducers({
         login: loginReducer,
+        userInfo: userInfoReducer,
         ...asyncReducers,
     });
 

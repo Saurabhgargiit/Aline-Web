@@ -15,7 +15,6 @@ const userUpdate = (userData) => {
 //fromLogin --> false  --> if action is dispatched from app
 
 export const loginAction = (isLoggedIn, fromLogin, loginInfo = {}) => {
-    console.log(loginInfo);
     if (isLoggedIn && fromLogin) {
         CommonUtils.saveTokens(loginInfo?.data);
     }
