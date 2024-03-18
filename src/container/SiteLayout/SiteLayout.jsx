@@ -8,12 +8,17 @@ import { CommonConstants } from '../../utils/globalConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAction } from '../../store/actions/loginaction';
 import { getsignedInUserInfo } from '../../store/actions/useraction/userInfoaction';
+import Loader from '../common/Loader/Loader';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 const SiteLayout = ({ location, navigate }) => {
     const [showSideSection, setShowSideSection] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const { storeUserData } = CommonUtils;
+
     const { IS_AUTHENTICATED, ACCESS_TOKEN, REFRESH_TOKEN } = CommonConstants;
     const fetchedLoginDetails = useSelector((state) => state.login); //reduxContext
-    const fetchedUserInfo = useSelector((state) => state.userInfo);
+    const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo);
     const dispatch = useDispatch();
     const sideSectionShowHandler = useCallback(() => {
         setShowSideSection((prevState) => !prevState);
@@ -24,21 +29,33 @@ const SiteLayout = ({ location, navigate }) => {
             navigate('/home');
         }
         if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
-            // if (!fetchedLoginDetails?.loggedIn) {
-            // console.log('entr');
-            dispatch(getsignedInUserInfo('GET_USER'));
-            // dispatch(loginAction(true, false));
-            // }
+            if (!fetchedLoginDetails?.loggedIn) {
+                console.log('entr');
+                dispatch(loginAction(true, false));
+            }
         }
     }, []);
-
-    useEffect(() => {
-        console.log(fetchedUserInfo);
-    }, [fetchedUserInfo]);
-
     console.log(fetchedUserInfo);
 
-    return (
+    useEffect(() => {
+        if (fetchedLoginDetails?.loggedIn) {
+            dispatch(getsignedInUserInfo('GET_USER'));
+        }
+    }, [fetchedLoginDetails?.loggedIn]);
+
+    useEffect(() => {
+        console.log(fetchedUserInfo?.data);
+        if (fetchedUserInfo?.result === 'success' && fetchedUserInfo?.data !== undefined) {
+            const data = fetchedUserInfo?.data;
+            storeUserData(data);
+            setIsLoading(false);
+        } else if (fetchedUserInfo?.result === 'error') {
+        }
+    }, [fetchedUserInfo]);
+
+    return isLoading ? (
+        <Loader />
+    ) : (
         <>
             <SideSectionLayout
                 open={showSideSection}

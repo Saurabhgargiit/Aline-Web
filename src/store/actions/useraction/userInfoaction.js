@@ -3,10 +3,11 @@ import { ApiRelativePaths, _agent } from '../../../utils/globalURLs';
 import axiosInstance from '../../../network/interceptor/interceptor';
 // import { CommonUtils } from 'utils/commonfunctions/commonfunctions';
 
-const setUserInfo = (userData) => {
+const setUserInfo = (userInfo) => {
+    console.log(userInfo);
     return {
         type: actionTypes.SET_USER,
-        userData: userData,
+        userInfo: userInfo,
     };
 };
 

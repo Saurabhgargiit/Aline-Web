@@ -5,7 +5,7 @@ import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 const { ACCESS_TOKEN, REFRESH_TOKEN } = CommonConstants;
 const axiosInstance = axios.create({
     headers: {
-        AccessToken: localStorage.getItem(ACCESS_TOKEN),
+        Authorization: localStorage.getItem(ACCESS_TOKEN),
         RefreshToken: localStorage.getItem(REFRESH_TOKEN),
         'Content-Type': 'application/json',
     },
@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        config.headers['AccessToken'] = localStorage.getItem(ACCESS_TOKEN);
+        config.headers['Authorization'] = localStorage.getItem(ACCESS_TOKEN);
         // Do something before request is sent.
         if (
             !localStorage.getItem(ACCESS_TOKEN) ||
@@ -28,6 +28,7 @@ axiosInstance.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
+axiosInstance.defaults.baseURL = 'http://localhost:3001';
 
 createAxiosResponseInterceptor(axiosInstance);
 

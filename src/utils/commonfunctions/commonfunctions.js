@@ -12,19 +12,10 @@ const {
     USER_EMAIL,
 } = CommonConstants;
 
-// export const clearStorage = () => {
-//     localStorage.setItem(ACCESS_TOKEN, '');
-//     localStorage.setItem(REFRESH_TOKEN, '');
-//     localStorage.setItem(IS_AUTHENTICATED, false);
-//     // window.location.pathname = '/login';
-// };
-
 export const CommonUtils = {
-    storeAuthData: function (data) {
-        localStorage.setItem(USER_NAME, data.name);
+    storeUserData: function (data) {
         localStorage.setItem(USER_ROLE, data.role);
-        localStorage.setItem(USER_ID, data.user_id);
-        localStorage.setItem(IS_AUTHENTICATED, 'true');
+        localStorage.setItem(USER_ID, data.id);
         localStorage.setItem(USER_EMAIL, data.email);
 
         // localStorage.setItem(
@@ -35,7 +26,7 @@ export const CommonUtils = {
     },
 
     saveTokens: function (data) {
-        localStorage.setItem(ACCESS_TOKEN, data.access_token);
+        localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.access_token}`);
         localStorage.setItem(REFRESH_TOKEN, data.refresh_token);
         localStorage.setItem(REFRESH_TOKEN_TIME, +new Date());
         localStorage.setItem(ACCESS_TOKEN_TIME, +new Date());

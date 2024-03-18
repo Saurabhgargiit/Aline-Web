@@ -12,7 +12,7 @@ import userInfoReducer from './reducers/userreducer/userInforReducer';
 const createReducer = (asyncReducers) =>
     combineReducers({
         login: loginReducer,
-        userInfo: userInfoReducer,
+        userInfoReducer: userInfoReducer,
         ...asyncReducers,
     });
 

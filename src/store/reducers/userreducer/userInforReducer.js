@@ -1,11 +1,12 @@
 import * as actionTypes from '../../actionTypes';
 
 const userInfoInitialState = {
-    userName: '',
-    userEmail: '',
-    role: [],
-    mobile: '',
-    creationDate: {},
+    userInfo: {},
+    // userName: '',
+    // userEmail: '',
+    // role: [],
+    // mobile: '',
+    // userID: {},
 };
 
 const userInfoReducer = (state = userInfoInitialState, action) => {
@@ -13,11 +14,12 @@ const userInfoReducer = (state = userInfoInitialState, action) => {
         case actionTypes.SET_USER: {
             return {
                 ...state,
-                userName: action.userData.data?.name,
-                userEmail: action.userData.data?.email,
-                role: action.userData.data?.role,
-                mobile: action.userData.data?.mobileNo,
-                creationDate: action.userData.data?.creationDate,
+                userInfo: action.userInfo,
+                // userName: action.userData.data?.name,
+                // userEmail: action.userData.data?.email,
+                // role: action.userData.data?.role,
+                // mobile: action.userData.data?.mobileNo,
+                // userID: action.userData.data?.id,
             };
         }
         default: {
