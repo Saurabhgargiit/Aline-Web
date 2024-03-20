@@ -39,7 +39,9 @@ const SiteLayout = ({ location, navigate }) => {
 
     useEffect(() => {
         if (fetchedLoginDetails?.loggedIn) {
+            // setTimeout(() => {
             dispatch(getsignedInUserInfo('GET_USER'));
+            // }, 2000);
         }
     }, [fetchedLoginDetails?.loggedIn]);
 

@@ -10,6 +10,7 @@ const {
     REFRESH_TOKEN_TIME,
     ACCESS_TOKEN_TIME,
     USER_EMAIL,
+    SESSION_EXP,
 } = CommonConstants;
 
 export const CommonUtils = {
@@ -27,21 +28,24 @@ export const CommonUtils = {
 
     saveTokens: function (data) {
         localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.access_token}`);
-        localStorage.setItem(REFRESH_TOKEN, data.refresh_token);
+        localStorage.setItem(REFRESH_TOKEN, `Bearer ${data.refresh_token}`);
         localStorage.setItem(REFRESH_TOKEN_TIME, +new Date());
         localStorage.setItem(ACCESS_TOKEN_TIME, +new Date());
+        localStorage.setItem(SESSION_EXP, 'false');
     },
 
     clearStorage: function () {
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(REFRESH_TOKEN);
-        localStorage.removeItem(USER_NAME);
-        localStorage.removeItem(USER_ROLE);
-        localStorage.removeItem(USER_ID);
-        localStorage.removeItem(IS_AUTHENTICATED);
         localStorage.removeItem(REFRESH_TOKEN_TIME);
         localStorage.removeItem(ACCESS_TOKEN_TIME);
+        // localStorage.removeItem(SESSION_EXP);
+
+        localStorage.removeItem(USER_ROLE);
+        localStorage.removeItem(USER_ID);
         localStorage.removeItem(USER_EMAIL);
+
+        localStorage.removeItem(IS_AUTHENTICATED);
     },
 
     logout: function () {

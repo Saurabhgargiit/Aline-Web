@@ -8,4 +8,5 @@ export const CommonConstants = {
     REFRESH_TOKEN_TIME: 'refresh_token_time',
     ACCESS_TOKEN_TIME: 'access_token_time',
     USER_EMAIL: 'user_email',
+    SESSION_EXP: 'SESSION_EXP',
 };
