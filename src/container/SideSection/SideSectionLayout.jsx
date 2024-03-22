@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './SideSectionLayout.scss';
 import Button from '../../components/Button/Button';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
     if (!open) return null;
@@ -29,7 +30,10 @@ const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
                     </nav>
                     <div className='side-logout-container'>
                         <div className='side-email'>saurabhgarg.iitbhu@gmail.com</div>
-                        <Button title={'Logout'} />
+                        <Button
+                            onClickCallBk={CommonUtils.logout.bind(CommonUtils)}
+                            title={'Logout'}
+                        />
                     </div>
                 </div>
             </aside>

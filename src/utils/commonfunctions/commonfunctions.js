@@ -27,7 +27,7 @@ export const CommonUtils = {
     },
 
     saveTokens: function (data) {
-        localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.access_token} +1`);
+        localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.access_token}`);
         localStorage.setItem(REFRESH_TOKEN, `Bearer ${data.refresh_token}`);
         localStorage.setItem(REFRESH_TOKEN_TIME, +new Date());
         localStorage.setItem(ACCESS_TOKEN_TIME, +new Date());
@@ -39,7 +39,7 @@ export const CommonUtils = {
         localStorage.removeItem(REFRESH_TOKEN);
         localStorage.removeItem(REFRESH_TOKEN_TIME);
         localStorage.removeItem(ACCESS_TOKEN_TIME);
-        // localStorage.removeItem(SESSION_EXP);
+        localStorage.removeItem(SESSION_EXP);
 
         localStorage.removeItem(USER_ROLE);
         localStorage.removeItem(USER_ID);
@@ -50,8 +50,16 @@ export const CommonUtils = {
 
     logout: function () {
         this.clearStorage();
-        //navigate to be handled at function calling
+        this.movetoLogin();
+        this.logoutApiFunction();
     },
+
+    movetoLogin: function () {
+        window.location.pathname = '/login';
+        window.location.reload();
+    },
+
+    logoutApiFunction: function () {},
 
     //check refreshtoken validity
     checkRefreshTokenValidity: function () {

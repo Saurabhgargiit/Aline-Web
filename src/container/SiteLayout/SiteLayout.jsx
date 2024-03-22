@@ -15,12 +15,12 @@ import { InformativeErrorModal } from '../../components/Modal/Modal';
 const SiteLayout = ({ location, navigate }) => {
     const [showSideSection, setShowSideSection] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [getUserErr, setGetUserErr] = useState(false);
-    const [errorModal, setErrorModal] = useState(false);
+    const [getUserErrMsg, setGetUserErrMsg] = useState('');
+    const [isError, setIsError] = useState(false);
 
-    const { storeUserData } = CommonUtils;
+    const { storeUserData, movetoLogin } = CommonUtils;
 
-    const { IS_AUTHENTICATED, ACCESS_TOKEN, REFRESH_TOKEN } = CommonConstants;
+    const { IS_AUTHENTICATED } = CommonConstants;
     const fetchedLoginDetails = useSelector((state) => state.login); //reduxContext
     const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo);
     const dispatch = useDispatch();
@@ -34,12 +34,10 @@ const SiteLayout = ({ location, navigate }) => {
         }
         if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
             if (!fetchedLoginDetails?.loggedIn) {
-                console.log('entr');
                 dispatch(loginAction(true, false));
             }
         }
     }, []);
-    console.log(fetchedUserInfo);
 
     useEffect(() => {
         if (fetchedLoginDetails?.loggedIn) {
@@ -50,28 +48,28 @@ const SiteLayout = ({ location, navigate }) => {
     }, [fetchedLoginDetails?.loggedIn]);
 
     useEffect(() => {
-        console.log(fetchedUserInfo?.data);
         if (fetchedUserInfo?.result === 'success' && fetchedUserInfo?.data !== undefined) {
             const data = fetchedUserInfo?.data;
             storeUserData(data);
             setIsLoading(false);
         } else if (fetchedUserInfo?.result === 'error') {
-            setGetUserErr('Something went wrong. Please try again or contact administrator');
+            setGetUserErrMsg('Something went wrong. Please try again or contact administrator');
             setIsLoading(false);
-            setErrorModal(true);
+            setIsError(true);
         }
     }, [fetchedUserInfo]);
 
     const closeHanler = () => {
-        setErrorModal(false);
+        setIsLoading(true);
+        setIsError(false);
+        setGetUserErrMsg('');
         CommonUtils.clearStorage();
-        window.location.path = '/login';
-        window.location.reload();
+        movetoLogin();
     };
 
     return isLoading ? (
         <Loader />
-    ) : !getUserErr ? (
+    ) : !isError ? (
         <>
             <SideSectionLayout
                 open={showSideSection}
@@ -83,10 +81,10 @@ const SiteLayout = ({ location, navigate }) => {
         </>
     ) : (
         <InformativeErrorModal
-            open={errorModal}
+            open={isError}
             btnFunction={closeHanler}
             className='add-clinic-box'
-            errorMsg={getUserErr}
+            errorMsg={getUserErrMsg}
         />
     );
 };
