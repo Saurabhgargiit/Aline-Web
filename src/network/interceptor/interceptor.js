@@ -61,7 +61,7 @@ function createAxiosResponseInterceptor(axiosInstance) {
                 // Reject promise if usual error
                 if (error !== undefined && error.response !== undefined) {
                     if (
-                        (error.response.status === 401 || error.response.status === 403) &&
+                        error.response.status === 401 &&
                         error.config &&
                         !error.config.__isRetryRequest
                     ) {
@@ -69,6 +69,7 @@ function createAxiosResponseInterceptor(axiosInstance) {
                             .then((response) => {
                                 if (response) {
                                     CommonUtils.saveTokens(response);
+                                    const originalRequest = error.config;
                                     originalRequest.__isRetryRequest = true;
                                     error.config.headers['Authorization'] =
                                         localStorage.getItem(REFRESH_TOKEN);

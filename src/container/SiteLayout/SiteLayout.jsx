@@ -10,10 +10,14 @@ import { loginAction } from '../../store/actions/loginaction';
 import { getsignedInUserInfo } from '../../store/actions/useraction/userInfoaction';
 import Loader from '../common/Loader/Loader';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import { InformativeErrorModal } from '../../components/Modal/Modal';
 
 const SiteLayout = ({ location, navigate }) => {
     const [showSideSection, setShowSideSection] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [getUserErr, setGetUserErr] = useState(false);
+    const [errorModal, setErrorModal] = useState(false);
+
     const { storeUserData } = CommonUtils;
 
     const { IS_AUTHENTICATED, ACCESS_TOKEN, REFRESH_TOKEN } = CommonConstants;
@@ -52,12 +56,22 @@ const SiteLayout = ({ location, navigate }) => {
             storeUserData(data);
             setIsLoading(false);
         } else if (fetchedUserInfo?.result === 'error') {
+            setGetUserErr('Something went wrong. Please try again or contact administrator');
+            setIsLoading(false);
+            setErrorModal(true);
         }
     }, [fetchedUserInfo]);
 
+    const closeHanler = () => {
+        setErrorModal(false);
+        CommonUtils.clearStorage();
+        window.location.path = '/login';
+        window.location.reload();
+    };
+
     return isLoading ? (
         <Loader />
-    ) : (
+    ) : !getUserErr ? (
         <>
             <SideSectionLayout
                 open={showSideSection}
@@ -67,6 +81,13 @@ const SiteLayout = ({ location, navigate }) => {
             <Routers />
             <Footer />
         </>
+    ) : (
+        <InformativeErrorModal
+            open={errorModal}
+            btnFunction={closeHanler}
+            className='add-clinic-box'
+            errorMsg={getUserErr}
+        />
     );
 };
 

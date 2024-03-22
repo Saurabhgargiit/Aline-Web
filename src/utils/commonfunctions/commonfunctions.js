@@ -27,7 +27,7 @@ export const CommonUtils = {
     },
 
     saveTokens: function (data) {
-        localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.access_token}`);
+        localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.access_token} +1`);
         localStorage.setItem(REFRESH_TOKEN, `Bearer ${data.refresh_token}`);
         localStorage.setItem(REFRESH_TOKEN_TIME, +new Date());
         localStorage.setItem(ACCESS_TOKEN_TIME, +new Date());
