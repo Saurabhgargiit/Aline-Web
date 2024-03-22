@@ -21,6 +21,7 @@ function App() {
 
     //Below code is to check if we have to login directly
     useEffect(() => {
+        document.title = 'Aline Patient Manager';
         if (localStorage.getItem(IS_AUTHENTICATED) === 'true') {
             // if (location.pathname !== '/forgotpassword') {
             //     navigate('/login', { replace: true });
