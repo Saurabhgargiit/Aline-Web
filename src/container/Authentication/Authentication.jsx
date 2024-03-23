@@ -45,11 +45,16 @@ function Authentication({ location, navigate, setIsLoggedIn }) {
     }, [fetchedDetails]);
 
     return (
-        <Routes>
-            <Route path='/login' element={<LoginForm />} />
-            <Route path='/forgotpassword' element={<ForgotPassword />} />
-            <Route path='*' element={<Navigate to={'/login'} />} />
-        </Routes>
+        <>
+            <div className='center-position'>
+                <img src='/aline-images/logo.png'></img>
+            </div>
+            <Routes>
+                <Route path='/login' element={<LoginForm />} />
+                <Route path='/forgotpassword' element={<ForgotPassword />} />
+                <Route path='*' element={<Navigate to={'/login'} />} />
+            </Routes>
+        </>
     );
 }
 

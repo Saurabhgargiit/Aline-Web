@@ -11,8 +11,11 @@ import './LoginForm.scss';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [emailVaild, setEmailVaild] = useState(false);
+    const [emailErr, setEmailErr] = useState('');
     const [pass, setPass] = useState('');
     const [passValid, setPassValid] = useState(false);
+    const [passErr, setPassErr] = useState('');
+
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
@@ -20,14 +23,23 @@ const LoginForm = () => {
     const emailHandler = (event) => {
         const { value } = event.target;
         setEmail(() => value);
-        if (value.includes('@') && !emailVaild) setEmailVaild(true);
-        else if (!value.includes('@') && emailVaild) setEmailVaild(false);
+        if (value.includes('@')) {
+            setEmailVaild(true);
+            if (!!emailErr) {
+                setEmailErr('');
+            }
+        } else if (!value.includes('@') && emailVaild) setEmailVaild(false);
     };
 
     const passHandler = (event) => {
         const { value } = event.target;
         setPass(() => value);
-        if (value.length > 8) setPassValid(true);
+        if (value.length > 5 && value.length < 12) {
+            setPassValid(true);
+            if (!!passErr) {
+                setPassErr('');
+            }
+        } else if (!(value.length > 5 && value.length < 12) && passValid) setPassValid(false);
     };
 
     const fetchData = () => {
@@ -45,6 +57,13 @@ const LoginForm = () => {
         if (emailVaild && passValid) {
             setLoading(true);
             fetchData();
+        } else {
+            if (!emailVaild) {
+                console.log(1);
+                setEmailErr('Please enter valid user ID.');
+            } else if (!passValid) {
+                setPassErr('Password should be between 6 to 12 letters.');
+            }
         }
     };
 
@@ -71,15 +90,18 @@ const LoginForm = () => {
                             placeholder='Password'
                             value={pass}
                             onChange={(e) => passHandler(e)}
+                            // onFocus={() => focusHander()}
                             autoComplete='off'
                         />
                     </Form.Group>
                     <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-                        <Form.Check type='checkbox' label='Check me out' />
+                        {/* <Form.Check type='checkbox' label='Check me out' /> */}
                     </Form.Group>
                     <Button variant='primary' type='submit' onClick={(e) => submitHandler(e)}>
                         Submit
                     </Button>
+                    {!!emailErr && <div className='error-Msg'>{emailErr}</div>}
+                    {!!passErr && <div className='error-Msg'>{passErr}</div>}
                 </Form>
             ) : (
                 <Loader />
