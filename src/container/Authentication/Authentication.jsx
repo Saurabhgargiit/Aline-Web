@@ -5,18 +5,15 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { CommonConstants } from '../../utils/globalConstants';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import WithRouter from '../../hoc/withRouter';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginAction } from '../../store/actions/loginaction';
+import { useSelector } from 'react-redux';
 
 function Authentication({ location, navigate, setIsLoggedIn }) {
     const { IS_AUTHENTICATED, ACCESS_TOKEN, REFRESH_TOKEN } = CommonConstants;
     const [errorObj, setErrorObj] = useState({
         errorMsg: '',
         errorFlag: false,
-        loader: false,
     });
     const fetchedDetails = useSelector((state) => state.login); //reduxContext
-    const dispatch = useDispatch();
 
     useEffect(() => {
         if (location.pathname !== '/forgotpassword') {
@@ -31,14 +28,14 @@ function Authentication({ location, navigate, setIsLoggedIn }) {
             setIsLoggedIn(true);
             // window.location.pathname = '/home';
             // window.location.reload();
-        } else if (fetchedDetails?.loggedInData?.loginInfo?.result === 'error') {
+        } else if (fetchedDetails?.loggedInData?.loginErr?.result === 'error') {
             CommonUtils.clearStorage();
+            // setIsLoggedIn(false);
             setErrorObj((prevState) => {
                 return {
                     ...prevState,
-                    errorMsg: fetchedDetails?.loggedInData?.loginInfo?.data,
+                    errorMsg: fetchedDetails?.loggedInData?.loginErr?.data?.message,
                     errorFlag: true,
-                    loader: false,
                 };
             });
         }
@@ -50,7 +47,10 @@ function Authentication({ location, navigate, setIsLoggedIn }) {
                 <img src='/aline-images/logo.png'></img>
             </div>
             <Routes>
-                <Route path='/login' element={<LoginForm />} />
+                <Route
+                    path='/login'
+                    element={<LoginForm setErrorObj={setErrorObj} errorObj={errorObj} />}
+                />
                 <Route path='/forgotpassword' element={<ForgotPassword />} />
                 <Route path='*' element={<Navigate to={'/login'} />} />
             </Routes>

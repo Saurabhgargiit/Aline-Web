@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,7 @@ import Loader from '../../common/Loader/Loader';
 import { ApiRelativePaths } from '../../../utils/globalURLs';
 import './LoginForm.scss';
 
-const LoginForm = () => {
+const LoginForm = ({ errorObj, setErrorObj }) => {
     const [email, setEmail] = useState('');
     const [emailVaild, setEmailVaild] = useState(false);
     const [emailErr, setEmailErr] = useState('');
@@ -54,6 +54,13 @@ const LoginForm = () => {
 
     const submitHandler = (e) => {
         e.preventDefault();
+        setErrorObj((prevState) => {
+            return {
+                ...prevState,
+                errorMsg: '',
+                errorFlag: false,
+            };
+        });
         if (emailVaild && passValid) {
             setLoading(true);
             fetchData();
@@ -66,6 +73,13 @@ const LoginForm = () => {
             }
         }
     };
+    console.log(loading, errorObj);
+
+    useEffect(() => {
+        if (errorObj.errorFlag && loading) {
+            setLoading(false);
+        }
+    }, [errorObj.errorFlag]);
 
     return (
         <div className='login-container'>
@@ -102,6 +116,7 @@ const LoginForm = () => {
                     </Button>
                     {!!emailErr && <div className='error-Msg'>{emailErr}</div>}
                     {!!passErr && <div className='error-Msg'>{passErr}</div>}
+                    {errorObj.errorFlag && <div className='error-Msg'>{errorObj.errorMsg}</div>}
                 </Form>
             ) : (
                 <Loader />
