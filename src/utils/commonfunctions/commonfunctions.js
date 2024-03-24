@@ -68,4 +68,17 @@ export const CommonUtils = {
         //1 month time in ms 2,629,746,000
         return curTime - refreshTokenSaveTime < 2629746000;
     },
+
+    isAdmin: function (role) {
+        return role === 'ROLE_ADMIN';
+    },
+    isLab: function (role) {
+        return role === 'ROLE_LAB';
+    },
+    isClinic: function (role) {
+        return role === 'ROLE_CLINIC';
+    },
+    isDoctor: function (role) {
+        return role === 'ROLE_DOCTOR';
+    },
 };

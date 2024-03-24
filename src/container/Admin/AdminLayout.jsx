@@ -1,18 +1,24 @@
-import React, { useState, useContext } from 'react';
+import { UseSelector, useSelector } from 'react-redux';
 import UserList from './UserList';
-import AddClinicLayout from './AddClinic/AddClinicLayout';
-import { AddClinicContextProvider } from './AddClinic/Context/AddClinicContext';
+import AddParentUserLayout from './AddParentUser/AddParentUserLayout';
+import { AddParentUserContextProvider } from './AddParentUser/Context/AddParentUserContext';
 import AdminHeaderBar from './AdminHeaderBar/AdminHeaderBar';
 
 const AdminLayout = () => {
+    const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo?.data);
+    console.log(fetchedUserInfo);
+    const {
+        id: userID,
+        role: [role],
+    } = fetchedUserInfo;
     return (
-        <AddClinicContextProvider>
+        <AddParentUserContextProvider>
             <div className='top-bottom-position-container'>
-                <AdminHeaderBar />
-                <UserList />
-                <AddClinicLayout />
+                <AdminHeaderBar userID={userID} role={role} />
+                <UserList userID={userID} role={role} />
+                <AddParentUserLayout />
             </div>
-        </AddClinicContextProvider>
+        </AddParentUserContextProvider>
     );
 };
 

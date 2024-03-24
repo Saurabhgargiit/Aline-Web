@@ -14,13 +14,14 @@ function Authentication({ location, navigate, setIsLoggedIn }) {
         errorFlag: false,
     });
     const fetchedDetails = useSelector((state) => state.login); //reduxContext
+    console.log('Authentication');
 
     useEffect(() => {
         if (location.pathname !== '/forgotpassword') {
+            console.log('entered');
             navigate('/login', { replace: true });
         }
     }, []);
-    console.log(fetchedDetails);
 
     useEffect(() => {
         if (!!fetchedDetails?.loggedIn) {
