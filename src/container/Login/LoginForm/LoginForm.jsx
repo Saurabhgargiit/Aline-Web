@@ -39,7 +39,7 @@ const LoginForm = ({ errorObj, setErrorObj }) => {
             if (!!passErr) {
                 setPassErr('');
             }
-        } else if (!(value.length > 5 && value.length < 12) && passValid) setPassValid(false);
+        } else if (!(value.length > 5 && value.length < 13) && passValid) setPassValid(false);
     };
 
     const fetchData = () => {
@@ -49,7 +49,6 @@ const LoginForm = ({ errorObj, setErrorObj }) => {
         };
 
         dispatch(getLoginData('LOGIN_PATH', data));
-        // dispatch(loginAction(true));
     };
 
     const submitHandler = (e) => {
@@ -66,7 +65,6 @@ const LoginForm = ({ errorObj, setErrorObj }) => {
             fetchData();
         } else {
             if (!emailVaild) {
-                console.log(1);
                 setEmailErr('Please enter valid user ID.');
             } else if (!passValid) {
                 setPassErr('Password should be between 6 to 12 letters.');
@@ -92,7 +90,6 @@ const LoginForm = ({ errorObj, setErrorObj }) => {
                             placeholder='Enter email'
                             onChange={(e) => emailHandler(e)}
                             value={email}
-                            // noValidate
                             autoComplete='off'
                         />
                     </Form.Group>
@@ -104,13 +101,10 @@ const LoginForm = ({ errorObj, setErrorObj }) => {
                             placeholder='Password'
                             value={pass}
                             onChange={(e) => passHandler(e)}
-                            // onFocus={() => focusHander()}
                             autoComplete='off'
                         />
                     </Form.Group>
-                    <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-                        {/* <Form.Check type='checkbox' label='Check me out' /> */}
-                    </Form.Group>
+                    <Form.Group className='mb-3' controlId='formBasicCheckbox'></Form.Group>
                     <Button variant='primary' type='submit' onClick={(e) => submitHandler(e)}>
                         Submit
                     </Button>

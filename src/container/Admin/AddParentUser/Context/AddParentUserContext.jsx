@@ -12,6 +12,7 @@ const obj = {
     userObj: {},
     setUserObj: () => {},
     addParentUserFn: () => {},
+    setFormValid: () => {},
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -28,6 +29,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         pass: '',
         role: [],
     });
+    const [formValid, setFormValid] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -56,9 +58,10 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             role: [],
         });
     };
-    console.log(userObj);
 
     const addParentUserFn = () => {
+        if (!formValid) return;
+
         postCall(userObj, 'CREATE_PARENT_USER').then((data) => {
             if (data.result === 'success') {
                 toast.success(`${addType} added successully`, {
@@ -94,6 +97,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         addParentUserFn,
         addParentUserModalHandler,
         closeModalHandler,
+        setFormValid,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

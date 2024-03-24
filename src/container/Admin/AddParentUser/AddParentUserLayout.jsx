@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalFooter } from '../../../components/Modal/Modal';
-import AddParentUser from './AddParentUser';
+import AddParentUserForm from './AddParentUserForm';
 import './AddParentUser.scss';
 import { AddParentUserContext } from './Context/AddParentUserContext';
 
@@ -15,7 +15,7 @@ function AddParentUserLayout({ isEdit = false }) {
         <Modal className='add-Parent-box' open={ctx.open}>
             <ModalHeader title={title} />
             <ModalContent>
-                <AddParentUser addType={addType} isEdit={isEdit} />
+                <AddParentUserForm addType={addType} isEdit={isEdit} />
             </ModalContent>
             <ModalFooter
                 onClose={ctx.closeModalHandler}
