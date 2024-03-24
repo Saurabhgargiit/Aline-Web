@@ -8,7 +8,9 @@ function AddParentUserLayout({ isEdit = false }) {
     const ctx = useContext(AddParentUserContext);
     const addType = ctx.addType;
     const title = `${!isEdit ? 'Add' : 'Edit'} ${addType}`;
-    const createUserHandler = () => {};
+    const createUserHandler = () => {
+        ctx.addParentUserFn();
+    };
     return (
         <Modal className='add-Parent-box' open={ctx.open}>
             <ModalHeader title={title} />

@@ -7,4 +7,5 @@ export class ApiRelativePaths {
 
     //USER
     static GET_USER = '/api/v1/aline/user/getSignedInUserInfo';
+    static CREATE_PARENT_USER = '/api/v1/aline/user/createUser';
 }

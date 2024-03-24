@@ -6,6 +6,9 @@ import './App.css';
 import './styles/styles.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Authentication from './container/Authentication/Authentication';
 import Loader from './container/common/Loader/Loader';
 import SiteLayout from './container/SiteLayout/SiteLayout';
@@ -54,6 +57,7 @@ function App() {
 
                 {isLoggedIn ? <SiteLayout /> : <Authentication setIsLoggedIn={setIsLoggedIn} />}
             </BrowserRouter>
+            <ToastContainer />
         </>
     );
 }

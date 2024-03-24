@@ -32,7 +32,6 @@ export const getLoginData = (url_path, data) => {
     return (dispatch) => {
         const path = ApiRelativePaths[url_path];
 
-        // const generatedURL = _agent + path;
         axios.defaults.baseURL = 'http://localhost:3001';
         axios
             .post(path, data, {

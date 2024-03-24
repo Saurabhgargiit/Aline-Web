@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AddParentUserContext } from './Context/AddParentUserContext';
 
 const AddParentUser = ({ addType, isEdit }) => {
     const [name, setName] = useState('');
@@ -7,7 +8,18 @@ const AddParentUser = ({ addType, isEdit }) => {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
-    console.log({ name, address, city, phone, email, pass });
+
+    const ctx = useContext(AddParentUserContext);
+    // console.log({ name, address, city, phone, email, pass });
+
+    const objSetter = (field, value) => {
+        ctx.setUserObj((prevState) => {
+            return {
+                ...prevState,
+                [field]: value,
+            };
+        });
+    };
 
     const inputHandler = (e, inputType) => {
         const { value } = e.target;
@@ -33,7 +45,16 @@ const AddParentUser = ({ addType, isEdit }) => {
             default:
                 break;
         }
+        objSetter(inputType, value);
     };
+
+    // useEffect(() => {
+    //     ctx.setUserObj((prevState) => {
+    //         return {...prevState,
+
+    //             };
+    //     });
+    // }, [name, address, city, phone, email, pass]);
 
     return (
         <div>

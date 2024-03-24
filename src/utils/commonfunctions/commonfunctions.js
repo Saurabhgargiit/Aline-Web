@@ -81,4 +81,16 @@ export const CommonUtils = {
     isDoctor: function (role) {
         return role === 'ROLE_DOCTOR';
     },
+    getPayloadRole: function (userRole) {
+        switch (userRole) {
+            case 'Admin':
+                return 'ROLE_ADMIN';
+            case 'Lab':
+                return 'ROLE_LAB';
+            case 'Clinic':
+                return 'ROLE_CLINIC';
+            case 'Doctor':
+                return 'ROLE_DOCTOR';
+        }
+    },
 };
