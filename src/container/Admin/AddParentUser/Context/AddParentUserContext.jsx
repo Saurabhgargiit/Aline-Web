@@ -13,6 +13,7 @@ const obj = {
     setUserObj: () => {},
     addParentUserFn: () => {},
     setFormValid: () => {},
+    loading: false,
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -26,10 +27,11 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         city: '',
         phone: '',
         email: '',
-        pass: '',
+        password: '',
         role: [],
     });
     const [formValid, setFormValid] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -54,12 +56,13 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             city: '',
             phone: '',
             email: '',
-            pass: '',
+            password: '',
             role: [],
         });
     };
 
     const addParentUserFn = () => {
+        setLoading(true);
         if (!formValid) return;
 
         postCall(userObj, 'CREATE_PARENT_USER').then((data) => {
@@ -73,6 +76,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
                     theme: 'light',
                     transition: Bounce,
                 });
+                closeModalHandler();
             } else if (data.result === 'error') {
                 // closeModalHandler();
                 toast.error('data.error', {
@@ -85,6 +89,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
                     transition: Bounce,
                 });
             }
+            setLoading(false);
         });
     };
 
@@ -93,6 +98,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         open,
         addType,
         userObj,
+        loading,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,

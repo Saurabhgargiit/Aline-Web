@@ -23,7 +23,7 @@ export const postCall = async (data, url_path, param, optionalData) => {
     //     generatedURL = generatedURL + optionalData;
     // }
 
-    generatedURL = url_path;
+    generatedURL = path;
 
     await axiosInstance
         .post(generatedURL, data)

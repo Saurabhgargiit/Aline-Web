@@ -83,7 +83,7 @@ const SiteLayout = ({ location, navigate }) => {
         <InformativeErrorModal
             open={isError}
             btnFunction={closeHanler}
-            className='add-clinic-box'
+            className='add-parent-box'
             errorMsg={getUserErrMsg}
         />
     );

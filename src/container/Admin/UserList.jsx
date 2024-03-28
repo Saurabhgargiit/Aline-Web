@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge } from 'react-bootstrap';
 import SVG from 'react-inlinesvg';
+import { useDispatch } from 'react-redux';
+import Loader from '../common/Loader/Loader';
 
 const obj = [
     {
@@ -22,6 +24,9 @@ const obj = [
 ];
 
 const UserList = () => {
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    useEffect(() => {}, []);
     const clinicList = obj.map((el, i) => (
         <div className='displayFlex home-row-container row-border' key={i}>
             <div className='home-page-name-date mt-2'>
@@ -48,7 +53,11 @@ const UserList = () => {
         </div>
     ));
 
-    return <div className='display-flex user-row-container row-border'>{clinicList}</div>;
+    return !loading ? (
+        <div className='display-flex user-row-container row-border'>{clinicList}</div>
+    ) : (
+        <Loader />
+    );
 };
 
 export default UserList;

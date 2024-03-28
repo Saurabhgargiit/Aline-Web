@@ -12,7 +12,7 @@ function AddParentUserLayout({ isEdit = false }) {
         ctx.addParentUserFn();
     };
     return (
-        <Modal className='add-Parent-box' open={ctx.open}>
+        <Modal className='add-parent-box' open={ctx.open}>
             <ModalHeader title={title} />
             <ModalContent>
                 <AddParentUserForm addType={addType} isEdit={isEdit} />
@@ -22,6 +22,7 @@ function AddParentUserLayout({ isEdit = false }) {
                 onSubmit={createUserHandler}
                 close={'Close'}
                 submit={'Create'}
+                disabled={ctx.loading}
             />
         </Modal>
     );

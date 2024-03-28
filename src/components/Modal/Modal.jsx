@@ -20,11 +20,18 @@ export const ModalContent = ({ children, className }) => {
     return <div className={'modalContent px-2 ' + className}>{children}</div>;
 };
 
-export const ModalFooter = ({ onClose, close = '', onSubmit, submit = '' }) => {
+export const ModalFooter = ({ onClose, close = '', onSubmit, submit = '', disabled = false }) => {
     return (
         <div className='modalfooter p-4'>
-            {!!close && <Button onClickCallBk={onClose} title={close} />}
-            {!!submit && <Button onClickCallBk={onSubmit} title={submit} type={'primary'} />}
+            {!!close && <Button onClickCallBk={onClose} title={close} disabled={disabled} />}
+            {!!submit && (
+                <Button
+                    onClickCallBk={onSubmit}
+                    title={submit}
+                    type={'primary'}
+                    disabled={disabled}
+                />
+            )}
         </div>
     );
 };
