@@ -98,7 +98,7 @@ const PatientList = () => {
         </div>
     ));
 
-    return <div className='top-bottom-position-container'>{patientList}</div>;
+    return <div className='top-bottom-position-container top56'>{patientList}</div>;
 };
 
 export default PatientList;

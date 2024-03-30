@@ -6,22 +6,10 @@ import Loader from '../common/Loader/Loader';
 import Table from '../../components/Table/Table';
 import { getallusersaction } from '../../store/actions/useraction/getallusersaction';
 import { noDataInfo, somethingWentWrong } from '../../utils/globalConstants';
-import withRouter from '../../hoc/withRouter';
+
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
-
-const data = [
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-];
+import './UserList.scss';
 
 const UserList = () => {
     const [loading, setLoading] = useState(true);
@@ -56,6 +44,7 @@ const UserList = () => {
         { key: 'name', id: 'name', label: 'Name', sortable: true, hidden: false, order: 'asc' },
         { key: 'email', id: 'email', label: 'Email ID', sortable: false, hidden: false },
         { key: 'role', id: 'role', label: 'Role', sortable: false, hidden: false },
+        { key: 'action', id: 'action', label: 'Action', sortable: false, hidden: false },
     ];
     const renderTbData = (key, item) => {
         return <span>{item[key]}</span>;
@@ -66,12 +55,21 @@ const UserList = () => {
             const row = [];
             headers.forEach((header, i) => {
                 const { key } = header;
-                row.push({
-                    label: '',
-                    id: `${key}-${j}-${i}`,
-                    children: renderTbData(key, item),
-                    // align: getTdClass(key),
-                });
+                if (key !== 'action') {
+                    row.push({
+                        label: '',
+                        id: `${key}-${j}-${i}`,
+                        children: renderTbData(key, item),
+                        // align: getTdClass(key),
+                    });
+                } else {
+                    row.push({
+                        label: '',
+                        id: `${key}-${j}-${i}`,
+                        children: <span>Take Action</span>,
+                        // align: getTdClass(key),
+                    });
+                }
             });
             return row;
         });
@@ -129,7 +127,7 @@ const UserList = () => {
 
     return !loading ? (
         !isError ? (
-            <div className='display-flex user-row-container'>{renderTable()}</div>
+            <div className='user-row-container'>{renderTable()}</div>
         ) : (
             <InformativeErrorModal
                 open={isError}

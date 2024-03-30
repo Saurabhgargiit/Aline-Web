@@ -28,30 +28,32 @@ const AdminHeaderBar = ({ role, userId }) => {
     };
 
     return (
-        <div className='displayFlex admin-header-bar-container py-2'>
-            {isAdmin && (
-                <Button
-                    title={'Add Admin'}
-                    onClickCallBk={() => addParentUserModalHandler('Admin')}
-                    // postionClass={role === 'ROLE_ADMIN' ? '' : 'noDisplay'}
-                />
-            )}
-            {isAdmin && (
-                <Button
-                    title={'Add Lab'}
-                    onClickCallBk={() => addParentUserModalHandler('Lab')}
-                    // postionClass={role === 'ROLE_ADMIN' ? '' : 'noDisplay'}
-                />
-            )}
-            {(isAdmin || isLab) && (
-                <Button
-                    title={'Add Clinic'}
-                    onClickCallBk={() => addParentUserModalHandler('Clinic')}
-                    // postionClass={role === 'ROLE_ADMIN' ? '' : 'noDisplay'}
-                />
-            )}
+        <div className='header-container'>
+            <div className='displayFlex admin-header-bar-container py-2'>
+                {isAdmin && (
+                    <Button
+                        title={'Add Admin'}
+                        onClickCallBk={() => addParentUserModalHandler('Admin')}
+                        // postionClass={role === 'ROLE_ADMIN' ? '' : 'noDisplay'}
+                    />
+                )}
+                {isAdmin && (
+                    <Button
+                        title={'Add Lab'}
+                        onClickCallBk={() => addParentUserModalHandler('Lab')}
+                        // postionClass={role === 'ROLE_ADMIN' ? '' : 'noDisplay'}
+                    />
+                )}
+                {(isAdmin || isLab) && (
+                    <Button
+                        title={'Add Clinic'}
+                        onClickCallBk={() => addParentUserModalHandler('Clinic')}
+                        // postionClass={role === 'ROLE_ADMIN' ? '' : 'noDisplay'}
+                    />
+                )}
 
-            <Dropdown options={filterUsertypes} onChangeCallBk={userTypeSelectHandler} />
+                <Dropdown options={filterUsertypes} onChangeCallBk={userTypeSelectHandler} />
+            </div>
         </div>
     );
 };

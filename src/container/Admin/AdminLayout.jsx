@@ -16,7 +16,7 @@ const AdminLayout = () => {
     } = fetchedUserInfo;
     return (
         <AddParentUserContextProvider>
-            <div className='top-bottom-position-container'>
+            <div className='top-bottom-position-container top112'>
                 <AdminHeaderBar userID={userID} role={role} />
                 <UserList userID={userID} role={role} />
                 <AddParentUserLayout />

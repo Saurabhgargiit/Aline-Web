@@ -1,3 +1,5 @@
+@import '../../styles/styles.scss';
+
 .aline-table-wrapper {
     margin: 0;
     position: relative;
@@ -6,16 +8,11 @@
     height: calc(
         100% - 9.375rem - 3.625rem
     ); // 100% of available height minus 150px for the table nav items, and 58px for the same spacing as above the table
-    background-color: var(--ed-color-white);
-
-    //   // Our modal is just another table element, so hide the second table while we're "loading"
-    //   // Isn't usually an issue on first load since the table hasn't been loaded yet
-    //   + .analytics {
-    //     display: none;
-    //   }
+    background-color: $whiteColor;
 
     table {
         border-collapse: collapse;
+        // border: $rowBorder;
         // font-size: 0.8rem;
         min-width: 100%;
     }

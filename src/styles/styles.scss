@@ -23,12 +23,25 @@ $primaryBtnColorHover: #029aae;
 
 $rowBorder: 1px solid $rowBorderColor;
 
+@function rem-calc($size) {
+    $remSize: calc($size / 16);
+    @return #{$remSize}rem;
+}
+
 //@@@@@@@ Common classes@@@@
 
 .top-bottom-position-container {
     position: relative;
-    top: 56px;
+    // top: 56px;
     margin-bottom: 112px;
+}
+
+.top56 {
+    top: 3.5rem;
+}
+
+.top112 {
+    top: 7rem;
 }
 
 .modal-container {

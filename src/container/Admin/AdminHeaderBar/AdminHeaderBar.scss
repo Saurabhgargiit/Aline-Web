@@ -1,4 +1,16 @@
+@import '../../../styles/styles.scss';
+
 .admin-header-bar-container {
     justify-content: space-around;
     align-items: center;
+}
+
+.header-container {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    background-color: $whiteColor;
+    border-bottom: $rowBorder;
 }
