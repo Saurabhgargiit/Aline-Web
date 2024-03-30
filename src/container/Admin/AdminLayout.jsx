@@ -3,6 +3,9 @@ import UserList from './UserList';
 import AddParentUserLayout from './AddParentUser/AddParentUserLayout';
 import { AddParentUserContextProvider } from './AddParentUser/Context/AddParentUserContext';
 import AdminHeaderBar from './AdminHeaderBar/AdminHeaderBar';
+import { withReducer } from '../../hoc/withReducer';
+import withRouter from '../../hoc/withRouter';
+import getAllUsersReducer from '../../store/reducers/userreducer/getAllUsersReducer';
 
 const AdminLayout = () => {
     const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo?.data);
@@ -22,4 +25,4 @@ const AdminLayout = () => {
     );
 };
 
-export default AdminLayout;
+export default withRouter(withReducer('getAllUsers', getAllUsersReducer)(AdminLayout));

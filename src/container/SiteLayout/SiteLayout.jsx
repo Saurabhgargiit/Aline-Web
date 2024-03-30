@@ -3,7 +3,7 @@ import SideSectionLayout from '../SideSection/SideSectionLayout';
 import { useState, useCallback, useEffect } from 'react';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
-import WithRouter from '../../hoc/withRouter';
+import withRouter from '../../hoc/withRouter';
 import { CommonConstants } from '../../utils/globalConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAction } from '../../store/actions/loginaction';
@@ -89,4 +89,4 @@ const SiteLayout = ({ location, navigate }) => {
     );
 };
 
-export default WithRouter(SiteLayout);
+export default withRouter(SiteLayout);

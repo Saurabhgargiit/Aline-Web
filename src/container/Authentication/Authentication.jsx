@@ -4,7 +4,7 @@ import ForgotPassword from '../Login/ForgotPassword/ForgotPassword';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { CommonConstants } from '../../utils/globalConstants';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
-import WithRouter from '../../hoc/withRouter';
+import withRouter from '../../hoc/withRouter';
 import { useSelector } from 'react-redux';
 
 function Authentication({ location, navigate, setIsLoggedIn }) {
@@ -59,4 +59,4 @@ function Authentication({ location, navigate, setIsLoggedIn }) {
     );
 }
 
-export default WithRouter(Authentication);
+export default withRouter(Authentication);
