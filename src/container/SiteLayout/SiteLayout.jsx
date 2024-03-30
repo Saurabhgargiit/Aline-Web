@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import withRouter from '../../hoc/withRouter';
-import { CommonConstants } from '../../utils/globalConstants';
+import { CommonConstants, somethingWentWrong } from '../../utils/globalConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAction } from '../../store/actions/loginaction';
 import { getsignedInUserInfo } from '../../store/actions/useraction/userInfoaction';
@@ -53,13 +53,13 @@ const SiteLayout = ({ location, navigate }) => {
             storeUserData(data);
             setIsLoading(false);
         } else if (fetchedUserInfo?.result === 'error') {
-            setGetUserErrMsg('Something went wrong. Please try again or contact administrator');
+            setGetUserErrMsg(somethingWentWrong);
             setIsLoading(false);
             setIsError(true);
         }
     }, [fetchedUserInfo]);
 
-    const closeHanler = () => {
+    const closeHandler = () => {
         setIsLoading(true);
         setIsError(false);
         setGetUserErrMsg('');
@@ -82,7 +82,7 @@ const SiteLayout = ({ location, navigate }) => {
     ) : (
         <InformativeErrorModal
             open={isError}
-            btnFunction={closeHanler}
+            btnFunction={closeHandler}
             className='add-parent-box'
             errorMsg={getUserErrMsg}
         />

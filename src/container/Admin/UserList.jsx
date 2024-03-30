@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../common/Loader/Loader';
 import Table from '../../components/Table/Table';
 import { getallusersaction } from '../../store/actions/useraction/getallusersaction';
-import { noDataInfo } from '../../utils/globalConstants';
+import { noDataInfo, somethingWentWrong } from '../../utils/globalConstants';
+import withRouter from '../../hoc/withRouter';
+import { InformativeErrorModal } from '../../components/Modal/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const data = [
     {
@@ -25,7 +28,12 @@ const UserList = () => {
     const [userBasicInfo, setUserBasicInfo] = useState([]);
     const [userDetailInfo, setUserDetailInfo] = useState([]);
 
+    const [isError, setIsError] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
+
     const fetchedAllUsers = useSelector((state) => state.getAllUsers.allUsers);
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const getAllUsers = () => {
@@ -81,23 +89,16 @@ const UserList = () => {
             console.log(fetchedAllUsers);
             const { userBasicInfoFromResponse, userDetailInfoFromResponse } =
                 separateDetails(userList);
-            // setUserList(() => userList);
             setUserBasicInfo(() => userBasicInfoFromResponse);
             setUserDetailInfo(() => userDetailInfoFromResponse);
             setLoading(false);
+        } else if (fetchedAllUsers.result === 'error') {
+            setErrMsg(somethingWentWrong);
+            setLoading(false);
+            setIsError(true);
         }
     }, [fetchedAllUsers]);
-    // const clinicList = obj.map((el, i) => (
-    //     <div className='displayFlex home-row-container row-border' key={i}>
-    //         <div className='home-page-name-date mt-2'>
-    //             <div className='home-page-name font700'>Saurabh Garg</div>
-    //             <div className='home-page-date font14'>21-Aug-2023</div>
-    //         </div>
-    //         <div className='home-status mt-2'>
-    //             <Badge pill bg='primary'>
-    //                 Primary
-    //             </Badge>
-    //         </div>
+
     //         <div className='mt-2'>
     //             <div className='home-page-count'>15 out of 24</div>
     //             <div className='home-page-icons'>
@@ -110,18 +111,33 @@ const UserList = () => {
     //                 />
     //             </div>
     //         </div>
-    //     </div>
-    // ));
+
     const renderTable = () => {
-        const rows = tableData([]);
+        const rows = tableData(userBasicInfo);
         console.log(rows);
         return (
             <Table headers={headers} rows={rows} errorMsg={rows.length === 0 ? noDataInfo : ''} />
         );
     };
 
+    const closeHandler = () => {
+        setLoading(true);
+        setIsError(false);
+        setErrMsg('');
+        navigate('/home');
+    };
+
     return !loading ? (
-        <div className='display-flex user-row-container'>{renderTable()}</div>
+        !isError ? (
+            <div className='display-flex user-row-container'>{renderTable()}</div>
+        ) : (
+            <InformativeErrorModal
+                open={isError}
+                btnFunction={closeHandler}
+                className='add-parent-box'
+                errorMsg={errMsg}
+            />
+        )
     ) : (
         <Loader />
     );

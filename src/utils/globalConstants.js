@@ -17,4 +17,8 @@ export const FormErrors = {
     passwordErr: 'Password should be between 6 to 12 letters.',
 };
 
+//Error Messages
+export const somethingWentWrong = 'Something went wrong. Please try again or contact administrator';
+
+//Info messages
 export const noDataInfo = 'There is no data to show.';
