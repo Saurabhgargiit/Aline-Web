@@ -8,7 +8,15 @@ const onKeyDownHandler = (e, functionName) => {
 };
 
 const Table = React.forwardRef((props, ref) => {
-    const { className = '', tableClass = '', headers = [], rows = [], sortKey, sortDir } = props;
+    const {
+        className = '',
+        tableClass = '',
+        headers = [],
+        rows = [],
+        sortKey,
+        sortDir,
+        errorMsg = '',
+    } = props;
 
     return (
         <div className={`aline-table-wrapper ${className}`}>
@@ -89,15 +97,21 @@ const Table = React.forwardRef((props, ref) => {
                     </tr>
                 </thead>
                 <tbody ref={ref}>
-                    {rows.map((row, i) => {
-                        return (
-                            <tr key={`table-row-${i}`}>
-                                {row.map((data) => {
-                                    return <TableData key={data.id || data.label} {...data} />;
-                                })}
-                            </tr>
-                        );
-                    })}
+                    {!!errorMsg ? (
+                        <div className='nodata center-position'>
+                            <span className='error-Msg'> {errorMsg} </span>
+                        </div>
+                    ) : (
+                        rows.map((row, i) => {
+                            return (
+                                <tr key={`table-row-${i}`}>
+                                    {row.map((data) => {
+                                        return <TableData key={data.id || data.label} {...data} />;
+                                    })}
+                                </tr>
+                            );
+                        })
+                    )}
                 </tbody>
             </table>
         </div>

@@ -142,5 +142,9 @@
 
     tbody {
         position: relative;
+        .nodata {
+            // position: absolute;
+            width: 100%;
+        }
     }
 }

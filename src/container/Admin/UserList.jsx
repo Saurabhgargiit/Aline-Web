@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../common/Loader/Loader';
 import Table from '../../components/Table/Table';
 import { getallusersaction } from '../../store/actions/useraction/getallusersaction';
+import { noDataInfo } from '../../utils/globalConstants';
 
 const data = [
     {
@@ -17,101 +18,74 @@ const data = [
         email: 'saurabh123@gmail.com',
         role: 'Admin',
     },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
-    {
-        name: 'Saurabh Garg',
-        email: 'saurabh123@gmail.com',
-        role: 'Admin',
-    },
 ];
-const headers = [
-    { key: 'name', id: 'name', label: 'Name', sortable: true, hidden: false, order: 'asc' },
-    { key: 'email', id: 'email', label: 'Email ID', sortable: false, hidden: false },
-    { key: 'role', id: 'role', label: 'Role', sortable: false, hidden: false },
-];
-
-const renderTbData = (key, item) => {
-    return <span>{item[key]}</span>;
-};
-
-const TableData = data.map((item, j) => {
-    const rows = [];
-    headers.forEach((header, i) => {
-        const { key } = header;
-        rows.push({
-            label: '',
-            id: `${key}-${j}-${i}`,
-            children: renderTbData(key, item),
-            // align: getTdClass(key),
-        });
-    });
-    return rows;
-});
 
 const UserList = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [userBasicInfo, setUserBasicInfo] = useState([]);
+    const [userDetailInfo, setUserDetailInfo] = useState([]);
 
-    const fetchedAllUsers = useSelector((state) => state.getAllUsers);
+    const fetchedAllUsers = useSelector((state) => state.getAllUsers.allUsers);
     const dispatch = useDispatch();
+
     const getAllUsers = () => {
         dispatch(getallusersaction('GET_ALL_USERS'));
     };
 
+    //Function to separate details and basic info
+    const separateDetails = (data) => {
+        const userBasicInfoFromResponse = [];
+        const userDetailInfoFromResponse = [];
+        Object.values(data).forEach((el, i) => {
+            userBasicInfoFromResponse.push(el.userDto);
+            userDetailInfoFromResponse.push(el.userDetailsDto);
+        });
+        return { userBasicInfoFromResponse, userDetailInfoFromResponse };
+    };
+
+    //Table headers
+    const headers = [
+        { key: 'name', id: 'name', label: 'Name', sortable: true, hidden: false, order: 'asc' },
+        { key: 'email', id: 'email', label: 'Email ID', sortable: false, hidden: false },
+        { key: 'role', id: 'role', label: 'Role', sortable: false, hidden: false },
+    ];
+    const renderTbData = (key, item) => {
+        return <span>{item[key]}</span>;
+    };
+
+    const tableData = (data) => {
+        const rows = data.map((item, j) => {
+            const row = [];
+            headers.forEach((header, i) => {
+                const { key } = header;
+                row.push({
+                    label: '',
+                    id: `${key}-${j}-${i}`,
+                    children: renderTbData(key, item),
+                    // align: getTdClass(key),
+                });
+            });
+            return row;
+        });
+        return rows;
+    };
+
+    //First time call
     useEffect(() => {
         getAllUsers();
     }, []);
 
     useEffect(() => {
-        console.log(fetchedAllUsers);
+        if (fetchedAllUsers.result === 'success' && fetchedAllUsers.data !== undefined) {
+            const userList = fetchedAllUsers.data;
+            console.log(fetchedAllUsers);
+            const { userBasicInfoFromResponse, userDetailInfoFromResponse } =
+                separateDetails(userList);
+            // setUserList(() => userList);
+            setUserBasicInfo(() => userBasicInfoFromResponse);
+            setUserDetailInfo(() => userDetailInfoFromResponse);
+            setLoading(false);
+        }
     }, [fetchedAllUsers]);
     // const clinicList = obj.map((el, i) => (
     //     <div className='displayFlex home-row-container row-border' key={i}>
@@ -138,11 +112,16 @@ const UserList = () => {
     //         </div>
     //     </div>
     // ));
+    const renderTable = () => {
+        const rows = tableData([]);
+        console.log(rows);
+        return (
+            <Table headers={headers} rows={rows} errorMsg={rows.length === 0 ? noDataInfo : ''} />
+        );
+    };
 
     return !loading ? (
-        <div className='display-flex user-row-container row-border'>
-            <Table headers={headers} rows={TableData} />
-        </div>
+        <div className='display-flex user-row-container'>{renderTable()}</div>
     ) : (
         <Loader />
     );

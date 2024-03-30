@@ -38,7 +38,6 @@ function createAxiosResponseInterceptor(axiosInstance) {
         let responseUrl;
         axiosInstance.interceptors.response.use(
             (response) => {
-                console.log(response);
                 var url = window.location.href;
                 responseUrl = response.config.url;
                 if (
