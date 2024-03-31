@@ -9,6 +9,7 @@ $whiteColor: #fff;
 
 //Error Message
 $erroMsgColor: #ff0000e3;
+
 //Borders
 $darkBorder: #9c9db5;
 $inputFieldBorder: #bdc1c6;
@@ -23,6 +24,11 @@ $primaryBtnColorHover: #029aae;
 
 $rowBorder: 1px solid $rowBorderColor;
 
+//Pagination colors
+$paginationDigitNumber: $backgroundheaderfooterColor;
+$paginationBorderColor: $backgroundheaderfooterColor;
+
+//Functions
 @function rem-calc($size) {
     $remSize: calc($size / 16);
     @return #{$remSize}rem;

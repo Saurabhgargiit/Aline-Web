@@ -1,0 +1,15 @@
+@import '../../styles/styles.scss';
+
+.custom-pagination {
+    // position: relative;
+    // z-index: 15;
+
+    a {
+        color: $paginationDigitNumber;
+        border-color: $paginationBorderColor;
+    }
+    .active .page-link {
+        background-color: $paginationDigitNumber;
+        border-color: $paginationDigitNumber;
+    }
+}

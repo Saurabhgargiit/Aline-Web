@@ -22,3 +22,6 @@ export const somethingWentWrong = 'Something went wrong. Please try again or con
 
 //Info messages
 export const noDataInfo = 'There is no data to show.';
+
+//LIMITS
+export const MAXIMUM_RESULTS_ON_ONE_PAGE = 10;

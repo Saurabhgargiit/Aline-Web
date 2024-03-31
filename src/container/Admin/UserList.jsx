@@ -10,6 +10,7 @@ import { noDataInfo, somethingWentWrong } from '../../utils/globalConstants';
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 import './UserList.scss';
+import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 
 const UserList = () => {
     const [loading, setLoading] = useState(true);
@@ -127,7 +128,10 @@ const UserList = () => {
 
     return !loading ? (
         !isError ? (
-            <div className='user-row-container'>{renderTable()}</div>
+            <>
+                <div className='user-row-container'>{renderTable()}</div>
+                <AdvancedPagination topContainerClassName='topContainerClassName' />
+            </>
         ) : (
             <InformativeErrorModal
                 open={isError}
