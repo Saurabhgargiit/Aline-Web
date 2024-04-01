@@ -36,46 +36,50 @@ const AddParentUserForm = ({ addType, isEdit }) => {
         });
     };
 
+    const detailObjSetter = (field, value) => {
+        ctx.setDetailUserObj((prevState) => {
+            return {
+                ...prevState,
+                [field]: value,
+            };
+        });
+    };
+
     const inputHandler = (e, inputType) => {
         const { value } = e.target;
         switch (inputType) {
             case 'name':
                 setName(() => value);
-                if (value.trim().length > 0) {
-                    setNameValid(true);
-                } else {
-                    setNameValid(false);
-                }
+                setNameValid(value.trim().length > 0);
+                objSetter(inputType, value);
                 break;
-            case 'address':
+            case 'userAddress':
                 setAddress(() => value);
+                detailObjSetter(inputType, value);
                 break;
-            case 'city':
+            case 'userCity':
                 setCity(() => value);
+                detailObjSetter(inputType, value);
                 break;
-            case 'phone':
+            case 'mobileNo':
                 setPhone(() => value);
+                detailObjSetter(inputType, value);
                 break;
             case 'email':
                 setEmail(() => value);
-                if (value.includes('@')) {
-                    setEmailVaild(true);
-                } else {
-                    setEmailVaild(false);
-                }
+                setEmailVaild(value.includes('@'));
+                objSetter(inputType, value);
                 break;
             case 'password':
                 setPass(() => value);
-                if (value.length > 5 && value.length < 13) {
-                    setPassValid(true);
-                } else {
-                    setPassValid(false);
-                }
+                setPassValid(value.length > 5 && value.length < 13);
+                objSetter(inputType, value);
                 break;
             default:
+                // This is the default case, which gets executed if `inputType` does not match any of the above.
+                console.log('Unhandled input type:', inputType);
                 break;
         }
-        objSetter(inputType, value);
     };
 
     return (
@@ -96,7 +100,7 @@ const AddParentUserForm = ({ addType, isEdit }) => {
                 <input
                     id='parent-address'
                     type='text'
-                    onChange={(e) => inputHandler(e, 'address')}
+                    onChange={(e) => inputHandler(e, 'userAddress')}
                     value={address}
                 ></input>
             </div>
@@ -105,7 +109,7 @@ const AddParentUserForm = ({ addType, isEdit }) => {
                 <input
                     id='parent-city'
                     type='text'
-                    onChange={(e) => inputHandler(e, 'city')}
+                    onChange={(e) => inputHandler(e, 'userCity')}
                     value={city}
                 ></input>
             </div>
@@ -114,7 +118,7 @@ const AddParentUserForm = ({ addType, isEdit }) => {
                 <input
                     id='parent-mobile'
                     type='tel'
-                    onChange={(e) => inputHandler(e, 'phone')}
+                    onChange={(e) => inputHandler(e, 'mobileNo')}
                     value={phone}
                 ></input>
             </div>

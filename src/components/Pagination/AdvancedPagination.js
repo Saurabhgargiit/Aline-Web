@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination } from 'react-bootstrap';
-import { MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN_IN_ADMIN } from '../../utils/globalConstants';
+import { MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN } from '../../utils/globalConstants';
 import './AdvancedPagination.scss';
 
 function AdvancedPagination({
     page = 1,
-    maxResOnePage = MAXIMUM_RESULTS_ON_ONE_PAGE,
+    maxResOnePage = MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN,
     totalRes = 80,
     topContainerClassName = '',
     setPageInParent = () => {},

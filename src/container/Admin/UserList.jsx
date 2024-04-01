@@ -150,28 +150,9 @@ const UserList = () => {
         navigate('/home');
     };
 
-    // const paginationHanlder = (type, page, totalElements = 0) => {
-    //     if (type === 'page') {
-    //         setPagination((prevState) => {
-    //             return { ...prevState, page: page };
-    //         });
-    //     } else if (type === 'total') {
-    //         setPagination((prevState) => {
-    //             return { ...prevState, total: totalElements };
-    //         });
-    //     }
-    // };
-
     return !loading ? (
         !isError ? (
-            <>
-                <div className='user-row-container'>{renderTable()}</div>
-                {/* <AdvancedPagination
-                    topContainerClassName='topContainerClassName'
-                    totalRes={pagination.total}
-                    setPageInParent={setPagination}
-                /> */}
-            </>
+            <div className='user-row-container'>{renderTable()}</div>
         ) : (
             <InformativeErrorModal
                 open={isError}

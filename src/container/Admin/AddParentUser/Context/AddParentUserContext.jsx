@@ -20,6 +20,8 @@ const obj = {
     paginationHanlder: () => {},
     userAdded: false,
     setUserAdded: () => {},
+    detailUserObject: {},
+    setDetailUserObj: () => {},
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -29,13 +31,19 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     const [addType, setAddType] = useState('');
     const [userObj, setUserObj] = useState({
         name: '',
-        address: '',
-        city: '',
-        phone: '',
         email: '',
         password: '',
         role: [],
     });
+
+    //different oject considering backend
+    const [detailUserObject, setDetailUserObj] = useState({
+        mobileNo: '',
+        userAddress: '',
+        userCity: '',
+        userCountry: '',
+    });
+
     const [formValid, setFormValid] = useState(false);
     const [pagination, setPagination] = useState({
         page: 1,
@@ -81,21 +89,11 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     const addParentUserFn = () => {
         setLoading(true);
         if (!formValid) return;
-        const { name, address, city, phone, email, password, role } = userObj;
+
         //user name is used in backend. Dont change
-        const user = {
-            name: name,
-            email: email,
-            password: password,
-            role: role,
-        };
+        const user = userObj;
         //userDetails name is used in backend. Dont change
-        const userDetails = {
-            mobileNo: 'string',
-            userAddress: 'string',
-            userCity: 'string',
-            userCountry: 'string',
-        };
+        const userDetails = detailUserObject;
         const userPayload = { user, userDetails };
 
         postCall(userPayload, 'CREATE_PARENT_USER').then((data) => {
@@ -112,7 +110,6 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
                 setUserAdded(true);
                 closeModalHandler();
             } else if (data.result === 'error') {
-                // closeModalHandler();
                 toast.error('data.error', {
                     position: 'top-right',
                     hideProgressBar: false,
@@ -148,6 +145,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         userTypeFilter,
         pagination,
         userAdded,
+        detailUserObject,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
@@ -156,6 +154,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setUserTypeFilter,
         paginationHanlder,
         setUserAdded,
+        setDetailUserObj,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>
