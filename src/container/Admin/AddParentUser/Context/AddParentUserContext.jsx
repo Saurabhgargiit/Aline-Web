@@ -14,6 +14,8 @@ const obj = {
     addParentUserFn: () => {},
     setFormValid: () => {},
     loading: false,
+    userTypeFilter: '',
+    setUserTypeFilter: () => {},
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -31,6 +33,10 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         role: [],
     });
     const [formValid, setFormValid] = useState(false);
+
+    //For Drodown in adminheaderbar
+    const [userTypeFilter, setUserTypeFilter] = useState('admin');
+
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
@@ -99,11 +105,13 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         addType,
         userObj,
         loading,
+        userTypeFilter,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
         closeModalHandler,
         setFormValid,
+        setUserTypeFilter,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

@@ -84,13 +84,34 @@ export const CommonUtils = {
     getPayloadRole: function (userRole) {
         switch (userRole) {
             case 'Admin':
+            case 'admin':
                 return 'ROLE_ADMIN';
             case 'Lab':
+            case 'lab':
                 return 'ROLE_LAB';
             case 'Clinic':
+            case 'clinic':
                 return 'ROLE_CLINIC';
             case 'Doctor':
+            case 'doctor':
                 return 'ROLE_DOCTOR';
         }
+    },
+
+    generateGetApiPath: function (baseUrl, dynamicSegments = [], queryParams = {}) {
+        // Join the base URL with dynamic segments
+        let path = `${baseUrl}/${dynamicSegments.join('/')}`;
+
+        // Convert query parameters object to a string
+        const queryParamString = Object.entries(queryParams)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        // Append query parameters to the path, if any
+        if (queryParamString) {
+            path += `?${queryParamString}`;
+        }
+
+        return path;
     },
 };

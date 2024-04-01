@@ -1,6 +1,6 @@
 import './Dropdown.scss';
 
-const Dropdown = ({ options, onChangeCallBk }) => {
+const Dropdown = ({ options, onChangeCallBk, selectedValue }) => {
     const optionsList = options.map((el) => (
         <option key={el.key} value={el.value}>
             {el.label}
@@ -12,7 +12,7 @@ const Dropdown = ({ options, onChangeCallBk }) => {
     };
     return (
         <div>
-            <select className='selectBox' onChange={changeHandler}>
+            <select className='selectBox' onChange={changeHandler} value={selectedValue}>
                 {optionsList}
             </select>
         </div>

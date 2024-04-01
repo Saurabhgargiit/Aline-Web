@@ -13,9 +13,10 @@ const filterUsertypes = [
 ];
 
 const AdminHeaderBar = ({ role, userId }) => {
-    const [userTypeFilter, setUserTypeFilter] = useState();
+    // const [userTypeFilter, setUserTypeFilter] = useState('doctor');
 
-    const { addParentUserModalHandler } = useContext(AddParentUserContext);
+    const { addParentUserModalHandler, userTypeFilter, setUserTypeFilter } =
+        useContext(AddParentUserContext);
 
     const isAdmin = CommonUtils.isAdmin(role);
     const isLab = CommonUtils.isLab(role);
@@ -23,8 +24,7 @@ const AdminHeaderBar = ({ role, userId }) => {
     const isDoctor = CommonUtils.isDoctor(role);
 
     const userTypeSelectHandler = (e) => {
-        console.log(e);
-        console.log(e.target.value);
+        setUserTypeFilter(() => e.target.value);
     };
 
     return (
@@ -52,7 +52,11 @@ const AdminHeaderBar = ({ role, userId }) => {
                     />
                 )}
 
-                <Dropdown options={filterUsertypes} onChangeCallBk={userTypeSelectHandler} />
+                <Dropdown
+                    options={filterUsertypes}
+                    onChangeCallBk={userTypeSelectHandler}
+                    selectedValue={userTypeFilter}
+                />
             </div>
         </div>
     );

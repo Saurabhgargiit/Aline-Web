@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Badge } from 'react-bootstrap';
 import SVG from 'react-inlinesvg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,13 +9,18 @@ import { noDataInfo, somethingWentWrong } from '../../utils/globalConstants';
 
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
-import './UserList.scss';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
+import { AddParentUserContext } from './AddParentUser/Context/AddParentUserContext';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import './UserList.scss';
 
 const UserList = () => {
     const [loading, setLoading] = useState(true);
     const [userBasicInfo, setUserBasicInfo] = useState([]);
     const [userDetailInfo, setUserDetailInfo] = useState([]);
+
+    const { userTypeFilter } = useContext(AddParentUserContext);
+    console.log(userTypeFilter);
 
     const [isError, setIsError] = useState(false);
     const [errMsg, setErrMsg] = useState('');
@@ -26,7 +31,14 @@ const UserList = () => {
     const dispatch = useDispatch();
 
     const getAllUsers = () => {
-        dispatch(getallusersaction('GET_ALL_USERS'));
+        const role = CommonUtils.getPayloadRole(userTypeFilter);
+        const query = {
+            pageNumber: 0,
+            pageSize: 10,
+            sortBy: 'id',
+            sortDir: 'asc',
+        };
+        dispatch(getallusersaction('GET_ALL_USERS', [role], query));
     };
 
     //Function to separate details and basic info
@@ -80,11 +92,11 @@ const UserList = () => {
     //First time call
     useEffect(() => {
         getAllUsers();
-    }, []);
+    }, [userTypeFilter]);
 
     useEffect(() => {
         if (fetchedAllUsers.result === 'success' && fetchedAllUsers.data !== undefined) {
-            const userList = fetchedAllUsers.data;
+            const userList = fetchedAllUsers.data?.content;
             console.log(fetchedAllUsers);
             const { userBasicInfoFromResponse, userDetailInfoFromResponse } =
                 separateDetails(userList);

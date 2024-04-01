@@ -1,6 +1,7 @@
 import * as actionTypes from '../../actionTypes';
 import { ApiRelativePaths, _agent } from '../../../utils/globalURLs';
 import axiosInstance from '../../../network/interceptor/interceptor';
+import { CommonUtils } from '../../../utils/commonfunctions/commonfunctions';
 
 const setAllUserInfo = (allUsers) => {
     return {
@@ -9,12 +10,13 @@ const setAllUserInfo = (allUsers) => {
     };
 };
 
-export const getallusersaction = (url_path) => {
+export const getallusersaction = (url_path, dynamicVal = [], query = {}) => {
     return (dispatch) => {
         const path = ApiRelativePaths[url_path];
+        const generatedURL = CommonUtils.generateGetApiPath(path, dynamicVal, query);
 
         axiosInstance
-            .get(path)
+            .get(generatedURL)
             .then((res) => {
                 const finalRes = {
                     result: 'success',
