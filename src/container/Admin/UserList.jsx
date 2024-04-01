@@ -6,7 +6,7 @@ import Loader from '../common/Loader/Loader';
 import Table from '../../components/Table/Table';
 import { getallusersaction } from '../../store/actions/useraction/getallusersaction';
 import { noDataInfo, somethingWentWrong } from '../../utils/globalConstants';
-import { MAXIMUM_RESULTS_ON_ONE_PAGE } from '../../utils/globalConstants';
+import { MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN } from '../../utils/globalConstants';
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
@@ -20,8 +20,8 @@ const UserList = () => {
 
     const [userDetailInfo, setUserDetailInfo] = useState([]);
 
-    const { userTypeFilter, pagination, paginationHanlder } = useContext(AddParentUserContext);
-    console.log(userTypeFilter);
+    const { userTypeFilter, pagination, paginationHanlder, userAdded, setUserAdded } =
+        useContext(AddParentUserContext);
 
     const [isError, setIsError] = useState(false);
     const [errMsg, setErrMsg] = useState('');
@@ -35,9 +35,9 @@ const UserList = () => {
         const role = CommonUtils.getPayloadRole(userTypeFilter);
         const query = {
             pageNumber: pagination.page - 1,
-            pageSize: MAXIMUM_RESULTS_ON_ONE_PAGE,
+            pageSize: MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN,
             sortBy: 'id',
-            sortDir: 'asc',
+            sortDir: 'des',
         };
         dispatch(getallusersaction('GET_ALL_USERS', [role], query));
     };
@@ -93,7 +93,17 @@ const UserList = () => {
     //First time call
     useEffect(() => {
         getAllUsers();
-    }, [userTypeFilter, pagination.page]);
+        if (userAdded) {
+            setUserAdded(false);
+        }
+    }, [userTypeFilter, pagination.page, userAdded]);
+
+    useEffect(() => {
+        if (userAdded) {
+            getAllUsers();
+            setUserAdded(false);
+        }
+    }, [userAdded]);
 
     useEffect(() => {
         if (fetchedAllUsers.result === 'success' && fetchedAllUsers.data !== undefined) {

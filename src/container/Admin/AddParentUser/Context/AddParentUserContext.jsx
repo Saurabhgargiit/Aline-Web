@@ -18,6 +18,8 @@ const obj = {
     setUserTypeFilter: () => {},
     pagination: {},
     paginationHanlder: () => {},
+    userAdded: false,
+    setUserAdded: () => {},
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -39,6 +41,9 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         page: 1,
         total: 0,
     });
+
+    //For re-rendering when new user is added
+    const [userAdded, setUserAdded] = useState(false);
 
     //For Drodown in adminheaderbar
     const [userTypeFilter, setUserTypeFilter] = useState('admin');
@@ -76,25 +81,42 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     const addParentUserFn = () => {
         setLoading(true);
         if (!formValid) return;
+        const { name, address, city, phone, email, password, role } = userObj;
+        //user name is used in backend. Dont change
+        const user = {
+            name: name,
+            email: email,
+            password: password,
+            role: role,
+        };
+        //userDetails name is used in backend. Dont change
+        const userDetails = {
+            mobileNo: 'string',
+            userAddress: 'string',
+            userCity: 'string',
+            userCountry: 'string',
+        };
+        const userPayload = { user, userDetails };
 
-        postCall(userObj, 'CREATE_PARENT_USER').then((data) => {
+        postCall(userPayload, 'CREATE_PARENT_USER').then((data) => {
             if (data.result === 'success') {
                 toast.success(`${addType} added successully`, {
                     position: 'top-right',
                     hideProgressBar: false,
-                    autoClose: 4000,
+                    autoClose: 2000,
                     closeOnClick: true,
                     pauseOnHover: true,
                     theme: 'light',
                     transition: Bounce,
                 });
+                setUserAdded(true);
                 closeModalHandler();
             } else if (data.result === 'error') {
                 // closeModalHandler();
                 toast.error('data.error', {
                     position: 'top-right',
                     hideProgressBar: false,
-                    autoClose: 4000,
+                    autoClose: 2000,
                     closeOnClick: true,
                     pauseOnHover: true,
                     theme: 'light',
@@ -125,6 +147,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         loading,
         userTypeFilter,
         pagination,
+        userAdded,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
@@ -132,6 +155,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setFormValid,
         setUserTypeFilter,
         paginationHanlder,
+        setUserAdded,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

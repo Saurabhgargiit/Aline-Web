@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination } from 'react-bootstrap';
-import { MAXIMUM_RESULTS_ON_ONE_PAGE } from '../../utils/globalConstants';
+import { MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN_IN_ADMIN } from '../../utils/globalConstants';
 import './AdvancedPagination.scss';
 
 function AdvancedPagination({
@@ -13,7 +13,6 @@ function AdvancedPagination({
     const [curPage, setCurPage] = useState(1);
     const [leftEllipse, setLeftEllipse] = useState(false);
     const totalPage = Math.ceil(totalRes / maxResOnePage);
-    console.log(totalPage);
     const [rightEllipse, setRightEllipse] = useState(totalPage >= 6);
 
     const gotoFirst = () => {
@@ -119,6 +118,8 @@ function AdvancedPagination({
     useEffect(() => {
         setPageInParent('page', curPage, totalRes);
     }, [curPage]);
+
+    if (totalRes === 0) return null;
 
     return (
         <div className={'custom-pagination ' + topContainerClassName}>
