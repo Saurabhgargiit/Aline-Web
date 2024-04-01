@@ -6,10 +6,10 @@ import AdminHeaderBar from './AdminHeaderBar/AdminHeaderBar';
 import { withReducer } from '../../hoc/withReducer';
 import withRouter from '../../hoc/withRouter';
 import getAllUsersReducer from '../../store/reducers/userreducer/getAllUsersReducer';
+import AdminPagination from './AdminPagination';
 
 const AdminLayout = () => {
     const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo?.data);
-    console.log(fetchedUserInfo);
     const {
         id: userID,
         role: [role],
@@ -21,6 +21,7 @@ const AdminLayout = () => {
                 <UserList userID={userID} role={role} />
                 <AddParentUserLayout />
             </div>
+            <AdminPagination />
         </AddParentUserContextProvider>
     );
 };

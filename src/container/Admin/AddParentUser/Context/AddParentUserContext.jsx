@@ -16,6 +16,8 @@ const obj = {
     loading: false,
     userTypeFilter: '',
     setUserTypeFilter: () => {},
+    pagination: {},
+    paginationHanlder: () => {},
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -33,6 +35,10 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         role: [],
     });
     const [formValid, setFormValid] = useState(false);
+    const [pagination, setPagination] = useState({
+        page: 1,
+        total: 0,
+    });
 
     //For Drodown in adminheaderbar
     const [userTypeFilter, setUserTypeFilter] = useState('admin');
@@ -99,6 +105,18 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         });
     };
 
+    const paginationHanlder = (type, page, totalElements = 0) => {
+        if (type === 'page') {
+            setPagination((prevState) => {
+                return { ...prevState, page: page };
+            });
+        } else if (type === 'total') {
+            setPagination((prevState) => {
+                return { ...prevState, total: totalElements };
+            });
+        }
+    };
+
     providerObj = {
         ...obj,
         open,
@@ -106,12 +124,14 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         userObj,
         loading,
         userTypeFilter,
+        pagination,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
         closeModalHandler,
         setFormValid,
         setUserTypeFilter,
+        paginationHanlder,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

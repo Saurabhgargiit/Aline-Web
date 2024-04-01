@@ -6,7 +6,7 @@ import Loader from '../common/Loader/Loader';
 import Table from '../../components/Table/Table';
 import { getallusersaction } from '../../store/actions/useraction/getallusersaction';
 import { noDataInfo, somethingWentWrong } from '../../utils/globalConstants';
-
+import { MAXIMUM_RESULTS_ON_ONE_PAGE } from '../../utils/globalConstants';
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
@@ -17,9 +17,10 @@ import './UserList.scss';
 const UserList = () => {
     const [loading, setLoading] = useState(true);
     const [userBasicInfo, setUserBasicInfo] = useState([]);
+
     const [userDetailInfo, setUserDetailInfo] = useState([]);
 
-    const { userTypeFilter } = useContext(AddParentUserContext);
+    const { userTypeFilter, pagination, paginationHanlder } = useContext(AddParentUserContext);
     console.log(userTypeFilter);
 
     const [isError, setIsError] = useState(false);
@@ -33,8 +34,8 @@ const UserList = () => {
     const getAllUsers = () => {
         const role = CommonUtils.getPayloadRole(userTypeFilter);
         const query = {
-            pageNumber: 0,
-            pageSize: 10,
+            pageNumber: pagination.page - 1,
+            pageSize: MAXIMUM_RESULTS_ON_ONE_PAGE,
             sortBy: 'id',
             sortDir: 'asc',
         };
@@ -92,7 +93,7 @@ const UserList = () => {
     //First time call
     useEffect(() => {
         getAllUsers();
-    }, [userTypeFilter]);
+    }, [userTypeFilter, pagination.page]);
 
     useEffect(() => {
         if (fetchedAllUsers.result === 'success' && fetchedAllUsers.data !== undefined) {
@@ -103,6 +104,7 @@ const UserList = () => {
             setUserBasicInfo(() => userBasicInfoFromResponse);
             setUserDetailInfo(() => userDetailInfoFromResponse);
             setLoading(false);
+            paginationHanlder('total', '_', fetchedAllUsers.data?.totalElements);
         } else if (fetchedAllUsers.result === 'error') {
             setErrMsg(somethingWentWrong);
             setLoading(false);
@@ -138,11 +140,27 @@ const UserList = () => {
         navigate('/home');
     };
 
+    // const paginationHanlder = (type, page, totalElements = 0) => {
+    //     if (type === 'page') {
+    //         setPagination((prevState) => {
+    //             return { ...prevState, page: page };
+    //         });
+    //     } else if (type === 'total') {
+    //         setPagination((prevState) => {
+    //             return { ...prevState, total: totalElements };
+    //         });
+    //     }
+    // };
+
     return !loading ? (
         !isError ? (
             <>
                 <div className='user-row-container'>{renderTable()}</div>
-                <AdvancedPagination topContainerClassName='topContainerClassName' />
+                {/* <AdvancedPagination
+                    topContainerClassName='topContainerClassName'
+                    totalRes={pagination.total}
+                    setPageInParent={setPagination}
+                /> */}
             </>
         ) : (
             <InformativeErrorModal

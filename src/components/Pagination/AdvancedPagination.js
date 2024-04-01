@@ -6,8 +6,9 @@ import './AdvancedPagination.scss';
 function AdvancedPagination({
     page = 1,
     maxResOnePage = MAXIMUM_RESULTS_ON_ONE_PAGE,
-    totalRes = 70,
+    totalRes = 80,
     topContainerClassName = '',
+    setPageInParent = () => {},
 }) {
     const [curPage, setCurPage] = useState(1);
     const [leftEllipse, setLeftEllipse] = useState(false);
@@ -115,7 +116,9 @@ function AdvancedPagination({
         }
     };
 
-    useEffect(() => {}, [curPage]);
+    useEffect(() => {
+        setPageInParent('page', curPage, totalRes);
+    }, [curPage]);
 
     return (
         <div className={'custom-pagination ' + topContainerClassName}>
