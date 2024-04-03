@@ -108,7 +108,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         const userPayload = { user, userDetails };
         let params = {};
         if (addType === 'Doctor') {
-            // params = { parentID: dataToModal?.userID };
+            params = { parentID: dataToModal?.userID };
         }
 
         postCall(userPayload, 'CREATE_PARENT_USER', [], params).then((data) => {
