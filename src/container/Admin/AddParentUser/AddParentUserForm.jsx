@@ -2,8 +2,10 @@ import { useContext, useEffect, useState } from 'react';
 import { AddParentUserContext } from './Context/AddParentUserContext';
 import { FormErrors } from '../../../utils/globalConstants';
 
-const AddParentUserForm = ({ addType, isEdit }) => {
+const AddParentUserForm = ({ isEdit }) => {
     const { passwordErr, nameErr, emailErr } = FormErrors;
+    const { addType, setFormValid, setUserObj, setDetailUserObj, dataToModal } =
+        useContext(AddParentUserContext);
 
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -16,19 +18,18 @@ const AddParentUserForm = ({ addType, isEdit }) => {
     const [emailVaild, setEmailVaild] = useState(false);
     const [passValid, setPassValid] = useState(false);
 
-    const ctx = useContext(AddParentUserContext);
     // console.log({ name, address, city, phone, email, pass });
 
     useEffect(() => {
         if (emailVaild && nameValid && passValid) {
-            ctx.setFormValid(true);
+            setFormValid(true);
         } else {
-            ctx.setFormValid(false);
+            setFormValid(false);
         }
     }, [emailVaild, nameValid, passValid]);
 
     const objSetter = (field, value) => {
-        ctx.setUserObj((prevState) => {
+        setUserObj((prevState) => {
             return {
                 ...prevState,
                 [field]: value,
@@ -37,7 +38,7 @@ const AddParentUserForm = ({ addType, isEdit }) => {
     };
 
     const detailObjSetter = (field, value) => {
-        ctx.setDetailUserObj((prevState) => {
+        setDetailUserObj((prevState) => {
             return {
                 ...prevState,
                 [field]: value,
@@ -126,6 +127,17 @@ const AddParentUserForm = ({ addType, isEdit }) => {
                 <label htmlFor='parent-role'>Role*</label>
                 <input id='parent-role' type='dropdown' disabled value={addType}></input>
             </div>
+            {addType === 'Doctor' && (
+                <div className='label-input-container mb-3'>
+                    <label htmlFor='clinic-name'>Clinic Name*</label>
+                    <input
+                        id='clinic-name'
+                        type='dropdown'
+                        disabled
+                        value={dataToModal?.name}
+                    ></input>
+                </div>
+            )}
             <div className='label-input-container'>
                 <label htmlFor='parent-email'>Email*</label>
                 <input

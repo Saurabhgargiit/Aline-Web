@@ -21,8 +21,14 @@ const UserList = ({ role, userID }) => {
 
     const [userDetailInfo, setUserDetailInfo] = useState([]);
 
-    const { userTypeFilter, pagination, paginationHanlder, userAdded, setUserAdded } =
-        useContext(AddParentUserContext);
+    const {
+        userTypeFilter,
+        pagination,
+        paginationHanlder,
+        userAdded,
+        setUserAdded,
+        addParentUserModalHandler,
+    } = useContext(AddParentUserContext);
 
     const [isError, setIsError] = useState(false);
     const [errMsg, setErrMsg] = useState('');
@@ -66,16 +72,29 @@ const UserList = ({ role, userID }) => {
         return <span>{item[key]}</span>;
     };
 
-    const getActionItems = () => {
+    const mergeData = (basicInfo) => {
+        const userDetails = userDetailInfo.find((el) => el.userID === basicInfo.id);
+        if (userDetails !== undefined || userDetails !== null) {
+            return { ...basicInfo, ...userDetails };
+        }
+        return basicInfo;
+    };
+
+    const addDoctorHandler = (clinicBasicInfo) => {
+        const clinic = mergeData(clinicBasicInfo);
+        addParentUserModalHandler('Doctor', clinic);
+    };
+
+    const getActionItems = (clinicBasicInfo) => {
         const isAddBtnDisabled = role === 'ROLE_DOCTOR';
         const isDeleteBtnDisabled = role !== 'ROLE_ADMIN';
 
-        const isAddBtnVisible = userTypeFilter === 'doctor';
+        const isAddBtnVisible = userTypeFilter === 'clinic';
 
         const actonItems = (
             <div className='admin-page-icons'>
                 {!isAddBtnDisabled && isAddBtnVisible && (
-                    <button>
+                    <button onClick={() => addDoctorHandler(clinicBasicInfo)}>
                         <PlusIcon className='admin-plus' />
                     </button>
                 )}
@@ -108,7 +127,7 @@ const UserList = ({ role, userID }) => {
                     row.push({
                         label: '',
                         id: `${key}-${j}-${i}`,
-                        children: getActionItems(),
+                        children: getActionItems(item),
                         // align: getTdClass(key),
                     });
                 }
@@ -136,7 +155,6 @@ const UserList = ({ role, userID }) => {
     useEffect(() => {
         if (fetchedAllUsers.result === 'success' && fetchedAllUsers.data !== undefined) {
             const userList = fetchedAllUsers.data?.content;
-            console.log(fetchedAllUsers);
             const { userBasicInfoFromResponse, userDetailInfoFromResponse } =
                 separateDetails(userList);
             setUserBasicInfo(() => userBasicInfoFromResponse);
@@ -150,22 +168,8 @@ const UserList = ({ role, userID }) => {
         }
     }, [fetchedAllUsers]);
 
-    //         <div className='mt-2'>
-    //             <div className='home-page-count'>15 out of 24</div>
-    //             <div className='home-page-icons'>
-    //                 <SVG src={require('../../assets/icons/deleteBin.svg').default} />
-    //                 <SVG src={require('../../assets/icons/edit.svg').default} />
-    //                 <SVG src={require('../../assets/icons/file.svg').default} />
-    //                 <SVG
-    //                     className='home-page-play'
-    //                     src={require('../../assets/icons/play.svg').default}
-    //                 />
-    //             </div>
-    //         </div>
-
     const renderTable = () => {
         const rows = tableData(userBasicInfo);
-        console.log(rows);
         return (
             <Table headers={headers} rows={rows} errorMsg={rows.length === 0 ? noDataInfo : ''} />
         );

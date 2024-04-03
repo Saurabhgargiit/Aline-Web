@@ -5,11 +5,9 @@ import axios from 'axios';
 
 let ApiPaths = ApiRelativePaths;
 
-export const postCall = async (data, url_path, param, optionalData) => {
-    let params = param ?? {};
+export const postCall = async (data, url_path, dynamicSeg = [], params = {}, optionalData) => {
     let path = ApiPaths[url_path];
     // let host = process.env.REACT_APP_ANALYTICS_HOST;
-    let paramObj = {};
     let generatedURL;
     let result = {};
 
@@ -22,8 +20,7 @@ export const postCall = async (data, url_path, param, optionalData) => {
     // if (optionalData !== '' && optionalData !== undefined) {
     //     generatedURL = generatedURL + optionalData;
     // }
-
-    generatedURL = path;
+    generatedURL = CommonUtils.generateGetApiPath(path, dynamicSeg, params);
 
     await axiosInstance
         .post(generatedURL, data)
@@ -35,13 +32,15 @@ export const postCall = async (data, url_path, param, optionalData) => {
                 };
             },
             (error) => {
+                console.log(error);
                 result = {
                     result: 'error',
-                    error: error.response.data.error,
+                    error: error.response?.data?.message,
                 };
             }
         )
         .catch((err) => {
+            console.log(err);
             result = {
                 result: 'catch_error',
                 error: err?.response?.data?.error,

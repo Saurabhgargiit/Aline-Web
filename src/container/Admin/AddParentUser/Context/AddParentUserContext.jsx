@@ -22,6 +22,8 @@ const obj = {
     setUserAdded: () => {},
     detailUserObject: {},
     setDetailUserObj: () => {},
+    dataToModal: {},
+    setDataToModal: () => {},
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -56,12 +58,19 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     //For Drodown in adminheaderbar
     const [userTypeFilter, setUserTypeFilter] = useState('doctor');
 
+    //For setting object to pass on to Modal for editing or adding doctor
+    const [dataToModal, setDataToModal] = useState({});
+
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
-    const addParentUserModalHandler = (type) => {
+    //Modal For adding lab, clinic and admin
+    const addParentUserModalHandler = (type, clinic = {}) => {
         setOpen((prevState) => !prevState);
+        if (type === 'Doctor') {
+            setDataToModal((prevState) => clinic);
+        }
         setAddType(type);
         const role = CommonUtils.getPayloadRole(type);
         setUserObj((prevState) => {
@@ -84,8 +93,10 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             password: '',
             role: [],
         });
+        setDataToModal(() => {});
     };
 
+    //For adding lab, clinic and admin
     const addParentUserFn = () => {
         setLoading(true);
         if (!formValid) return;
@@ -95,8 +106,13 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         //userDetails name is used in backend. Dont change
         const userDetails = detailUserObject;
         const userPayload = { user, userDetails };
+        let params = {};
+        if (addType === 'Doctor') {
+            // params = { parentID: dataToModal?.userID };
+        }
 
-        postCall(userPayload, 'CREATE_PARENT_USER').then((data) => {
+        postCall(userPayload, 'CREATE_PARENT_USER', [], params).then((data) => {
+            console.log(data);
             if (data.result === 'success') {
                 toast.success(`${addType} added successully`, {
                     position: 'top-right',
@@ -110,7 +126,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
                 setUserAdded(true);
                 closeModalHandler();
             } else if (data.result === 'error') {
-                toast.error('data.error', {
+                toast.error(data.error ?? 'data.error', {
                     position: 'top-right',
                     hideProgressBar: false,
                     autoClose: 2000,
@@ -123,6 +139,8 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             setLoading(false);
         });
     };
+
+    const addDoctorFn = () => {};
 
     const paginationHanlder = (type, page, totalElements = 0) => {
         if (type === 'page') {
@@ -146,6 +164,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         pagination,
         userAdded,
         detailUserObject,
+        dataToModal,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
@@ -155,6 +174,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         paginationHanlder,
         setUserAdded,
         setDetailUserObj,
+        setDataToModal,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

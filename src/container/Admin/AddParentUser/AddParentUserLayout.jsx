@@ -15,7 +15,7 @@ function AddParentUserLayout({ isEdit = false }) {
         <Modal className='add-parent-box' open={ctx.open}>
             <ModalHeader title={title} />
             <ModalContent>
-                <AddParentUserForm addType={addType} isEdit={isEdit} />
+                <AddParentUserForm isEdit={isEdit} />
             </ModalContent>
             <ModalFooter
                 onClose={ctx.closeModalHandler}
