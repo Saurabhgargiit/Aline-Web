@@ -5,7 +5,7 @@ import Dropdown from '../../../components/Dropdown/Dropdown';
 import './AdminHeaderBar.scss';
 import { CommonUtils } from '../../../utils/commonfunctions/commonfunctions';
 
-const filterUsertypes = [
+let filterUsertypes = [
     { key: 'ROLE_DOCTOR', value: 'doctor', label: 'Doctor List' },
     { key: 'ROLE_CLINIC', value: 'clinic', label: 'Clinic List' },
     { key: 'ROLE_LAB', value: 'lab', label: 'Lab List' },
@@ -26,6 +26,15 @@ const AdminHeaderBar = ({ role, userId }) => {
     const userTypeSelectHandler = (e) => {
         setUserTypeFilter(() => e.target.value);
     };
+
+    filterUsertypes =
+        role === 'ROLE_ADMIN'
+            ? filterUsertypes
+            : role === 'ROLE_LAB'
+            ? filterUsertypes.filter((el) => el.value !== 'admin')
+            : role === 'ROLE_CLINIC'
+            ? filterUsertypes.filter((el) => el.value !== 'admin' && el.value !== 'lab')
+            : filterUsertypes.filter((el) => el.value === 'doctor');
 
     return (
         <div className='header-container'>

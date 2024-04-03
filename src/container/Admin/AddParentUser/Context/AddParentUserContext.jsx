@@ -54,7 +54,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     const [userAdded, setUserAdded] = useState(false);
 
     //For Drodown in adminheaderbar
-    const [userTypeFilter, setUserTypeFilter] = useState('admin');
+    const [userTypeFilter, setUserTypeFilter] = useState('doctor');
 
     const [loading, setLoading] = useState(false);
 

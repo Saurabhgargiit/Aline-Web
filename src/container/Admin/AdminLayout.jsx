@@ -14,6 +14,7 @@ const AdminLayout = () => {
         id: userID,
         role: [role],
     } = fetchedUserInfo;
+    console.log(role);
     return (
         <AddParentUserContextProvider>
             <div className='top-bottom-position-container top112'>

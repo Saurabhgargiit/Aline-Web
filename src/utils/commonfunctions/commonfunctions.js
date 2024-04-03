@@ -100,7 +100,7 @@ export const CommonUtils = {
 
     generateGetApiPath: function (baseUrl, dynamicSegments = [], queryParams = {}) {
         // Join the base URL with dynamic segments
-        let path = `${baseUrl}/${dynamicSegments.join('/')}`;
+        let path = `${baseUrl}${dynamicSegments.length > 0 ? '/' + dynamicSegments.join('/') : ''}`;
 
         // Convert query parameters object to a string
         const queryParamString = Object.entries(queryParams)

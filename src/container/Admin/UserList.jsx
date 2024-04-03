@@ -12,9 +12,10 @@ import { useNavigate } from 'react-router-dom';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import { AddParentUserContext } from './AddParentUser/Context/AddParentUserContext';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import { ReactComponent as PlusIcon } from '../../assets/icons/admin-plus.svg'; // Using SVGR
 import './UserList.scss';
 
-const UserList = () => {
+const UserList = ({ role, userID }) => {
     const [loading, setLoading] = useState(true);
     const [userBasicInfo, setUserBasicInfo] = useState([]);
 
@@ -34,12 +35,13 @@ const UserList = () => {
     const getAllUsers = () => {
         const role = CommonUtils.getPayloadRole(userTypeFilter);
         const query = {
+            role: role,
             pageNumber: pagination.page - 1,
             pageSize: MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN,
             sortBy: 'id',
             sortDir: 'des',
         };
-        dispatch(getallusersaction('GET_ALL_USERS', [role], query));
+        dispatch(getallusersaction('GET_ALL_USERS', [], query));
     };
 
     //Function to separate details and basic info
@@ -64,6 +66,32 @@ const UserList = () => {
         return <span>{item[key]}</span>;
     };
 
+    const getActionItems = () => {
+        const isAddBtnDisabled = role === 'ROLE_DOCTOR';
+        const isDeleteBtnDisabled = role !== 'ROLE_ADMIN';
+
+        const isAddBtnVisible = userTypeFilter === 'doctor';
+
+        const actonItems = (
+            <div className='admin-page-icons'>
+                {!isAddBtnDisabled && isAddBtnVisible && (
+                    <button>
+                        <PlusIcon className='admin-plus' />
+                    </button>
+                )}
+                <button>
+                    <SVG src={require('../../assets/icons/edit.svg').default} />
+                </button>
+                {!isDeleteBtnDisabled && (
+                    <button>
+                        <SVG src={require('../../assets/icons/deleteBin.svg').default} />
+                    </button>
+                )}
+            </div>
+        );
+        return actonItems;
+    };
+
     const tableData = (data) => {
         const rows = data.map((item, j) => {
             const row = [];
@@ -80,7 +108,7 @@ const UserList = () => {
                     row.push({
                         label: '',
                         id: `${key}-${j}-${i}`,
-                        children: <span>Take Action</span>,
+                        children: getActionItems(),
                         // align: getTdClass(key),
                     });
                 }
