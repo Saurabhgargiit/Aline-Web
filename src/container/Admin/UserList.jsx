@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useId, useState } from 'react';
 import { Badge } from 'react-bootstrap';
 import SVG from 'react-inlinesvg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,9 @@ import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import { AddParentUserContext } from './AddParentUser/Context/AddParentUserContext';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import { ReactComponent as PlusIcon } from '../../assets/icons/admin-plus.svg'; // Using SVGR
+
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+
 import './UserList.scss';
 
 const UserList = ({ role, userID }) => {
@@ -90,26 +93,52 @@ const UserList = ({ role, userID }) => {
         addParentUserModalHandler(userTypeFilter, user, true);
     };
 
-    const getActionItems = (basicInfo) => {
+    const getActionItems = (basicInfo, i) => {
         const isAddBtnDisabled = role === 'ROLE_DOCTOR';
         const isDeleteBtnDisabled = role !== 'ROLE_ADMIN';
 
         const isAddBtnVisible = userTypeFilter === 'clinic';
 
+        //delete button has been disabled unless its implementation is done
         const actonItems = (
             <div className='admin-page-icons'>
                 {!isAddBtnDisabled && isAddBtnVisible && (
-                    <button onClick={() => addDoctorHandler(basicInfo)}>
-                        <PlusIcon className='admin-plus' />
-                    </button>
+                    <OverlayTrigger
+                        key={'add-doctor-' + i}
+                        placement='top'
+                        overlay={<Tooltip id={`tooltip-add-doctor-${i}`}>Add Doctor</Tooltip>}
+                    >
+                        <button
+                            id={'add-doctor-btn-' + i}
+                            key={'add-doctor-btn-' + i}
+                            onClick={() => addDoctorHandler(basicInfo)}
+                        >
+                            <PlusIcon className='admin-plus' />
+                        </button>
+                    </OverlayTrigger>
                 )}
-                <button onClick={() => editUserHandler(basicInfo)}>
-                    <SVG src={require('../../assets/icons/edit.svg').default} />
-                </button>
-                {!isDeleteBtnDisabled && (
-                    <button>
-                        <SVG src={require('../../assets/icons/deleteBin.svg').default} />
+                <OverlayTrigger
+                    key={'edit-user-' + i}
+                    placement='top'
+                    overlay={
+                        <Tooltip id={`tooltip-edit-user-${i}`}>{`Edit ${userTypeFilter}`}</Tooltip>
+                    }
+                >
+                    <button onClick={() => editUserHandler(basicInfo)}>
+                        <SVG src={require('../../assets/icons/edit.svg').default} />
                     </button>
+                </OverlayTrigger>
+
+                {!isDeleteBtnDisabled && (
+                    <OverlayTrigger
+                        key={'delete-user-' + i}
+                        placement='top'
+                        overlay={<Tooltip id={`tooltip-delete-user-${i}`}>Delete</Tooltip>}
+                    >
+                        <button disabled>
+                            <SVG src={require('../../assets/icons/deleteBin.svg').default} />
+                        </button>
+                    </OverlayTrigger>
                 )}
             </div>
         );
@@ -132,7 +161,7 @@ const UserList = ({ role, userID }) => {
                     row.push({
                         label: '',
                         id: `${key}-${j}-${i}`,
-                        children: getActionItems(item),
+                        children: getActionItems(item, i),
                         // align: getTdClass(key),
                     });
                 }

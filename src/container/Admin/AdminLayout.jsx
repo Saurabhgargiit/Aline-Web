@@ -10,10 +10,12 @@ import AdminPagination from './AdminPagination';
 
 const AdminLayout = () => {
     const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo?.data);
+    //userID and role here are of the logged In person
     const {
         id: userID,
         role: [role],
     } = fetchedUserInfo;
+
     return (
         <AddParentUserContextProvider>
             <div className='top-bottom-position-container top112'>
