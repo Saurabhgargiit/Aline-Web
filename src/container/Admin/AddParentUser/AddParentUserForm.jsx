@@ -2,31 +2,21 @@ import { useContext, useEffect, useState } from 'react';
 import { AddParentUserContext } from './Context/AddParentUserContext';
 import { FormErrors } from '../../../utils/globalConstants';
 
-const AddParentUserForm = ({ isEdit }) => {
+const AddParentUserForm = ({}) => {
     const { passwordErr, nameErr, emailErr } = FormErrors;
-    const { addType, setFormValid, setUserObj, setDetailUserObj, dataToModal } =
+    const { addType, setFormValid, setUserObj, setDetailUserObj, dataToModal, isEdit } =
         useContext(AddParentUserContext);
 
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
-    const [phone, setPhone] = useState('');
+    const [mobileNo, setMobileNo] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
     const [nameValid, setNameValid] = useState(false);
     const [emailVaild, setEmailVaild] = useState(false);
     const [passValid, setPassValid] = useState(false);
-
-    // console.log({ name, address, city, phone, email, pass });
-
-    useEffect(() => {
-        if (emailVaild && nameValid && passValid) {
-            setFormValid(true);
-        } else {
-            setFormValid(false);
-        }
-    }, [emailVaild, nameValid, passValid]);
 
     const objSetter = (field, value) => {
         setUserObj((prevState) => {
@@ -46,8 +36,14 @@ const AddParentUserForm = ({ isEdit }) => {
         });
     };
 
-    const inputHandler = (e, inputType) => {
-        const { value } = e.target;
+    const inputHandler = (e, inputType, firstLoad = false) => {
+        let value;
+        if (firstLoad && isEdit) {
+            //for edit flow, data is passed in 'e' variable
+            value = e;
+        } else {
+            value = e.target.value;
+        }
         switch (inputType) {
             case 'name':
                 setName(() => value);
@@ -63,7 +59,7 @@ const AddParentUserForm = ({ isEdit }) => {
                 detailObjSetter(inputType, value);
                 break;
             case 'mobileNo':
-                setPhone(() => value);
+                setMobileNo(() => value);
                 detailObjSetter(inputType, value);
                 break;
             case 'email':
@@ -82,6 +78,37 @@ const AddParentUserForm = ({ isEdit }) => {
                 break;
         }
     };
+
+    useEffect(() => {
+        if (emailVaild && nameValid && passValid) {
+            setFormValid(true);
+        } else {
+            setFormValid(false);
+        }
+    }, [emailVaild, nameValid, passValid]);
+
+    //UseEffect to input field if its a edit flow
+    useEffect(() => {
+        if (isEdit) {
+            if (dataToModal.name) {
+                inputHandler(dataToModal.name, 'name', true);
+            }
+            if (dataToModal.userAddress) {
+                inputHandler(dataToModal.userAddress, 'userAddress', true);
+            }
+            if (dataToModal.userCity) {
+                inputHandler(dataToModal.userCity, 'userCity', true);
+            }
+            if (dataToModal.mobileNo) {
+                inputHandler(dataToModal.mobileNo, 'mobileNo', true);
+            }
+            if (dataToModal.email) {
+                inputHandler(dataToModal.email, 'email', true);
+            }
+            //makePassValid flag true by default
+            setPassValid(true);
+        }
+    }, [isEdit]);
 
     return (
         <div>
@@ -120,7 +147,7 @@ const AddParentUserForm = ({ isEdit }) => {
                     id='parent-mobile'
                     type='tel'
                     onChange={(e) => inputHandler(e, 'mobileNo')}
-                    value={phone}
+                    value={mobileNo}
                 ></input>
             </div>
             <div className='label-input-container mb-3'>
@@ -151,19 +178,23 @@ const AddParentUserForm = ({ isEdit }) => {
             <div className={`error-Msg height1rem ${emailVaild ? 'noVisible' : ''}`}>
                 {emailErr}
             </div>
-            <div className='label-input-container'>
-                <label htmlFor='parent-pass'>Password*</label>
-                <input
-                    id='parent-pass'
-                    type='text'
-                    onChange={(e) => inputHandler(e, 'password')}
-                    value={pass}
-                    required
-                ></input>
-            </div>
-            <div className={`error-Msg height1rem ${passValid ? 'noVisible' : ''} mb-2`}>
-                {passwordErr}
-            </div>
+            {!isEdit && (
+                <div className='label-input-container'>
+                    <label htmlFor='parent-pass'>Password*</label>
+                    <input
+                        id='parent-pass'
+                        type='text'
+                        onChange={(e) => inputHandler(e, 'password')}
+                        value={pass}
+                        required
+                    ></input>
+                </div>
+            )}
+            {!isEdit && (
+                <div className={`error-Msg height1rem ${passValid ? 'noVisible' : ''} mb-2`}>
+                    {passwordErr}
+                </div>
+            )}
         </div>
     );
 };

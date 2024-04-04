@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CommonUtils } from '../../../../utils/commonfunctions/commonfunctions';
-import { postCall } from '../../../../utils/commonfunctions/apicallactions';
+import { postCall, putCall } from '../../../../utils/commonfunctions/apicallactions';
 import { toast, Bounce } from 'react-toastify';
 
 const obj = {
@@ -24,6 +24,22 @@ const obj = {
     setDetailUserObj: () => {},
     dataToModal: {},
     setDataToModal: () => {},
+    isEdit: false,
+    setIsEdit: () => {},
+};
+
+const userObjInitialState = {
+    name: '',
+    email: '',
+    password: '',
+    role: [],
+};
+
+const detailUserObjInitialState = {
+    mobileNo: '',
+    userAddress: '',
+    userCity: '',
+    userCountry: '',
 };
 
 export const AddParentUserContext = createContext(obj);
@@ -31,20 +47,23 @@ export const AddParentUserContext = createContext(obj);
 export const AddParentUserContextProvider = ({ children, providerObj = obj }) => {
     const [open, setOpen] = useState(false);
     const [addType, setAddType] = useState('');
-    const [userObj, setUserObj] = useState({
-        name: '',
-        email: '',
-        password: '',
-        role: [],
-    });
+    // const [userObj, setUserObj] = useState({
+    //     name: '',
+    //     email: '',
+    //     password: '',
+    //     role: [],
+    // });
+
+    const [userObj, setUserObj] = useState(userObjInitialState);
 
     //different oject considering backend
-    const [detailUserObject, setDetailUserObj] = useState({
-        mobileNo: '',
-        userAddress: '',
-        userCity: '',
-        userCountry: '',
-    });
+    // const [detailUserObject, setDetailUserObj] = useState({
+    //     mobileNo: '',
+    //     userAddress: '',
+    //     userCity: '',
+    //     userCountry: '',
+    // });
+    const [detailUserObject, setDetailUserObj] = useState(detailUserObjInitialState);
 
     const [formValid, setFormValid] = useState(false);
     const [pagination, setPagination] = useState({
@@ -61,18 +80,27 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     //For setting object to pass on to Modal for editing or adding doctor
     const [dataToModal, setDataToModal] = useState({});
 
+    const [isEdit, setIsEdit] = useState(false);
+
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
     //Modal For adding lab, clinic and admin
-    const addParentUserModalHandler = (type, clinic = {}) => {
+    const addParentUserModalHandler = (type, user = {}, isEdit = false) => {
         setOpen((prevState) => !prevState);
-        if (type === 'Doctor') {
-            setDataToModal((prevState) => clinic);
+        if (type === 'Doctor' && !isEdit) {
+            setDataToModal((prevState) => user);
         }
+        if (isEdit) {
+            setIsEdit(() => true);
+            setDataToModal((prevState) => user);
+        }
+        type = CommonUtils.capitalizeFirstLetter(type);
         setAddType(type);
         const role = CommonUtils.getPayloadRole(type);
+
+        //To set role as default
         setUserObj((prevState) => {
             return {
                 ...prevState,
@@ -84,63 +112,99 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     const closeModalHandler = () => {
         setOpen((prevState) => !prevState);
         setAddType('');
-        setUserObj({
-            name: '',
-            address: '',
-            city: '',
-            phone: '',
-            email: '',
-            password: '',
-            role: [],
+        setUserObj(() => {
+            return { ...userObjInitialState };
+        });
+        setDetailUserObj(() => {
+            return { ...detailUserObjInitialState };
         });
         setDataToModal(() => {});
+        setIsEdit(() => false);
     };
 
-    //For adding lab, clinic and admin
+    //For adding lab, clinic, admin, doctor
     const addParentUserFn = () => {
         setLoading(true);
         if (!formValid) return;
 
-        //user name is used in backend. Dont change
-        const user = userObj;
-        //userDetails name is used in backend. Dont change
-        const userDetails = detailUserObject;
-        const userPayload = { user, userDetails };
+        let user, userDetails, userDto, userDetailsDto;
+        let userPayload = {};
+
+        if (!isEdit) {
+            //user & userDetails names are used in backend for post request. Dont change
+            userPayload = { user: userObj, userDetails: detailUserObject };
+        } else {
+            //userDto & userDetailsDto names are used in backend for post request. Dont change
+            const userObjModified = { ...userObj, id: dataToModal?.userID };
+            delete userObjModified['password'];
+            userPayload = { userDto: userObjModified, userDetailsDto: detailUserObject };
+        }
+
         let params = {};
+
+        //consdition for doctor only to add parent
         if (addType === 'Doctor') {
             params = { parentID: dataToModal?.userID };
         }
 
-        postCall(userPayload, 'CREATE_PARENT_USER', [], params).then((data) => {
-            console.log(data);
-            if (data.result === 'success') {
-                toast.success(`${addType} added successully`, {
-                    position: 'top-right',
-                    hideProgressBar: false,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    theme: 'light',
-                    transition: Bounce,
-                });
-                setUserAdded(true);
-                closeModalHandler();
-            } else if (data.result === 'error') {
-                toast.error(data.error ?? 'data.error', {
-                    position: 'top-right',
-                    hideProgressBar: false,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    theme: 'light',
-                    transition: Bounce,
-                });
-            }
-            setLoading(false);
-        });
+        if (!isEdit) {
+            postCall(userPayload, 'CREATE_PARENT_USER', [], params).then((data) => {
+                if (data.result === 'success') {
+                    toast.success(`${addType} added successully`, {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                    setUserAdded(true);
+                    closeModalHandler();
+                } else if (data.result === 'error') {
+                    toast.error(data.error ?? 'data.error', {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                }
+                setLoading(false);
+            });
+        } else {
+            putCall(userPayload, 'UPDATE_USER', [dataToModal?.userID], params).then((data) => {
+                if (data.result === 'success') {
+                    toast.success(`${addType} modified successully`, {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                    setUserAdded(true);
+                    closeModalHandler();
+                } else if (data.result === 'error') {
+                    toast.error(data.error ?? 'data.error', {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                }
+                setLoading(false);
+            });
+        }
     };
 
-    const addDoctorFn = () => {};
+    const editUserFn = () => {};
 
     const paginationHanlder = (type, page, totalElements = 0) => {
         if (type === 'page') {
@@ -165,6 +229,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         userAdded,
         detailUserObject,
         dataToModal,
+        isEdit,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
@@ -175,6 +240,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setUserAdded,
         setDetailUserObj,
         setDataToModal,
+        setIsEdit,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

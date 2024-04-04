@@ -74,7 +74,7 @@ const UserList = ({ role, userID }) => {
 
     const mergeData = (basicInfo) => {
         const userDetails = userDetailInfo.find((el) => el.userID === basicInfo.id);
-        if (userDetails !== undefined || userDetails !== null) {
+        if (userDetails !== undefined && userDetails !== null) {
             return { ...basicInfo, ...userDetails };
         }
         return basicInfo;
@@ -85,7 +85,12 @@ const UserList = ({ role, userID }) => {
         addParentUserModalHandler('Doctor', clinic);
     };
 
-    const getActionItems = (clinicBasicInfo) => {
+    const editUserHandler = (userBasicInfo) => {
+        const user = mergeData(userBasicInfo);
+        addParentUserModalHandler(userTypeFilter, user, true);
+    };
+
+    const getActionItems = (basicInfo) => {
         const isAddBtnDisabled = role === 'ROLE_DOCTOR';
         const isDeleteBtnDisabled = role !== 'ROLE_ADMIN';
 
@@ -94,11 +99,11 @@ const UserList = ({ role, userID }) => {
         const actonItems = (
             <div className='admin-page-icons'>
                 {!isAddBtnDisabled && isAddBtnVisible && (
-                    <button onClick={() => addDoctorHandler(clinicBasicInfo)}>
+                    <button onClick={() => addDoctorHandler(basicInfo)}>
                         <PlusIcon className='admin-plus' />
                     </button>
                 )}
-                <button>
+                <button onClick={() => editUserHandler(basicInfo)}>
                     <SVG src={require('../../assets/icons/edit.svg').default} />
                 </button>
                 {!isDeleteBtnDisabled && (

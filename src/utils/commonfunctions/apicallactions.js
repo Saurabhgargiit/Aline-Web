@@ -11,12 +11,6 @@ export const postCall = async (data, url_path, dynamicSeg = [], params = {}, opt
     let generatedURL;
     let result = {};
 
-    // if (url_path === 'LOGOUT') {
-    //     generatedURL = host + '/' + path;
-    // } else {
-    //     generatedURL = CommonUtils.URLGenerator(params, path, paramObj);
-    // }
-
     // if (optionalData !== '' && optionalData !== undefined) {
     //     generatedURL = generatedURL + optionalData;
     // }
@@ -32,7 +26,6 @@ export const postCall = async (data, url_path, dynamicSeg = [], params = {}, opt
                 };
             },
             (error) => {
-                console.log(error);
                 result = {
                     result: 'error',
                     error: error.response?.data?.message,
@@ -40,53 +33,55 @@ export const postCall = async (data, url_path, dynamicSeg = [], params = {}, opt
             }
         )
         .catch((err) => {
-            console.log(err);
             result = {
                 result: 'catch_error',
-                error: err?.response?.data?.error,
+                error: err?.response?.data?.message,
             };
         });
 
     return result;
 };
 
-// export const putCall = async (data: any, url_path: string, optionalData?: any) => {
-//     let params = {};
-//     let path = ApiPaths[url_path];
-//     // let host = process.env.REACT_APP_ANALYTICS_HOST;
-//     let paramObj = {};
-//     let generatedURL = CommonUtils.URLGenerator(params, path, paramObj);
-//     let result = {};
+export const putCall = async (data, url_path, dynamicSeg = [], params = {}, optionalData) => {
+    let path = ApiPaths[url_path];
+    // let host = process.env.REACT_APP_ANALYTICS_HOST;
+    let generatedURL;
+    let result = {};
 
-//     let urlData;
-//     if (optionalData !== '') {
-//         urlData = generatedURL + optionalData;
-//     } else {
-//         urlData = generatedURL;
-//     }
+    // if (optionalData !== '' && optionalData !== undefined) {
+    //     generatedURL = generatedURL + optionalData;
+    // }
+    generatedURL = CommonUtils.generateGetApiPath(path, dynamicSeg, params);
 
-//     await axiosInstance
-//         .put(urlData, data)
-//         .then(
-//             (res) => {
-//                 result = {
-//                     result: 'success',
-//                     data: res.data,
-//                 };
-//             },
-//             (error) => {
-//                 result = {
-//                     result: 'error',
-//                     error: error.response.data.error,
-//                 };
-//             }
-//         )
-//         .catch((err) => {
-//             result = {
-//                 result: 'cacth_error',
-//                 error: err.response.data.error,
-//             };
-//         });
+    // let urlData;
+    // if (optionalData !== '') {
+    //     urlData = generatedURL + optionalData;
+    // } else {
+    //     urlData = generatedURL;
+    // }
 
-//     return result;
-// };
+    await axiosInstance
+        .put(generatedURL, data)
+        .then(
+            (res) => {
+                result = {
+                    result: 'success',
+                    data: res.data,
+                };
+            },
+            (error) => {
+                result = {
+                    result: 'error',
+                    error: error.response?.data?.message,
+                };
+            }
+        )
+        .catch((error) => {
+            result = {
+                result: 'cacth_error',
+                error: error.response?.data?.message,
+            };
+        });
+
+    return result;
+};

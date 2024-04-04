@@ -4,10 +4,10 @@ import AddParentUserForm from './AddParentUserForm';
 import './AddParentUser.scss';
 import { AddParentUserContext } from './Context/AddParentUserContext';
 
-function AddParentUserLayout({ isEdit = false }) {
+function AddParentUserLayout({}) {
     const ctx = useContext(AddParentUserContext);
     const addType = ctx.addType;
-    const title = `${!isEdit ? 'Add' : 'Edit'} ${addType}`;
+    const title = `${!ctx.isEdit ? 'Add' : 'Edit'} ${addType}`;
     const createUserHandler = () => {
         ctx.addParentUserFn();
     };
@@ -15,7 +15,7 @@ function AddParentUserLayout({ isEdit = false }) {
         <Modal className='add-parent-box' open={ctx.open}>
             <ModalHeader title={title} />
             <ModalContent>
-                <AddParentUserForm isEdit={isEdit} />
+                <AddParentUserForm />
             </ModalContent>
             <ModalFooter
                 onClose={ctx.closeModalHandler}
