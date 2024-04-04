@@ -13,6 +13,7 @@ import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import { AddParentUserContext } from './AddParentUser/Context/AddParentUserContext';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import { ReactComponent as PlusIcon } from '../../assets/icons/admin-plus.svg'; // Using SVGR
+import { ReactComponent as AddExistingDoctorIcon } from '../../assets/icons/add-existing-doctor.svg'; // Using SVGR
 
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
@@ -95,7 +96,9 @@ const UserList = ({ role, userID }) => {
 
     const getActionItems = (basicInfo, i) => {
         const isAddBtnDisabled = role === 'ROLE_DOCTOR';
+
         const isDeleteBtnDisabled = role !== 'ROLE_ADMIN';
+        const isAddExisitingDoctorDisabled = role !== 'ROLE_ADMIN';
 
         const isAddBtnVisible = userTypeFilter === 'clinic';
 
@@ -114,6 +117,25 @@ const UserList = ({ role, userID }) => {
                             onClick={() => addDoctorHandler(basicInfo)}
                         >
                             <PlusIcon className='admin-plus' />
+                        </button>
+                    </OverlayTrigger>
+                )}
+                {!isAddExisitingDoctorDisabled && isAddBtnVisible && (
+                    <OverlayTrigger
+                        key={'existing-doctor-' + i}
+                        placement='top'
+                        overlay={
+                            <Tooltip id={`tooltip-existing-doctor-${i}`}>
+                                Add Existing Doctor to this Clinic
+                            </Tooltip>
+                        }
+                    >
+                        <button
+                            id={'add-existing-doctor-btn-' + i}
+                            key={'add-existing-doctor-btn-' + i}
+                            onClick={() => {}}
+                        >
+                            <AddExistingDoctorIcon />
                         </button>
                     </OverlayTrigger>
                 )}
