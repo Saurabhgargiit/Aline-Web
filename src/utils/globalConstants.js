@@ -15,6 +15,7 @@ export const FormErrors = {
     nameErr: 'Name cannot be blank.',
     emailErr: 'Please enter valid email ID.',
     passwordErr: 'Password should be between 6 to 12 letters.',
+    repasswordErr: 'Password do not match',
 };
 
 //Error Messages

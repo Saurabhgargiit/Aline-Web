@@ -14,6 +14,7 @@ import { AddParentUserContext } from './AddParentUser/Context/AddParentUserConte
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import { ReactComponent as PlusIcon } from '../../assets/icons/admin-plus.svg'; // Using SVGR
 import { ReactComponent as AddExistingDoctorIcon } from '../../assets/icons/add-existing-doctor.svg'; // Using SVGR
+import { ReactComponent as ChangePasswordIcon } from '../../assets/icons/change-password.svg'; // Using SVGR
 
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
@@ -32,6 +33,7 @@ const UserList = ({ role, userID }) => {
         userAdded,
         setUserAdded,
         addParentUserModalHandler,
+        changePasswordHandler,
     } = useContext(AddParentUserContext);
 
     const [isError, setIsError] = useState(false);
@@ -94,11 +96,16 @@ const UserList = ({ role, userID }) => {
         addParentUserModalHandler(userTypeFilter, user, true);
     };
 
+    const changeUserPassByAdmin = () => {
+        changePasswordHandler();
+    };
+
     const getActionItems = (basicInfo, i) => {
         const isAddBtnDisabled = role === 'ROLE_DOCTOR';
 
         const isDeleteBtnDisabled = role !== 'ROLE_ADMIN';
         const isAddExisitingDoctorDisabled = role !== 'ROLE_ADMIN';
+        const isChangePasswordVisible = role === 'ROLE_ADMIN';
 
         const isAddBtnVisible = userTypeFilter === 'clinic';
 
@@ -115,6 +122,7 @@ const UserList = ({ role, userID }) => {
                             id={'add-doctor-btn-' + i}
                             key={'add-doctor-btn-' + i}
                             onClick={() => addDoctorHandler(basicInfo)}
+                            aria-label='Add Doctor'
                         >
                             <PlusIcon className='admin-plus' />
                         </button>
@@ -134,6 +142,7 @@ const UserList = ({ role, userID }) => {
                             id={'add-existing-doctor-btn-' + i}
                             key={'add-existing-doctor-btn-' + i}
                             onClick={() => {}}
+                            aria-label='Add exisitng Doctor to Clinic'
                         >
                             <AddExistingDoctorIcon />
                         </button>
@@ -146,10 +155,34 @@ const UserList = ({ role, userID }) => {
                         <Tooltip id={`tooltip-edit-user-${i}`}>{`Edit ${userTypeFilter}`}</Tooltip>
                     }
                 >
-                    <button onClick={() => editUserHandler(basicInfo)}>
+                    <button
+                        id={'edit-user-' + i}
+                        key={'edit-user-' + i}
+                        onClick={() => editUserHandler(basicInfo)}
+                        aria-label='Edit User'
+                    >
                         <SVG src={require('../../assets/icons/edit.svg').default} />
                     </button>
                 </OverlayTrigger>
+
+                {isChangePasswordVisible && (
+                    <OverlayTrigger
+                        key={'change-password-' + i}
+                        placement='top'
+                        overlay={
+                            <Tooltip id={`tooltip-change-password-${i}`}>Change Password</Tooltip>
+                        }
+                    >
+                        <button
+                            id={'change-password-btn-' + i}
+                            key={'change-password-btn-' + i}
+                            onClick={() => changeUserPassByAdmin()}
+                            aria-label='Change Password'
+                        >
+                            <ChangePasswordIcon />
+                        </button>
+                    </OverlayTrigger>
+                )}
 
                 {!isDeleteBtnDisabled && (
                     <OverlayTrigger
@@ -157,7 +190,13 @@ const UserList = ({ role, userID }) => {
                         placement='top'
                         overlay={<Tooltip id={`tooltip-delete-user-${i}`}>Delete</Tooltip>}
                     >
-                        <button disabled>
+                        <button
+                            id={'delete-user-btn-' + i}
+                            key={'delete-user-btn-' + i}
+                            onClick={() => changeUserPassByAdmin()}
+                            aria-label='Delete User'
+                            disabled
+                        >
                             <SVG src={require('../../assets/icons/deleteBin.svg').default} />
                         </button>
                     </OverlayTrigger>

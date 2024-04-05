@@ -26,6 +26,9 @@ const obj = {
     setDataToModal: () => {},
     isEdit: false,
     setIsEdit: () => {},
+    isResetPassModalOpen: false,
+    changePasswordHandler: () => {},
+    changePasswordFn: () => {},
 };
 
 const userObjInitialState = {
@@ -47,22 +50,9 @@ export const AddParentUserContext = createContext(obj);
 export const AddParentUserContextProvider = ({ children, providerObj = obj }) => {
     const [open, setOpen] = useState(false);
     const [addType, setAddType] = useState('');
-    // const [userObj, setUserObj] = useState({
-    //     name: '',
-    //     email: '',
-    //     password: '',
-    //     role: [],
-    // });
 
     const [userObj, setUserObj] = useState(userObjInitialState);
 
-    //different oject considering backend
-    // const [detailUserObject, setDetailUserObj] = useState({
-    //     mobileNo: '',
-    //     userAddress: '',
-    //     userCity: '',
-    //     userCountry: '',
-    // });
     const [detailUserObject, setDetailUserObj] = useState(detailUserObjInitialState);
 
     const [formValid, setFormValid] = useState(false);
@@ -80,7 +70,11 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     //For setting object to pass on to Modal for editing or adding doctor
     const [dataToModal, setDataToModal] = useState({});
 
+    //Edit Users state
     const [isEdit, setIsEdit] = useState(false);
+
+    //Edit password by Admin related state
+    const [isResetPassModalOpen, setIsResetPassModalOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -88,7 +82,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //Modal For adding lab, clinic and admin
     const addParentUserModalHandler = (type, user = {}, isEdit = false) => {
-        setOpen((prevState) => !prevState);
+        setOpen((prevState) => true);
         if (type === 'Doctor' && !isEdit) {
             setDataToModal((prevState) => user);
         }
@@ -109,8 +103,14 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         });
     };
 
+    //Modal For changing password
+    const changePasswordHandler = (user) => {
+        setIsResetPassModalOpen(() => true);
+    };
+
+    //Close Modal For adding lab, clinic and admin
     const closeModalHandler = () => {
-        setOpen((prevState) => !prevState);
+        setOpen((prevState) => false);
         setAddType('');
         setUserObj(() => {
             return { ...userObjInitialState };
@@ -120,9 +120,10 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         });
         setDataToModal(() => {});
         setIsEdit(() => false);
+        setIsResetPassModalOpen(() => false);
     };
 
-    //For adding lab, clinic, admin, doctor
+    //api call For adding lab, clinic, admin, doctor
     const addParentUserFn = () => {
         setLoading(true);
         if (!formValid) return;
@@ -204,7 +205,8 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         }
     };
 
-    const editUserFn = () => {};
+    //api call for change password
+    const changePasswordFn = () => {};
 
     const paginationHanlder = (type, page, totalElements = 0) => {
         if (type === 'page') {
@@ -230,6 +232,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         detailUserObject,
         dataToModal,
         isEdit,
+        isResetPassModalOpen,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
@@ -241,6 +244,8 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setDetailUserObj,
         setDataToModal,
         setIsEdit,
+        changePasswordHandler,
+        changePasswordFn,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>

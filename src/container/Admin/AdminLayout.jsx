@@ -7,6 +7,7 @@ import { withReducer } from '../../hoc/withReducer';
 import withRouter from '../../hoc/withRouter';
 import getAllUsersReducer from '../../store/reducers/userreducer/getAllUsersReducer';
 import AdminPagination from './AdminPagination';
+import ChangePasswordModal from './ChangePassword/ChangePasswordModal';
 
 const AdminLayout = () => {
     const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo?.data);
@@ -22,6 +23,7 @@ const AdminLayout = () => {
                 <AdminHeaderBar userID={userID} role={role} />
                 <UserList userID={userID} role={role} />
                 <AddParentUserLayout />
+                <ChangePasswordModal />
             </div>
             <AdminPagination />
         </AddParentUserContextProvider>
