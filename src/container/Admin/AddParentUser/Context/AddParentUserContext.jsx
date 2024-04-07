@@ -1,5 +1,4 @@
 import { createContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { CommonUtils } from '../../../../utils/commonfunctions/commonfunctions';
 import { postCall, putCall } from '../../../../utils/commonfunctions/apicallactions';
 import { toast, Bounce } from 'react-toastify';
@@ -75,10 +74,9 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //Edit password by Admin related state
     const [isResetPassModalOpen, setIsResetPassModalOpen] = useState(false);
+    const [resetPassObj, setResetPassObj] = useState({});
 
     const [loading, setLoading] = useState(false);
-
-    const dispatch = useDispatch();
 
     //Modal For adding lab, clinic and admin
     const addParentUserModalHandler = (type, user = {}, isEdit = false) => {
@@ -105,6 +103,14 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //Modal For changing password
     const changePasswordHandler = (user) => {
+        console.log(user);
+        //newPassword & reEnterNewPassword are keys sent on apis. Donot change name
+        setDataToModal(() => {
+            return { ...user };
+        });
+        setUserObj(() => {
+            return { newPassword: '', reEnterNewPassword: '' };
+        });
         setIsResetPassModalOpen(() => true);
     };
 
@@ -121,6 +127,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setDataToModal(() => {});
         setIsEdit(() => false);
         setIsResetPassModalOpen(() => false);
+        setFormValid(() => false);
     };
 
     //api call For adding lab, clinic, admin, doctor
@@ -206,7 +213,39 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
     };
 
     //api call for change password
-    const changePasswordFn = () => {};
+    const changePasswordFn = () => {
+        console.log(dataToModal, userObj);
+
+        //userObj must contain {newPassword, reEnterNewPassword}. These are backend keys
+        const userPayload = userObj;
+        const params = {};
+        putCall(userPayload, 'PASS_CHANGE_BY_ADMIN', [dataToModal?.id], params).then((data) => {
+            if (data.result === 'success') {
+                toast.success(`Password changed successully`, {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                // setUserAdded(true);
+                closeModalHandler();
+            } else if (data.result === 'error') {
+                toast.error(data.error ?? 'data.error', {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+            }
+            setLoading(false);
+        });
+    };
 
     const paginationHanlder = (type, page, totalElements = 0) => {
         if (type === 'page') {

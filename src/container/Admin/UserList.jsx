@@ -96,8 +96,8 @@ const UserList = ({ role, userID }) => {
         addParentUserModalHandler(userTypeFilter, user, true);
     };
 
-    const changeUserPassByAdmin = () => {
-        changePasswordHandler();
+    const changeUserPassByAdmin = (basicInfo) => {
+        changePasswordHandler(basicInfo);
     };
 
     const getActionItems = (basicInfo, i) => {
@@ -176,7 +176,7 @@ const UserList = ({ role, userID }) => {
                         <button
                             id={'change-password-btn-' + i}
                             key={'change-password-btn-' + i}
-                            onClick={() => changeUserPassByAdmin()}
+                            onClick={() => changeUserPassByAdmin(basicInfo)}
                             aria-label='Change Password'
                         >
                             <ChangePasswordIcon />
