@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { CommonConstants } from '../globalConstants';
+import { postCall } from './apicallactions';
+
 const {
     ACCESS_TOKEN,
     REFRESH_TOKEN,
@@ -48,10 +50,16 @@ export const CommonUtils = {
         localStorage.removeItem(IS_AUTHENTICATED);
     },
 
-    logout: function () {
-        this.clearStorage();
-        this.movetoLogin();
-        this.logoutApiFunction();
+    logout: async function () {
+        try {
+            const response = await this.logoutApiFunction();
+        } catch (error) {
+            console.error('Error during logout:', error); // This is also optional, but good for debugging.
+        } finally {
+            // This will run whether the logoutApiFunction resolved or rejected
+            this.clearStorage();
+            this.movetoLogin();
+        }
     },
 
     movetoLogin: function () {
@@ -59,7 +67,14 @@ export const CommonUtils = {
         window.location.reload();
     },
 
-    logoutApiFunction: function () {},
+    logoutApiFunction: async function () {
+        // Wrap the API call in a try-catch to handle any network errors.
+        try {
+            return await postCall({}, 'LOGOUT');
+        } catch (error) {
+            throw error; // Rethrow the error to be caught by the try-catch in 'logout'.
+        }
+    },
 
     //check refreshtoken validity
     checkRefreshTokenValidity: function () {

@@ -71,7 +71,6 @@ const LoginForm = ({ errorObj, setErrorObj }) => {
             }
         }
     };
-    console.log(loading, errorObj);
 
     useEffect(() => {
         if (errorObj.errorFlag && loading) {
