@@ -34,6 +34,7 @@ const UserList = ({ role, userID }) => {
         setUserAdded,
         addParentUserModalHandler,
         changePasswordHandler,
+        addExistingDoctortoClinincModal,
     } = useContext(AddParentUserContext);
 
     const [isError, setIsError] = useState(false);
@@ -53,7 +54,7 @@ const UserList = ({ role, userID }) => {
             sortBy: 'id',
             sortDir: 'des',
         };
-        dispatch(getallusersaction('GET_ALL_USERS', [], query));
+        dispatch(getallusersaction('GET_ALL_USERS_WITH_DETAILS', [], query));
     };
 
     //Function to separate details and basic info
@@ -100,6 +101,10 @@ const UserList = ({ role, userID }) => {
         changePasswordHandler(basicInfo);
     };
 
+    const addExistingDoctortoClininc = (basicInfo) => {
+        addExistingDoctortoClinincModal(basicInfo);
+    };
+
     const getActionItems = (basicInfo, i) => {
         const isAddBtnDisabled = role === 'ROLE_DOCTOR';
 
@@ -141,7 +146,9 @@ const UserList = ({ role, userID }) => {
                         <button
                             id={'add-existing-doctor-btn-' + i}
                             key={'add-existing-doctor-btn-' + i}
-                            onClick={() => {}}
+                            onClick={() => {
+                                addExistingDoctortoClininc(basicInfo);
+                            }}
                             aria-label='Add exisitng Doctor to Clinic'
                         >
                             <AddExistingDoctorIcon />

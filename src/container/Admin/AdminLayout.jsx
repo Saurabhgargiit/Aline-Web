@@ -8,6 +8,7 @@ import withRouter from '../../hoc/withRouter';
 import getAllUsersReducer from '../../store/reducers/userreducer/getAllUsersReducer';
 import AdminPagination from './AdminPagination';
 import ChangePasswordModal from './ChangePassword/ChangePasswordModal';
+import AddExisitingDoctorToClinicModal from './AddExisitingDoctorToClinic/AddExisitingDoctorToClinicModal';
 
 const AdminLayout = () => {
     const fetchedUserInfo = useSelector((state) => state.userInfoReducer?.userInfo?.data);
@@ -24,6 +25,7 @@ const AdminLayout = () => {
                 <UserList userID={userID} role={role} />
                 <AddParentUserLayout />
                 <ChangePasswordModal />
+                <AddExisitingDoctorToClinicModal />
             </div>
             <AdminPagination />
         </AddParentUserContextProvider>

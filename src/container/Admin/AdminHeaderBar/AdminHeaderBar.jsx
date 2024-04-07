@@ -23,8 +23,8 @@ const AdminHeaderBar = ({ role, userId }) => {
     const isClinic = CommonUtils.isClinic(role);
     const isDoctor = CommonUtils.isDoctor(role);
 
-    const userTypeSelectHandler = (e) => {
-        setUserTypeFilter(() => e.target.value);
+    const userTypeSelectHandler = (value) => {
+        setUserTypeFilter(() => value);
     };
 
     filterUsertypes =

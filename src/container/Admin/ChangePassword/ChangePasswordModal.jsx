@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalFooter } from '../../../components/Modal/Modal';
-// import './AddParentUser.scss';
 import { AddParentUserContext } from '../AddParentUser/Context/AddParentUserContext';
 import ChangePasswordForm from './ChangePasswordForm';
 
@@ -11,7 +10,6 @@ function ChangePasswordModal({}) {
     const changePassword = () => {
         ctx.changePasswordFn();
     };
-    console.log(ctx.isResetPassModalOpen);
     return (
         <Modal className='add-parent-box' open={ctx.isResetPassModalOpen}>
             <ModalHeader title={title} />

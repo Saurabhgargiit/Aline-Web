@@ -11,7 +11,8 @@ export class ApiRelativePaths {
     //USER
     static GET_USER = '/api/v1/aline/user/getSignedInUserInfo';
     static CREATE_PARENT_USER = '/api/v1/aline/user/createUserWithDetails';
-    static GET_ALL_USERS = '/api/v1/aline/user/getAllUsersWithDetails';
     static UPDATE_USER = '/api/v1/aline/user/updateUserWithDetails';
     static PASS_CHANGE_BY_ADMIN = '/api/v1/aline/user/forgotPassword';
+    static GET_ALL_USERS = '/api/v1/aline/user/getAllUsers';
+    static GET_ALL_USERS_WITH_DETAILS = '/api/v1/aline/user/getAllUsersWithDetails';
 }

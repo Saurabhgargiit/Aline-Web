@@ -28,6 +28,9 @@ const obj = {
     isResetPassModalOpen: false,
     changePasswordHandler: () => {},
     changePasswordFn: () => {},
+    isAddExistingDrClinicOpen: false,
+    addExistingDoctortoClinincModal: () => {},
+    addExistingDoctortoClinincFn: () => {},
 };
 
 const userObjInitialState = {
@@ -74,7 +77,9 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //Edit password by Admin related state
     const [isResetPassModalOpen, setIsResetPassModalOpen] = useState(false);
-    const [resetPassObj, setResetPassObj] = useState({});
+
+    //Add existing doctor to clinic modal
+    const [isAddExistingDrClinicOpen, setIsAddExistingDrClinicOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -103,7 +108,6 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //Modal For changing password
     const changePasswordHandler = (user) => {
-        console.log(user);
         //newPassword & reEnterNewPassword are keys sent on apis. Donot change name
         setDataToModal(() => {
             return { ...user };
@@ -112,6 +116,15 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             return { newPassword: '', reEnterNewPassword: '' };
         });
         setIsResetPassModalOpen(() => true);
+    };
+
+    //Modal For adding exisiting docctor to this clinic
+    const addExistingDoctortoClinincModal = (user) => {
+        setDataToModal(() => {
+            return { ...user };
+        });
+        setUserObj(() => {});
+        setIsAddExistingDrClinicOpen(() => true);
     };
 
     //Close Modal For adding lab, clinic and admin
@@ -128,6 +141,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setIsEdit(() => false);
         setIsResetPassModalOpen(() => false);
         setFormValid(() => false);
+        setIsAddExistingDrClinicOpen(() => false);
     };
 
     //api call For adding lab, clinic, admin, doctor
@@ -214,8 +228,6 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //api call for change password
     const changePasswordFn = () => {
-        console.log(dataToModal, userObj);
-
         //userObj must contain {newPassword, reEnterNewPassword}. These are backend keys
         const userPayload = userObj;
         const params = {};
@@ -247,6 +259,13 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         });
     };
 
+    const addExistingDoctortoClinincFn = () => {
+        //dataToModal is containing clinic Id
+        console.log(dataToModal);
+        // userId is containing doctorid & doctor name;
+        console.log(userObj);
+    };
+
     const paginationHanlder = (type, page, totalElements = 0) => {
         if (type === 'page') {
             setPagination((prevState) => {
@@ -272,6 +291,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         dataToModal,
         isEdit,
         isResetPassModalOpen,
+        isAddExistingDrClinicOpen,
         setUserObj,
         addParentUserFn,
         addParentUserModalHandler,
@@ -285,6 +305,8 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         setIsEdit,
         changePasswordHandler,
         changePasswordFn,
+        addExistingDoctortoClinincModal,
+        addExistingDoctortoClinincFn,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>
