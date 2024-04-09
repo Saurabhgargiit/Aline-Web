@@ -261,9 +261,37 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     const addExistingDoctortoClinincFn = () => {
         //dataToModal is containing clinic Id
-        console.log(dataToModal);
+        const { id: clinicID } = dataToModal;
         // userId is containing doctorid & doctor name;
-        console.log(userObj);
+        const { id: doctorID } = userObj;
+        //ADD_EXISTING_DOCTOR_TO_CLINIC
+        const userPayload = { clinicID, doctorID };
+        postCall(userPayload, 'ADD_EXISTING_DOCTOR_TO_CLINIC', [], {}).then((data) => {
+            if (data.result === 'success') {
+                toast.success(`Doctor added successully`, {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                // setUserAdded(true);
+                closeModalHandler();
+            } else if (data.result === 'error') {
+                toast.error(data.error ?? 'data.error', {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+            }
+            setLoading(false);
+        });
     };
 
     const paginationHanlder = (type, page, totalElements = 0) => {

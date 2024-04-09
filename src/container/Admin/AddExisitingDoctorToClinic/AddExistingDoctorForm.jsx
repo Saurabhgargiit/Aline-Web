@@ -14,14 +14,14 @@ const AddExistingDoctorForm = ({}) => {
 
     const [doctorValid, setDoctorValid] = useState(false);
 
-    const objSetter = (field, value) => {
-        setUserObj((prevState) => {
-            return {
-                ...prevState,
-                [field]: value,
-            };
-        });
-    };
+    // const objSetter = (field, value) => {
+    //     setUserObj((prevState) => {
+    //         return {
+    //             ...prevState,
+    //             [field]: value,
+    //         };
+    //     });
+    // };
 
     const selectHandler = (value) => {
         const doctorObj = doctorList.find((el) => el.value === value);
