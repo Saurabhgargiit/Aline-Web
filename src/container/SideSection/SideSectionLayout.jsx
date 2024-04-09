@@ -7,6 +7,7 @@ import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
     if (!open) return null;
+    const email = localStorage.getItem('user_email');
     return (
         <div className='modal-container displayFlex'>
             <aside className='side-section-layout'>
@@ -32,7 +33,7 @@ const SideSectionLayout = ({ open, sideSectionShowHandler }) => {
                         </nav>
                     </div>
                     <div className='side-logout-container'>
-                        <div className='side-email'>saurabhgarg.iitbhu@gmail.com</div>
+                        <div className='side-email'>{email}</div>
                         <Button
                             onClickCallBk={CommonUtils.logout.bind(CommonUtils)}
                             title={'Logout'}
