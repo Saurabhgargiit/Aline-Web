@@ -1,26 +1,23 @@
-import * as actionTypes from "../actionTypes";
+import * as actionTypes from '../actionTypes';
 
 const loginIntialState = {
-  loggedIn: false,
-}
+    loggedIn: false,
+    loggedInData: {},
+};
 
 const loginReducer = (state = loginIntialState, action) => {
+    switch (action.type) {
+        case actionTypes.LOGIN:
+            return {
+                ...state,
+                loggedIn: action.loggedInData?.isLoggedIn,
+                loggedInData: action.loggedInData,
+            };
 
-  switch (action.type) {
-    case actionTypes.LOGIN:
-      return {
-        ...state,
-        loggedIn: action.userData.loggedIn,
-      };
-      break;
-
-    default:
-      return state;
-      break;
-  }
-
-
-}
+        default:
+            return state;
+    }
+};
 
 export default loginReducer;
 
