@@ -24,7 +24,7 @@ const AddExistingDoctorForm = ({}) => {
     // };
 
     const selectHandler = (value) => {
-        const doctorObj = doctorList.find((el) => el.value === value);
+        const doctorObj = doctorList.find((el) => el.id === value);
         setDoctor(() => value);
         if (value !== '') {
             setDoctorValid(() => true);
@@ -44,18 +44,26 @@ const AddExistingDoctorForm = ({}) => {
             sortDir: 'des',
         };
         const data = await getCall('GET_ALL_USERS', [], query);
-        const { content: doctors } = data?.data;
-        const doctorWithLabals = doctors.map((el, i) => {
-            return { key: el.id, id: el.id, value: el.name, label: el.name };
-        });
-        doctorWithLabals.unshift({
-            key: 'select',
-            id: 'select',
-            value: '',
-            label: '--Please choose an option--',
-        });
-        console.log(doctorWithLabals);
-        setDoctorList(() => doctorWithLabals);
+        if (data.result === 'success') {
+            const { content: doctors } = data?.data;
+            const doctorWithLabals = doctors.map((el, i) => {
+                return {
+                    key: el.id,
+                    id: el.id,
+                    value: el.id,
+                    label: el.name + ' (' + el.email + ')',
+                };
+            });
+            doctorWithLabals.unshift({
+                key: 'select',
+                id: 'select',
+                value: '',
+                label: '--Please choose an option--',
+            });
+            setDoctorList(() => doctorWithLabals);
+        } else {
+            console.error(data.message);
+        }
     };
 
     useEffect(() => {

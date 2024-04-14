@@ -1,12 +1,15 @@
 import React from 'react';
 import './PatientDetailsContainer.scss';
+import FormViewTabs from '../PatientDetailsForm/FormViewTabs';
 
 function PatientDetailsContainer() {
-  return (
-    <div className='PatientDetailsContainer'>
-      <div className=''></div>
-    </div>
-  );
+    return (
+        <div className='PatientDetailsContainer'>
+            <div className=''>
+                <FormViewTabs />
+            </div>
+        </div>
+    );
 }
 
 export default PatientDetailsContainer;

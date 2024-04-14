@@ -228,6 +228,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
 
     //api call for change password
     const changePasswordFn = () => {
+        if (!formValid) return;
         //userObj must contain {newPassword, reEnterNewPassword}. These are backend keys
         const userPayload = userObj;
         const params = {};
@@ -259,7 +260,9 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         });
     };
 
+    //api call For adding exisiting docctor to this clinic
     const addExistingDoctortoClinincFn = () => {
+        if (!formValid) return;
         //dataToModal is containing clinic Id
         const { id: clinicID } = dataToModal;
         // userId is containing doctorid & doctor name;
@@ -305,6 +308,8 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             });
         }
     };
+
+    console.log(formValid);
 
     providerObj = {
         ...obj,

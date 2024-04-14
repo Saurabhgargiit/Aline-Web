@@ -1,6 +1,14 @@
 import './Dropdown.scss';
 
-const Dropdown = ({ options, onChangeCallBk, selectedValue, isMultiSelect = false }) => {
+const Dropdown = ({
+    propsClassName = '',
+    errClassName = '',
+    options,
+    onChangeCallBk,
+    selectedValue,
+    isMultiSelect = false,
+    id = 'select-id',
+}) => {
     const optionsList = options.map((el) => (
         <option key={el.key} value={el.value}>
             {el.label}
@@ -19,9 +27,10 @@ const Dropdown = ({ options, onChangeCallBk, selectedValue, isMultiSelect = fals
         }
     };
     return (
-        <div>
+        <div className={propsClassName}>
             <select
-                className='selectBox'
+                id={id}
+                className={'selectBox' + errClassName}
                 onChange={changeHandler}
                 value={selectedValue}
                 multiple={isMultiSelect}

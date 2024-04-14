@@ -17,6 +17,15 @@ export const FormErrors = {
     passwordErr: 'Password should be between 6 to 12 letters.',
     repasswordErr: 'Password do not match',
     emptyField: 'Field is empty',
+    pastDateError: 'Date must not be in the past.',
+    ageError: 'Please enter a valid age.',
+};
+
+export const roles = {
+    ROLE_ADMIN: 'ROLE_ADMIN',
+    ROLE_LAB: 'ROLE_LAB',
+    ROLE_CLINIC: 'ROLE_CLINIC',
+    ROLE_DOCTOR: 'ROLE_DOCTOR',
 };
 
 //Error Messages
