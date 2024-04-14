@@ -15,7 +15,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
         gender: '',
         age: '',
         nationality: '',
-        dateOfScan: '',
+        dateOfScan: CommonUtils.formatDate(new Date()),
     });
 
     const [formValidity, setFormValidity] = useState({
@@ -212,6 +212,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
                     id='date-scan'
                     type='date'
                     value={formData.dateOfScan}
+                    min={formData.dateOfScan}
                     onChange={(e) => handleInputChange('dateOfScan', e.target.value)}
                 ></input>
             </div>

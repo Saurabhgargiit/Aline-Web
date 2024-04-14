@@ -1,6 +1,9 @@
 import './PatientList.scss';
 import { Badge } from 'react-bootstrap';
 import SVG from 'react-inlinesvg';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import Button from '../../components/Button/Button';
+import Dropdown from '../../components/Dropdown/Dropdown';
 
 const obj = [
     {
@@ -69,6 +72,12 @@ const obj = [
 ];
 
 const PatientList = () => {
+    let genderList = [
+        { key: 'select', id: 'select', value: '', label: '--Please choose an option--' },
+        { key: 'male', id: 'male', value: 'male', label: 'Male' },
+        { key: 'female', id: 'female', value: 'female', label: 'Female' },
+        { key: 'others', id: 'others', value: 'others', label: 'Others' },
+    ];
     const patientList = obj.map((el, i) => (
         <div className='displayFlex home-row-container row-border' key={i}>
             <div className='img-container'>
@@ -82,17 +91,63 @@ const PatientList = () => {
                 <Badge pill bg='primary'>
                     Primary
                 </Badge>
+                <Button
+                    onClickCallBk={() => {}}
+                    tooltip='Change Status'
+                    svg={<SVG src={require('../../assets/icons/edit-2.svg').default} />}
+                    ariaLabel='Change Status'
+                />
+                <Button
+                    onClickCallBk={() => {}}
+                    tooltip='Cancel'
+                    svg={<SVG src={require('../../assets/icons/cross.svg').default} />}
+                    ariaLabel='Cancel'
+                />
+                <Dropdown
+                    id='status-list'
+                    options={genderList}
+                    // selectedValue={formData.gender}
+                    // onChangeCallBk={(value) => handleInputChange('gender', value)}
+                />
+                <Button
+                    onClickCallBk={() => {}}
+                    tooltip='Confirm Status'
+                    svg={<SVG src={require('../../assets/icons/send.svg').default} />}
+                    ariaLabel='Confirm Status'
+                />
             </div>
             <div className='mt-2'>
                 <div className='home-page-count'>15 out of 24</div>
                 <div className='home-page-icons'>
-                    <SVG src={require('../../assets/icons/deleteBin.svg').default} />
-                    <SVG src={require('../../assets/icons/edit.svg').default} />
+                    <Button
+                        onClickCallBk={() => {}}
+                        tooltip='Delete Patient'
+                        svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
+                        ariaLabel='Delete Patient'
+                    />
+                    <Button
+                        onClickCallBk={() => {}}
+                        tooltip='Edit Patient Basic Info'
+                        svg={<SVG src={require('../../assets/icons/edit.svg').default} />}
+                        ariaLabel='Edit Patient Basic Info'
+                    />{' '}
+                    <Button
+                        onClickCallBk={() => {}}
+                        tooltip='Delete Patient'
+                        svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
+                        ariaLabel='Delete Patient'
+                    />{' '}
+                    <Button
+                        onClickCallBk={() => {}}
+                        tooltip='Delete Patient'
+                        svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
+                        ariaLabel='Delete Patient'
+                    />
                     <SVG src={require('../../assets/icons/file.svg').default} />
-                    <SVG
+                    {/* <SVG
                         className='home-page-play'
                         src={require('../../assets/icons/play.svg').default}
-                    />
+                    /> */}
                 </div>
             </div>
         </div>
