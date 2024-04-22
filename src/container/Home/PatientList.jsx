@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Button from '../../components/Button/Button';
 import Dropdown from '../../components/Dropdown/Dropdown';
+import Status from './Status/Status';
 
 const obj = [
     {
@@ -87,35 +88,7 @@ const PatientList = () => {
                 <div className='home-page-name font700'>Saurabh Garg</div>
                 <div className='home-page-date font14'>21-Aug-2023</div>
             </div>
-            <div className='home-status mt-2'>
-                <Badge pill bg='primary'>
-                    Primary
-                </Badge>
-                <Button
-                    onClickCallBk={() => {}}
-                    tooltip='Change Status'
-                    svg={<SVG src={require('../../assets/icons/edit-2.svg').default} />}
-                    ariaLabel='Change Status'
-                />
-                <Button
-                    onClickCallBk={() => {}}
-                    tooltip='Cancel'
-                    svg={<SVG src={require('../../assets/icons/cross.svg').default} />}
-                    ariaLabel='Cancel'
-                />
-                <Dropdown
-                    id='status-list'
-                    options={genderList}
-                    // selectedValue={formData.gender}
-                    // onChangeCallBk={(value) => handleInputChange('gender', value)}
-                />
-                <Button
-                    onClickCallBk={() => {}}
-                    tooltip='Confirm Status'
-                    svg={<SVG src={require('../../assets/icons/send.svg').default} />}
-                    ariaLabel='Confirm Status'
-                />
-            </div>
+            <Status />
             <div className='mt-2'>
                 <div className='home-page-count'>15 out of 24</div>
                 <div className='home-page-icons'>

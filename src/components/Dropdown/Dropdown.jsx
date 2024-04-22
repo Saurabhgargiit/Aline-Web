@@ -4,7 +4,7 @@ const Dropdown = ({
     propsClassName = '',
     errClassName = '',
     options,
-    onChangeCallBk,
+    onChangeCallBk = () => {},
     selectedValue,
     isMultiSelect = false,
     id = 'select-id',
@@ -30,7 +30,7 @@ const Dropdown = ({
         <div className={propsClassName}>
             <select
                 id={id}
-                className={'selectBox' + errClassName}
+                className={'selectBox ' + errClassName}
                 onChange={changeHandler}
                 value={selectedValue}
                 multiple={isMultiSelect}
