@@ -1,3 +1,50 @@
 .home-status {
-    margin: 0 auto;
+    width: 100%; // Adjust this to fit the width you desire for the entire component
+    max-width: 320px; // Example fixed max-width; adjust as needed
+    display: flex;
+    flex-direction: column;
+
+    // margin-top: 2rem; // mt-2 equivalent
+    // margin: 0 auto;
+
+    // Containing the badge and button in a row
+    .status-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // padding-right: 10px; // Ensuring some space on the right
+
+        .badge {
+            flex-grow: 1; // Allows the badge to grow and fill the space
+            flex-shrink: 1; // Allows the badge to shrink if needed
+            overflow: hidden; // Prevents content from spilling out
+            white-space: nowrap;
+            text-overflow: ellipsis; // Adds an ellipsis for overflow text
+        }
+
+        button {
+            flex-shrink: 0; // Prevents the button from shrinking
+            margin-left: 10px; // Ensures space between the badge and the button
+        }
+    }
+
+    // Style for the dropdown and send button when in edit mode
+    .edit-mode {
+        display: flex;
+        justify-content: space-between;
+        // margin-top: 1px; // Space between lines
+
+        .dropdown {
+            // flex-grow: 1;
+            // margin-right: 10px; // Space between dropdown and send button
+            select {
+                // padding: 0 !important;
+                height: 1.75rem !important;
+            }
+        }
+
+        button {
+            flex-shrink: 0;
+        }
+    }
 }

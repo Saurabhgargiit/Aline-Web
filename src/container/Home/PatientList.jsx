@@ -90,7 +90,6 @@ const PatientList = () => {
             </div>
             <Status />
             <div className='mt-2'>
-                <div className='home-page-count'>15 out of 24</div>
                 <div className='home-page-icons'>
                     <Button
                         onClickCallBk={() => {}}

@@ -76,33 +76,37 @@ const Status = ({ id, status = 'scanned' }) => {
     };
 
     return (
-        <div className='home-status mt-2'>
-            <Badge pill bg={currentStatus?.color || 'secondary'}>
-                {currentStatus.label}
-            </Badge>
-            {!editMode ? (
-                <Button
-                    onClickCallBk={() => setEditMode(true)}
-                    tooltip='Change Status'
-                    svg={<SVG src={require('../../../assets/icons/edit-2.svg').default} />}
-                    ariaLabel='Change Status'
-                />
-            ) : (
-                <Button
-                    onClickCallBk={cancelEdit}
-                    tooltip='Cancel'
-                    svg={<SVG src={require('../../../assets/icons/cross.svg').default} />}
-                    ariaLabel='Cancel'
-                />
-            )}
+        <div className='home-status'>
+            <div className='status-line'>
+                {' '}
+                <Badge pill bg={currentStatus?.color || 'secondary'}>
+                    {currentStatus.label}
+                </Badge>
+                {!editMode ? (
+                    <Button
+                        onClickCallBk={() => setEditMode(true)}
+                        tooltip='Change Status'
+                        svg={<SVG src={require('../../../assets/icons/edit-2.svg').default} />}
+                        ariaLabel='Change Status'
+                    />
+                ) : (
+                    <Button
+                        onClickCallBk={cancelEdit}
+                        tooltip='Cancel'
+                        svg={<SVG src={require('../../../assets/icons/cross.svg').default} />}
+                        ariaLabel='Cancel'
+                    />
+                )}
+            </div>
 
             {editMode && (
-                <>
+                <div className='edit-mode'>
                     <Dropdown
                         id='status-list'
                         options={statusList}
                         selectedValue={newStatus}
                         onChangeCallBk={handleStatusChange}
+                        propsClassName='dropdown'
                     />
                     <Button
                         onClickCallBk={confirmStatusChange}
@@ -110,7 +114,7 @@ const Status = ({ id, status = 'scanned' }) => {
                         svg={<SVG src={require('../../../assets/icons/send.svg').default} />}
                         ariaLabel='Confirm Status'
                     />
-                </>
+                </div>
             )}
         </div>
     );
