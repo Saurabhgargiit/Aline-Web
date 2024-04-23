@@ -8,6 +8,7 @@ const Dropdown = ({
     selectedValue,
     isMultiSelect = false,
     id = 'select-id',
+    disabled = false,
 }) => {
     const optionsList = options.map((el) => (
         <option key={el.key} value={el.value}>
@@ -34,6 +35,7 @@ const Dropdown = ({
                 onChange={changeHandler}
                 value={selectedValue}
                 multiple={isMultiSelect}
+                disabled={disabled}
             >
                 {optionsList}
             </select>

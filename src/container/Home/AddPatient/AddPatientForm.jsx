@@ -34,6 +34,8 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
     const {
         id: userID,
         role: [role],
+        name,
+        email,
     } = fetchedUserInfo;
 
     const validateField = (name, value) => {
@@ -77,6 +79,34 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
             if (CommonUtils.isAdmin(role) || CommonUtils.isLab(role)) {
                 await getAllDoctors();
                 await getAllClinics();
+            } else {
+                if (CommonUtils.isClinic(role)) {
+                    setFormValidity((prev) => ({ ...prev, clinicValid: true }));
+                    setFormData((prev) => ({ ...prev, clinic: userID }));
+                    const clinicData = [
+                        {
+                            key: 'cli' + userID,
+                            id: 'clin' + userID,
+                            value: userID,
+                            label: `${name} (${email})`,
+                        },
+                    ];
+                    setClinicList(clinicData);
+                    await getAllDoctors();
+                } else {
+                    setFormValidity((prev) => ({ ...prev, doctorValid: true }));
+                    setFormData((prev) => ({ ...prev, doctor: userID }));
+                    const doctorData = [
+                        {
+                            key: 'doc' + userID,
+                            id: 'doc' + userID,
+                            value: userID,
+                            label: `${name} (${email})`,
+                        },
+                    ];
+                    setDoctorList(doctorData);
+                    await getAllClinics();
+                }
             }
         };
         fetchDoctorsAndClinics();
@@ -177,6 +207,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
                     options={doctorList}
                     selectedValue={formData.doctor}
                     onChangeCallBk={(value) => handleInputChange('doctor', value)}
+                    disabled={CommonUtils.isDoctor(role)}
                 />
             </div>
             <div
@@ -195,6 +226,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
                     options={clinicList}
                     selectedValue={formData.clinic}
                     onChangeCallBk={(value) => handleInputChange('clinic', value)}
+                    disabled={CommonUtils.isClinic(role)}
                 />
             </div>
             <div
