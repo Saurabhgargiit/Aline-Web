@@ -18,7 +18,7 @@ function AddPatientModal({ isOpen, isEdit = false, closeHanlder }) {
         <Modal className='add-parent-box' open={isOpen}>
             <ModalHeader title={title} />
             <ModalContent>
-                <AddPatientForm isEdit={isEdit} ref={formRef} />
+                <AddPatientForm isEdit={isEdit} ref={formRef} closeModal={closeHanlder} />
             </ModalContent>
             <ModalFooter
                 onClose={closeHanlder}

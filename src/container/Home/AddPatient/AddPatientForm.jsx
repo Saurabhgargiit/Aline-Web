@@ -3,9 +3,10 @@ import { FormErrors, roles } from '../../../utils/globalConstants';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import { useSelector } from 'react-redux';
 import { CommonUtils } from '../../../utils/commonfunctions/commonfunctions';
-import { getCall } from '../../../utils/commonfunctions/apicallactions';
+import { getCall, postCall, putCall } from '../../../utils/commonfunctions/apicallactions';
+import { toast, Bounce } from 'react-toastify';
 
-const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
+const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => {
     const { nameErr, pastDateError, emptyField, ageError } = FormErrors;
 
     const [formData, setFormData] = useState({
@@ -163,6 +164,68 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
         setClinicList(clinicWithLabels);
     };
 
+    const addPatientFn = () => {
+        let payload = { ...formData };
+
+        let params = {};
+
+        if (!isEdit) {
+            postCall(payload, 'CREATE_PATIENT', [], params).then((data) => {
+                if (data.result === 'success') {
+                    toast.success(`Patient added successully`, {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                    // setUserAdded(true);
+                    closeModal();
+                } else if (data.result === 'error') {
+                    toast.error(data.error ?? 'data.error', {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                }
+                // setLoading(false);
+            });
+        } else {
+            putCall(payload, 'UPDATE_PATIENT', [], params).then((data) => {
+                if (data.result === 'success') {
+                    toast.success(`Patient modified successully`, {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                    // setUserAdded(true);
+                    // closeModalHandler();
+                } else if (data.result === 'error') {
+                    toast.error(data.error ?? 'data.error', {
+                        position: 'top-right',
+                        hideProgressBar: false,
+                        autoClose: 2000,
+                        closeOnClick: true,
+                        // pauseOnHover: true,
+                        theme: 'light',
+                        transition: Bounce,
+                    });
+                }
+                // setLoading(false);
+            });
+        }
+    };
+
     const handleSubmit = (event) => {
         if (event) {
             event.preventDefault();
@@ -170,7 +233,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData }, ref) => {
         const allValid = Object.values(formValidity).every(Boolean);
         if (allValid) {
             console.log('Form Data:', formData);
-            // Submit logic here
+            addPatientFn();
         } else {
             console.error('Validation errors:', formValidity);
         }
