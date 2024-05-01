@@ -21,4 +21,7 @@ export class ApiRelativePaths {
     //Patient Basic Information
     static CREATE_PATIENT = '/api/v1/aline/patient/createPatient';
     static GET_ALL_PATIENTS = '/api/v1/aline/patient/getAllPatients';
+    static UPDATE_PATIENT = '/api/v1/aline/patient/updatePatient';
+    static UPDATE_STATUS = '/api/v1/aline/patient/updatePatientStatus';
+    static DELETE_PATIENT = '/api/v1/aline/patient/deletePatient';
 }

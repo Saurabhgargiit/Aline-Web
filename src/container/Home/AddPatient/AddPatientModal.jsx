@@ -5,7 +5,7 @@ import AddPatientForm from './AddPatientForm';
 // import './AddParentUser.scss';
 // import { AddParentUserContext } from './Context/AddParentUserContext';
 
-function AddPatientModal({ isOpen, isEdit = false, closeHanlder }) {
+function AddPatientModal({ isOpen, isEdit = false, closeHanlder, initialData, setUserAdded }) {
     const formRef = useRef(null);
     const title = `${!isEdit ? 'Add Patient' : 'Edit Patient'}`;
     const handleSubmit = () => {
@@ -18,13 +18,19 @@ function AddPatientModal({ isOpen, isEdit = false, closeHanlder }) {
         <Modal className='add-parent-box' open={isOpen}>
             <ModalHeader title={title} />
             <ModalContent>
-                <AddPatientForm isEdit={isEdit} ref={formRef} closeModal={closeHanlder} />
+                <AddPatientForm
+                    isEdit={isEdit}
+                    ref={formRef}
+                    closeModal={closeHanlder}
+                    initialData={initialData}
+                    setUserAdded={setUserAdded}
+                />
             </ModalContent>
             <ModalFooter
                 onClose={closeHanlder}
                 onSubmit={handleSubmit}
                 close={'Close'}
-                submit={'Create'}
+                submit={!isEdit ? 'Create' : 'Update'}
                 // disabled={ctx.loading}
             />
         </Modal>

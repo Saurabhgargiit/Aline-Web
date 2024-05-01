@@ -129,3 +129,47 @@ export const getCall = async (url_path, dynamicSeg = [], params = {}, optionalDa
 
     return data;
 };
+
+export const deleteCall = async (url_path, dynamicSeg = [], params = {}, optionalData) => {
+    let path = ApiPaths[url_path];
+    // let host = process.env.REACT_APP_ANALYTICS_HOST;
+    let generatedURL;
+    let data = {},
+        urlData;
+
+    // if (optionalData !== '' && optionalData !== undefined) {
+    //     generatedURL = generatedURL + optionalData;
+    // }
+    generatedURL = CommonUtils.generateGetApiPath(path, dynamicSeg, params);
+
+    if (optionalData !== '' && optionalData !== undefined) {
+        urlData = generatedURL + optionalData;
+    } else {
+        urlData = generatedURL;
+    }
+
+    await axiosInstance
+        .delete(urlData)
+        .then((res) => {
+            data = {
+                result: 'success',
+                data: res.data,
+            };
+        })
+        .catch((error) => {
+            //ignore below code for now
+            if ('apiErrorFlag' === '') {
+                data = {
+                    result: 'retry',
+                    data: error.response?.data?.message,
+                };
+            } else {
+                data = {
+                    result: 'error',
+                    data: error.response?.data?.message,
+                };
+            }
+        });
+
+    return data;
+};

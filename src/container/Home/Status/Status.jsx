@@ -6,7 +6,7 @@ import Dropdown from '../../../components/Dropdown/Dropdown';
 import Button from '../../../components/Button/Button';
 import './Status.scss';
 
-const Status = ({ id, status = 'scanned' }) => {
+const Status = ({ patientID, status = 'scanned', changeStatus }) => {
     const statusList = [
         { id: 'scanned', key: 'scanned', value: 'scanned', label: 'Scanned', color: 'secondary' },
         {
@@ -63,9 +63,9 @@ const Status = ({ id, status = 'scanned' }) => {
 
     const confirmStatusChange = () => {
         if (newStatus !== currentStatus.value) {
-            // Simulate PUT API call here
+            changeStatus(patientID, newStatus);
             // dispatch(updatePatientStatus(id, newStatus));
-            setCurrentStatus(() => statusList.find((s) => s.value === newStatus)); // Update local state only after successful API call simulation
+            // setCurrentStatus(() => statusList.find((s) => s.value === newStatus)); // Update local state only after successful API call simulation
         }
         setEditMode(() => false);
     };
@@ -74,6 +74,7 @@ const Status = ({ id, status = 'scanned' }) => {
         setNewStatus(() => currentStatus.value); // Reset new status to current status
         setEditMode(() => false);
     };
+    console.log(newStatus);
 
     return (
         <div className='home-status'>

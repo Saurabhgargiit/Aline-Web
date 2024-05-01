@@ -6,13 +6,13 @@ import { CommonUtils } from '../../../utils/commonfunctions/commonfunctions';
 import { getCall, postCall, putCall } from '../../../utils/commonfunctions/apicallactions';
 import { toast, Bounce } from 'react-toastify';
 
-const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => {
+const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal, setUserAdded }, ref) => {
     const { nameErr, pastDateError, emptyField, ageError } = FormErrors;
 
     const [formData, setFormData] = useState({
         name: '',
-        doctor: '',
-        clinic: '',
+        doctorID: '',
+        clinicID: '',
         gender: '',
         age: '',
         nationality: '',
@@ -21,8 +21,8 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
 
     const [formValidity, setFormValidity] = useState({
         nameValid: false,
-        doctorValid: false,
-        clinicValid: false,
+        doctorIDValid: false,
+        clinicIDValid: false,
         genderValid: false,
         ageValid: false,
         dateOfScanValid: true, // Assume valid initially until a date is chosen
@@ -40,10 +40,11 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
     } = fetchedUserInfo;
 
     const validateField = (name, value) => {
+        console.log(value);
         switch (name) {
             case 'name':
-            case 'doctor':
-            case 'clinic':
+            case 'doctorID':
+            case 'clinicID':
             case 'gender':
                 return value.trim() !== '';
             case 'age':
@@ -51,7 +52,8 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                 const ageNum = parseInt(value, 10);
                 return !isNaN(ageNum) && ageNum > 0 && ageNum <= 120;
             case 'dateOfScan':
-                // Ensure the date is not in the past
+                if (isEdit) return !!value;
+                // Ensure the date is not in the past while creating new patient
                 const today = new Date();
                 const selectedDate = new Date(value);
                 return selectedDate >= today;
@@ -70,6 +72,9 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
     useEffect(() => {
         if (isEdit && initialData) {
             Object.entries(initialData).forEach(([key, value]) => {
+                if (key === 'dateOfScan') {
+                    value = CommonUtils.formatDate(value);
+                }
                 handleInputChange(key, value);
             });
         }
@@ -82,8 +87,8 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                 await getAllClinics();
             } else {
                 if (CommonUtils.isClinic(role)) {
-                    setFormValidity((prev) => ({ ...prev, clinicValid: true }));
-                    setFormData((prev) => ({ ...prev, clinic: userID }));
+                    setFormValidity((prev) => ({ ...prev, clinicIDValid: true }));
+                    setFormData((prev) => ({ ...prev, clinicID: userID }));
                     const clinicData = [
                         {
                             key: 'cli' + userID,
@@ -95,8 +100,8 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                     setClinicList(clinicData);
                     await getAllDoctors();
                 } else {
-                    setFormValidity((prev) => ({ ...prev, doctorValid: true }));
-                    setFormData((prev) => ({ ...prev, doctor: userID }));
+                    setFormValidity((prev) => ({ ...prev, doctorIDValid: true }));
+                    setFormData((prev) => ({ ...prev, doctorID: userID }));
                     const doctorData = [
                         {
                             key: 'doc' + userID,
@@ -140,6 +145,12 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
             })),
         ];
         setDoctorList(() => doctorWithLabels);
+        if (isEdit) {
+            const value = doctorWithLabels.filter((el) => el.id === initialData.doctorID);
+            if (value.length !== 0) {
+                handleInputChange(handleInputChange('doctorID', initialData.doctorID));
+            }
+        }
     };
 
     const getAllClinics = async () => {
@@ -162,6 +173,12 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
             })),
         ];
         setClinicList(clinicWithLabels);
+        if (isEdit) {
+            const value = clinicWithLabels.filter((el) => el.id === initialData.clinicID);
+            if (value.length !== 0) {
+                handleInputChange(handleInputChange('clinicID', initialData.clinicID));
+            }
+        }
     };
 
     const addPatientFn = () => {
@@ -181,7 +198,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                         theme: 'light',
                         transition: Bounce,
                     });
-                    // setUserAdded(true);
+                    setUserAdded(() => true);
                     closeModal();
                 } else if (data.result === 'error') {
                     toast.error(data.error ?? 'data.error', {
@@ -208,8 +225,8 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                         theme: 'light',
                         transition: Bounce,
                     });
-                    // setUserAdded(true);
-                    // closeModalHandler();
+                    setUserAdded(() => true);
+                    closeModal();
                 } else if (data.result === 'error') {
                     toast.error(data.error ?? 'data.error', {
                         position: 'top-right',
@@ -268,14 +285,14 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                 <Dropdown
                     id='doctor-name'
                     options={doctorList}
-                    selectedValue={formData.doctor}
-                    onChangeCallBk={(value) => handleInputChange('doctor', value)}
+                    selectedValue={formData.doctorID}
+                    onChangeCallBk={(value) => handleInputChange('doctorID', value)}
                     disabled={CommonUtils.isDoctor(role)}
                 />
             </div>
             <div
                 className={`error-Msg height1rem ${
-                    formValidity.doctorValid && formData.doctor ? 'noVisible' : ''
+                    formValidity.doctorIDValid && formData.doctorID ? 'noVisible' : ''
                 } mb-1`}
             >
                 {emptyField}
@@ -287,14 +304,14 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                 <Dropdown
                     id='clinic-name'
                     options={clinicList}
-                    selectedValue={formData.clinic}
-                    onChangeCallBk={(value) => handleInputChange('clinic', value)}
+                    selectedValue={formData.clinicID}
+                    onChangeCallBk={(value) => handleInputChange('clinicID', value)}
                     disabled={CommonUtils.isClinic(role)}
                 />
             </div>
             <div
                 className={`error-Msg height1rem ${
-                    formValidity.clinicValid && formData.clinic ? 'noVisible' : ''
+                    formValidity.clinicIDValid && formData.clinicID ? 'noVisible' : ''
                 }`}
             >
                 {emptyField}
@@ -307,7 +324,7 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal }, ref) => 
                     id='date-scan'
                     type='date'
                     value={formData.dateOfScan}
-                    min={formData.dateOfScan}
+                    // min={formData.dateOfScan}
                     onChange={(e) => handleInputChange('dateOfScan', e.target.value)}
                 ></input>
             </div>
