@@ -18,7 +18,7 @@ function DeleteConfirmationModal({
         setDeleteModalOpen(false);
         setLoading(true);
         refetchDataFn();
-        setDataToDelete();
+        setDataToDelete({});
     };
     return (
         <Modal className='add-parent-box' open={modalOpen}>

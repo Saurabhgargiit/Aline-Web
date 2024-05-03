@@ -9,6 +9,7 @@ import { toast, Bounce } from 'react-toastify';
 import Button from '../../components/Button/Button';
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import Loader from '../common/Loader/Loader';
+import DeleteConfirmationModal from '../../components/Modal/DeleteConfirmationModal';
 
 import {
     MAXIMUM_RESULTS_ON_ONE_PAGE_ON_HOME_PAGE,
@@ -26,6 +27,9 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     const [patientBasicInfo, setPatientBasicInfo] = useState({});
     const [isError, setIsError] = useState(false);
     const [errMsg, setErrMsg] = useState('');
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteUserData, setDeleteUserData] = useState({});
 
     const fetchedAllPatients = useSelector((state) => state.getAllPatients.allPatients);
 
@@ -77,8 +81,8 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     };
 
     //api function for deleting the patient
-    const deletePatient = (patientID) => {
-        deleteCall('DELETE_PATIENT', [patientID], {}).then((data) => {
+    const deletePatient = (basicInfo) => {
+        deleteCall('DELETE_PATIENT', [basicInfo.id], {}).then((data) => {
             if (data.result === 'success') {
                 toast.success(`Patient deleted successully`, {
                     position: 'top-right',
@@ -103,6 +107,11 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                 });
             }
         });
+    };
+
+    const deleteHandler = (basicInfo) => {
+        setDeleteModalOpen(() => true);
+        setDeleteUserData(basicInfo);
     };
 
     //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@
@@ -172,7 +181,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                             ariaLabel='Edit Patient Basic Info'
                         />{' '}
                         <Button
-                            onClickCallBk={() => deletePatient(el.id)}
+                            onClickCallBk={() => deleteHandler(el)}
                             tooltip='Delete Patient'
                             svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
                             ariaLabel='Delete Patient'
@@ -200,25 +209,39 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         // navigate('/users');
     };
 
-    return !loading ? (
-        !isError ? (
-            Object.keys(patientBasicInfo).length === 0 ? (
-                <div className='top-bottom-position-container top56 center-position'>
-                    No patient
-                </div>
+    return (
+        <>
+            {!loading ? (
+                !isError ? (
+                    Object.keys(patientBasicInfo).length === 0 ? (
+                        <div className='top-bottom-position-container top56 center-position'>
+                            No patient
+                        </div>
+                    ) : (
+                        <div className='top-bottom-position-container top56'>{patientList()}</div>
+                    )
+                ) : (
+                    <InformativeErrorModal
+                        open={isError}
+                        btnFunction={closeHandler}
+                        className='add-parent-box'
+                        errorMsg={errMsg}
+                    />
+                )
             ) : (
-                <div className='top-bottom-position-container top56'>{patientList()}</div>
-            )
-        ) : (
-            <InformativeErrorModal
-                open={isError}
-                btnFunction={closeHandler}
-                className='add-parent-box'
-                errorMsg={errMsg}
+                <Loader />
+            )}
+            <DeleteConfirmationModal
+                modalOpen={deleteModalOpen}
+                setDeleteModalOpen={setDeleteModalOpen}
+                refetchDataFn={getAllPatients}
+                deleteUserHandlerFn={deletePatient}
+                dataToDelete={deleteUserData}
+                setDataToDelete={setDeleteUserData}
+                type={'Patient'}
+                setLoading={setLoading}
             />
-        )
-    ) : (
-        <Loader />
+        </>
     );
 };
 
