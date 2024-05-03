@@ -17,6 +17,7 @@ export class ApiRelativePaths {
     static GET_ALL_USERS_WITH_DETAILS = '/api/v1/aline/user/getAllUsersWithDetails';
     static ADD_EXISTING_DOCTOR_TO_CLINIC =
         '/api/v1/aline/clinicDoctorRelationship/addExistingDoctorToClinic';
+    static DELETE_USER = '/api/v1/aline/user/deleteUserByID';
 
     //Patient Basic Information
     static CREATE_PATIENT = '/api/v1/aline/patient/createPatient';

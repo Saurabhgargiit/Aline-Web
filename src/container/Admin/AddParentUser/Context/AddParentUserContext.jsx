@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
 import { CommonUtils } from '../../../../utils/commonfunctions/commonfunctions';
-import { postCall, putCall } from '../../../../utils/commonfunctions/apicallactions';
+import { deleteCall, postCall, putCall } from '../../../../utils/commonfunctions/apicallactions';
 import { toast, Bounce } from 'react-toastify';
 
 const obj = {
@@ -31,6 +31,7 @@ const obj = {
     isAddExistingDrClinicOpen: false,
     addExistingDoctortoClinincModal: () => {},
     addExistingDoctortoClinincFn: () => {},
+    deleteUserHandlerFn: () => {},
 };
 
 const userObjInitialState = {
@@ -297,6 +298,35 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         });
     };
 
+    //api call for deletion of user
+    const deleteUserHandlerFn = (basicInfo) => {
+        deleteCall('DELETE_USER', [basicInfo.id], {}).then((data) => {
+            if (data.result === 'success') {
+                toast.success(`User deleted successully`, {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                // setLoading(true);
+                // getAllPatients();
+            } else if (data.result === 'error') {
+                toast.error(data.error ?? 'data.error', {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+            }
+        });
+    };
+
     const paginationHanlder = (type, page, totalElements = 0) => {
         if (type === 'page') {
             setPagination((prevState) => {
@@ -308,8 +338,6 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
             });
         }
     };
-
-    console.log(formValid);
 
     providerObj = {
         ...obj,
@@ -340,6 +368,7 @@ export const AddParentUserContextProvider = ({ children, providerObj = obj }) =>
         changePasswordFn,
         addExistingDoctortoClinincModal,
         addExistingDoctortoClinincFn,
+        deleteUserHandlerFn,
     };
     return (
         <AddParentUserContext.Provider value={providerObj}>
