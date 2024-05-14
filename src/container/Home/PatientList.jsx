@@ -109,9 +109,14 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         });
     };
 
-    const deleteHandler = (basicInfo) => {
+    const deleteHandler = (e, basicInfo) => {
+        e.stopPropagation();
         setDeleteModalOpen(() => true);
         setDeleteUserData(basicInfo);
+    };
+
+    const navgationHandler = (patientInfo) => {
+        !!patientInfo.id && navigate('/patientDetails/' + patientInfo.id);
     };
 
     //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@
@@ -147,8 +152,9 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     const patientList = () =>
         Object.values(patientBasicInfo).map((el, i) => (
             <div
-                className='displayFlex home-row-container row-border'
+                className='displayFlex home-row-container row-border pointer'
                 key={'patient-container' + i}
+                onClick={(e) => navgationHandler(el)}
             >
                 <div className='img-container'>
                     <img
@@ -173,15 +179,15 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                 <div className='mt-2 icon-container'>
                     <div className='home-page-icons'>
                         <Button
-                            onClickCallBk={() => {
-                                editPatientHandler(el);
+                            onClickCallBk={(e) => {
+                                editPatientHandler(e, el);
                             }}
                             tooltip='Edit Patient Basic Info'
                             svg={<SVG src={require('../../assets/icons/edit.svg').default} />}
                             ariaLabel='Edit Patient Basic Info'
                         />{' '}
                         <Button
-                            onClickCallBk={() => deleteHandler(el)}
+                            onClickCallBk={(e) => deleteHandler(e, el)}
                             tooltip='Delete Patient'
                             svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
                             ariaLabel='Delete Patient'

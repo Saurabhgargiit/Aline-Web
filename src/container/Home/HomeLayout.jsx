@@ -21,7 +21,8 @@ const HomeLayout = ({}) => {
         setEditData({});
     };
 
-    const editPatientHandler = (patientInfo) => {
+    const editPatientHandler = (e, patientInfo) => {
+        e.stopPropagation();
         console.log(patientInfo);
         modalOpenHandler();
         setIsEdit(() => true);

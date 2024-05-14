@@ -1,8 +1,9 @@
 import React from 'react';
 import './PatientDetailsContainer.scss';
 import FormViewTabs from '../PatientDetailsForm/FormViewTabs';
+import PatientDetailsLayout from './PatientDetailsLayout';
 
-function PatientDetailsContainer() {
+const PatientDetailsContainer = () => {
     return (
         <div className='PatientDetailsContainer'>
             <div className=''>
@@ -10,6 +11,6 @@ function PatientDetailsContainer() {
             </div>
         </div>
     );
-}
+};
 
-export default PatientDetailsContainer;
+export default PatientDetailsLayout(PatientDetailsContainer);

@@ -18,6 +18,7 @@ const Dropdown = ({
     // console.log(optionsList);
 
     const changeHandler = (e) => {
+        e.stopPropagation();
         if (isMultiSelect) {
             // For a multi-select, construct an array of selected options
             const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
@@ -32,7 +33,8 @@ const Dropdown = ({
             <select
                 id={id}
                 className={'selectBox ' + errClassName}
-                onChange={changeHandler}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => changeHandler(e)}
                 value={selectedValue}
                 multiple={isMultiSelect}
                 disabled={disabled}

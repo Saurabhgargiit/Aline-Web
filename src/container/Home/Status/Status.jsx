@@ -61,7 +61,8 @@ const Status = ({ patientID, status = 'scanned', changeStatus }) => {
         setNewStatus(() => newStatus);
     };
 
-    const confirmStatusChange = () => {
+    const confirmStatusChange = (e) => {
+        e.stopPropagation();
         if (newStatus !== currentStatus.value) {
             changeStatus(patientID, newStatus);
             // dispatch(updatePatientStatus(id, newStatus));
@@ -70,11 +71,11 @@ const Status = ({ patientID, status = 'scanned', changeStatus }) => {
         setEditMode(() => false);
     };
 
-    const cancelEdit = () => {
+    const cancelEdit = (e) => {
+        e.stopPropagation();
         setNewStatus(() => currentStatus.value); // Reset new status to current status
         setEditMode(() => false);
     };
-    console.log(newStatus);
 
     return (
         <div className='home-status'>
@@ -85,14 +86,17 @@ const Status = ({ patientID, status = 'scanned', changeStatus }) => {
                 </Badge>
                 {!editMode ? (
                     <Button
-                        onClickCallBk={() => setEditMode(true)}
+                        onClickCallBk={(e) => {
+                            e.stopPropagation();
+                            setEditMode(true);
+                        }}
                         tooltip='Change Status'
                         svg={<SVG src={require('../../../assets/icons/edit-2.svg').default} />}
                         ariaLabel='Change Status'
                     />
                 ) : (
                     <Button
-                        onClickCallBk={cancelEdit}
+                        onClickCallBk={(e) => cancelEdit(e)}
                         tooltip='Cancel'
                         svg={<SVG src={require('../../../assets/icons/cross.svg').default} />}
                         ariaLabel='Cancel'
@@ -110,7 +114,7 @@ const Status = ({ patientID, status = 'scanned', changeStatus }) => {
                         propsClassName='dropdown'
                     />
                     <Button
-                        onClickCallBk={confirmStatusChange}
+                        onClickCallBk={(e) => confirmStatusChange(e)}
                         tooltip='Confirm Status'
                         svg={<SVG src={require('../../../assets/icons/send.svg').default} />}
                         ariaLabel='Confirm Status'
