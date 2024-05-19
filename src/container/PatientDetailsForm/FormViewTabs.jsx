@@ -1,9 +1,10 @@
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import LabInputs from './LabInputs';
-import './FormViewTabs.scss';
 import TreatmentInputs from './TreatmentInputs';
 import ComplaintNHistoryForm from './ComplaintNHistoryForm';
+
+import './FormViewTabs.scss';
 import './PatientDetailsAddEditLayout.scss';
 
 function FormViewTabs() {
