@@ -3,6 +3,22 @@
 .home-row-container {
     gap: 0.75rem;
 
+    button {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+    }
+
+    svg {
+        width: 20px;
+        height: auto;
+        margin: 0.6rem;
+
+        path {
+            fill: $icon-color;
+        }
+    }
+
     .img-container {
         padding: 4px;
 
@@ -24,26 +40,20 @@
         }
     }
 
-    .home-status {
-        margin: 0 auto;
-    }
-
     .home-page-count {
         color: $secondaryText;
         text-align: right;
         margin-right: 0.6rem;
     }
 
+    .icon-container {
+        display: flex;
+        flex-grow: 1;
+        justify-content: end;
+        margin-right: 3rem;
+    }
     .home-page-icons {
-        svg {
-            width: 20px;
-            height: auto;
-            margin: 0.6rem;
-
-            path {
-                fill: $icon-color;
-            }
-        }
+        display: flex;
 
         .home-page-play {
             width: 1.75rem;

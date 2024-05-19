@@ -92,6 +92,11 @@ $paginationBorderColor: $backgroundheaderfooterColor;
     font-weight: 700;
 }
 
+.input-error {
+    // border: 2px solid $erroMsgColor !important; /* Red border to indicate error */
+    background-color: #ffe6e6 !important; /* Light red background */
+}
+
 .displayFlex {
     display: flex;
 }
@@ -102,6 +107,10 @@ $paginationBorderColor: $backgroundheaderfooterColor;
 
 .noVisible {
     visibility: hidden;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 //@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@

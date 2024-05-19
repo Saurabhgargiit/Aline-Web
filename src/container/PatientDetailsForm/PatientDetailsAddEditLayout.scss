@@ -1,31 +1,39 @@
 @import '../../styles/styles.scss';
 
 .patientAddEditTopContainer {
-  position: relative;
-  top: 56px;
-  margin-bottom: 112px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .patientAddEditContainer {
-    width: 600px;
-    border: 0.5px solid $primaryBorderSuttle;
-    border-top: none;
-    border-radius: 0 0 0.375rem 0.375rem;
+    position: relative;
+    // top: 56px;
+    margin-bottom: 112px;
     display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 2rem;
-    .patient-detials-input-fields {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      input {
-        height: 3rem;
-        border: 1px solid $inputFieldBorder;
-        border-radius: 4px;
-      }
+    justify-content: center;
+    align-items: center;
+
+    .patientAddEditContainer {
+        width: 600px;
+        border: 0.5px solid $primaryBorderSuttle;
+        border-top: none;
+        border-radius: 0 0 0.375rem 0.375rem;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 2rem;
+        .patient-detials-input-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            input {
+                height: 2.3rem;
+                border: 1px solid $inputFieldBorder;
+                border-radius: 4px;
+            }
+
+            .checkbox-container {
+                .checkbox {
+                    height: 1.5rem;
+                    width: 1.5rem;
+                    margin-left: 10rem;
+                }
+            }
+        }
     }
-  }
 }

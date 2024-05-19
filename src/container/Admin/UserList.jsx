@@ -17,6 +17,7 @@ import { ReactComponent as AddExistingDoctorIcon } from '../../assets/icons/add-
 import { ReactComponent as ChangePasswordIcon } from '../../assets/icons/change-password.svg'; // Using SVGR
 
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import DeleteConfirmationModal from '../../components/Modal/DeleteConfirmationModal';
 
 import './UserList.scss';
 
@@ -25,6 +26,8 @@ const UserList = ({ role, userID }) => {
     const [userBasicInfo, setUserBasicInfo] = useState([]);
 
     const [userDetailInfo, setUserDetailInfo] = useState([]);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteUserData, setDeleteUserData] = useState({});
 
     const {
         userTypeFilter,
@@ -35,6 +38,7 @@ const UserList = ({ role, userID }) => {
         addParentUserModalHandler,
         changePasswordHandler,
         addExistingDoctortoClinincModal,
+        deleteUserHandlerFn,
     } = useContext(AddParentUserContext);
 
     const [isError, setIsError] = useState(false);
@@ -67,7 +71,7 @@ const UserList = ({ role, userID }) => {
         });
         return { userBasicInfoFromResponse, userDetailInfoFromResponse };
     };
-
+    console.log(deleteUserData);
     //Table headers
     const headers = [
         { key: 'name', id: 'name', label: 'Name', sortable: true, hidden: false, order: 'asc' },
@@ -103,6 +107,11 @@ const UserList = ({ role, userID }) => {
 
     const addExistingDoctortoClininc = (basicInfo) => {
         addExistingDoctortoClinincModal(basicInfo);
+    };
+
+    const deleteHandler = (basicInfo) => {
+        setDeleteModalOpen(() => true);
+        setDeleteUserData(basicInfo);
     };
 
     const getActionItems = (basicInfo, i) => {
@@ -195,14 +204,14 @@ const UserList = ({ role, userID }) => {
                     <OverlayTrigger
                         key={'delete-user-' + i}
                         placement='top'
-                        overlay={<Tooltip id={`tooltip-delete-user-${i}`}>Delete</Tooltip>}
+                        overlay={<Tooltip id={`tooltip-delete-user-${i}`}>Delete User</Tooltip>}
                     >
                         <button
                             id={'delete-user-btn-' + i}
                             key={'delete-user-btn-' + i}
-                            onClick={() => changeUserPassByAdmin()}
+                            onClick={() => deleteHandler(basicInfo)}
                             aria-label='Delete User'
-                            disabled
+                            // disabled
                         >
                             <SVG src={require('../../assets/icons/deleteBin.svg').default} />
                         </button>
@@ -286,7 +295,19 @@ const UserList = ({ role, userID }) => {
 
     return !loading ? (
         !isError ? (
-            <div className='user-row-container'>{renderTable()}</div>
+            <>
+                <div className='user-row-container'>{renderTable()}</div>
+                <DeleteConfirmationModal
+                    modalOpen={deleteModalOpen}
+                    setDeleteModalOpen={setDeleteModalOpen}
+                    refetchDataFn={getAllUsers}
+                    deleteUserHandlerFn={deleteUserHandlerFn}
+                    dataToDelete={deleteUserData}
+                    setDataToDelete={setDeleteUserData}
+                    type={'User'}
+                    setLoading={setLoading}
+                />
+            </>
         ) : (
             <InformativeErrorModal
                 open={isError}

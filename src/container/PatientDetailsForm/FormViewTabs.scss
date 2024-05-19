@@ -1,9 +1,17 @@
 @import '../../styles/styles.scss';
 
-.patient-details-tabs-container{
+.patient-details-tabs-container {
     width: 600px;
     position: relative;
-    top: 56px;
+    // top: 56px;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.heading {
+    width: 100%;
+    span {
+        overflow: hidden;
+        text-wrap: nowrap;
+    }
 }

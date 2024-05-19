@@ -17,6 +17,15 @@ export const FormErrors = {
     passwordErr: 'Password should be between 6 to 12 letters.',
     repasswordErr: 'Password do not match',
     emptyField: 'Field is empty',
+    pastDateError: 'Date must not be in the past.',
+    ageError: 'Please enter a valid age.',
+};
+
+export const roles = {
+    ROLE_ADMIN: 'ROLE_ADMIN',
+    ROLE_LAB: 'ROLE_LAB',
+    ROLE_CLINIC: 'ROLE_CLINIC',
+    ROLE_DOCTOR: 'ROLE_DOCTOR',
 };
 
 //Error Messages
@@ -27,3 +36,4 @@ export const noDataInfo = 'There is no data to show.';
 
 //LIMITS
 export const MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN = 9;
+export const MAXIMUM_RESULTS_ON_ONE_PAGE_ON_HOME_PAGE = 10;

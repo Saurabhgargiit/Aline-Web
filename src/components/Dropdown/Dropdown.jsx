@@ -1,6 +1,15 @@
 import './Dropdown.scss';
 
-const Dropdown = ({ options, onChangeCallBk, selectedValue, isMultiSelect = false }) => {
+const Dropdown = ({
+    propsClassName = '',
+    errClassName = '',
+    options,
+    onChangeCallBk = () => {},
+    selectedValue,
+    isMultiSelect = false,
+    id = 'select-id',
+    disabled = false,
+}) => {
     const optionsList = options.map((el) => (
         <option key={el.key} value={el.value}>
             {el.label}
@@ -9,6 +18,7 @@ const Dropdown = ({ options, onChangeCallBk, selectedValue, isMultiSelect = fals
     // console.log(optionsList);
 
     const changeHandler = (e) => {
+        e.stopPropagation();
         if (isMultiSelect) {
             // For a multi-select, construct an array of selected options
             const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
@@ -19,12 +29,15 @@ const Dropdown = ({ options, onChangeCallBk, selectedValue, isMultiSelect = fals
         }
     };
     return (
-        <div>
+        <div className={propsClassName}>
             <select
-                className='selectBox'
-                onChange={changeHandler}
+                id={id}
+                className={'selectBox ' + errClassName}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => changeHandler(e)}
                 value={selectedValue}
                 multiple={isMultiSelect}
+                disabled={disabled}
             >
                 {optionsList}
             </select>

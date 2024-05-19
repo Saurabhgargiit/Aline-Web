@@ -1,23 +1,52 @@
+import { useId } from 'react';
 import './Button.scss';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const Button = ({
-    className,
-    postionClass,
-    title,
+    className = '',
+    postionClass = '',
+    title = '',
     svg,
     onClickCallBk,
     disabled = false,
     type = 'neutral',
+    tooltip = '',
+    ariaLabel = '',
 }) => {
     const clickHandler = (e) => {
         onClickCallBk(e);
     };
-    const btnClass = title ? `buttonLayout ${type} ${className}` : `${className}`;
+    const id = useId();
+    const btnClass = !!title ? `buttonLayout ${type} ${className}` : `${className}`;
 
-    return (
+    return !!tooltip.trim() ? (
+        <OverlayTrigger
+            key={id + title + tooltip}
+            placement='top'
+            overlay={<Tooltip id={id + title + tooltip}>{tooltip}</Tooltip>}
+        >
+            <div className={postionClass}>
+                <button
+                    className={btnClass}
+                    onClick={clickHandler}
+                    disabled={disabled}
+                    id={id}
+                    aria-label={!!title ? title : ariaLabel}
+                >
+                    {!!title ? title : svg}
+                </button>
+            </div>
+        </OverlayTrigger>
+    ) : (
         <div className={postionClass}>
-            <button className={btnClass} onClick={clickHandler} disabled={disabled}>
-                {title ? title : svg}
+            <button
+                className={btnClass}
+                onClick={clickHandler}
+                disabled={disabled}
+                id={id}
+                aria-label={!!title ? title : ariaLabel}
+            >
+                {!!title ? title : svg}
             </button>
         </div>
     );

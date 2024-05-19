@@ -136,4 +136,17 @@ export const CommonUtils = {
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
             .join(' '); // Join the words back into a sentence
     },
+
+    // Function to format today's date as YYYY-MM-DD
+    formatDate: function (date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    },
 };
