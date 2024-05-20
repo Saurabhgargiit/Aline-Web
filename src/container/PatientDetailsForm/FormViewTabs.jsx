@@ -1,7 +1,7 @@
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import LabInputs from './LabInputs';
 import TreatmentInputs from './TreatmentInputs';
+import TreatmentGoal from './TreatmentGoal';
 import ComplaintNHistoryForm from './ComplaintNHistoryForm';
 
 import './FormViewTabs.scss';
@@ -19,7 +19,7 @@ function FormViewTabs() {
                 <ComplaintNHistoryForm />
             </Tab>
             <Tab eventKey='profile' title='Treatment Goal'>
-                <LabInputs />
+                <TreatmentGoal />
             </Tab>
             <Tab eventKey='longer-tab' title='Photos & Scans'>
                 <TreatmentInputs />

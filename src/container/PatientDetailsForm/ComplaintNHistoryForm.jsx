@@ -10,14 +10,14 @@ function ComplaintNHistoryForm() {
     return (
         <div className='patientAddEditTopContainer'>
             <div className='patientAddEditContainer'>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='chief-complaint'>Chief Complaint*</label>
                     <input id='chief-complaint' type='text'></input>
                 </div>
-                <div className='font600 center-position heading'>
+                <div className='font500 center-position heading'>
                     <span>~~~~~~~~~~~~~~~~~~~~Previous Dental History~~~~~~~~~~~~~~~~~~~~</span>
                 </div>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='crown-bridges' className='checkbox-container'>
                         Crown/Bridges
                         <input id='crown-bridges' type='checkbox' />
@@ -26,7 +26,7 @@ function ComplaintNHistoryForm() {
                     <label htmlFor='crown-bridges-details'>If Yes, Details</label>
                     <input id='crown-bridges-details' type='text' disabled />
                 </div>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='implants' className='checkbox-container'>
                         Implants
                         <input id='implants' type='checkbox' />
@@ -35,7 +35,7 @@ function ComplaintNHistoryForm() {
                     <label htmlFor='implants-details'>If Yes, Details</label>
                     <input id='implants-details' type='text' disabled />
                 </div>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='veneers' className='checkbox-container'>
                         Veneers
                         <input id='veneers' type='checkbox' />
@@ -44,7 +44,7 @@ function ComplaintNHistoryForm() {
                     <label htmlFor='veneers-details'>If Yes, Details</label>
                     <input id='veneers-details' type='text' disabled />
                 </div>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='previous-treat' className='checkbox-container'>
                         Previous Orthodontic Treatment
                         <input id='previous-treat' type='checkbox' />
@@ -53,7 +53,7 @@ function ComplaintNHistoryForm() {
                     <label htmlFor='previous-treat-details'>If Yes, Details</label>
                     <input id='previous-treat-details' type='text' disabled />
                 </div>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='composites' className='checkbox-container'>
                         Composites/Buildup
                         <input id='composites' type='checkbox' />
@@ -62,7 +62,7 @@ function ComplaintNHistoryForm() {
                     <label htmlFor='composites-details'>If Yes, Details</label>
                     <input id='composites-details' type='text' disabled />
                 </div>
-                <div className='patient-detials-input-fields'>
+                <div className='patient-detials-input-fields gap-8'>
                     <label htmlFor='others'>Others</label>
                     <input id='others' type='text'></input>
                 </div>
