@@ -1,0 +1,51 @@
+@import '../../../styles/styles.scss';
+
+.side-navigator-layout {
+    background-color: #fff;
+    height: 100%;
+    max-width: 240px;
+    width: 55%;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    border-right: $rowBorder;
+    color: $primaryText;
+    .side-navigator-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 100%;
+
+        .side-links {
+            flex-grow: 1;
+            // border-bottom: $rowBorder;
+            font-weight: 500;
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                li {
+                    border-bottom: $rowBorder;
+                }
+            }
+
+            a {
+                display: block; // Make links fill the li for a larger click area
+                padding: 0.5rem 1rem; // Add some padding for visual appearance and touch targets
+
+                text-decoration: none;
+                color: $primaryText;
+                &:hover,
+                &:focus {
+                    background-color: $navigatorlinkColor; // Choose a light color for hover/focus
+                    color: $linklabelColorHover; // Optionally change text color on hover/focus
+                }
+
+                &:active {
+                    background-color: $navigatorlinkColor;
+                }
+            }
+        }
+    }
+}
