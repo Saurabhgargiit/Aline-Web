@@ -13,7 +13,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
         <div className='displayFlex'>
             <aside className='side-navigator-layout'>
                 <div className='side-navigator-container'>
-                    <div className='side-links'>
+                    <div className='side-navigator-links'>
                         <nav>
                             <ul>
                                 <li className=''>

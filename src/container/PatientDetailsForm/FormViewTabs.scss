@@ -46,11 +46,33 @@
         .patient-detials-input-fields {
             display: flex;
             flex-direction: column;
-            margin-bottom: 2.5rem;
+            padding: 1rem;
+            background-color: $formBackgroundColor;
+            border-radius: 4px;
+
             input:not([type='checkbox']) {
-                height: 2.3rem;
+                height: 2rem;
+                border: 1px solid $inputFieldBorder;
+                border-radius: 5px;
+            }
+
+            textarea {
+                height: 5rem; // You might adjust or remove this for `<textarea>`
                 border: 1px solid $inputFieldBorder;
                 border-radius: 4px;
+                resize: vertical; // Allows vertical resizing, remove or change to 'none' if no resizing is needed
+            }
+
+            textarea {
+                overflow: auto; // Ensures the content can scroll if it exceeds the area
+            }
+
+            input:disabled,
+            textarea:disabled {
+                opacity: 0.7;
+                background-color: #f9f9f9;
+                color: #666; // Dim the text color for disabled inputs
+                cursor: not-allowed;
             }
 
             .checkbox-container {
@@ -60,6 +82,16 @@
                 position: relative;
                 cursor: pointer;
                 display: block;
+
+                .info {
+                    margin-left: 0.5rem;
+                }
+                .yes {
+                    color: $erroMsgColor;
+                }
+                .no {
+                    color: $positiveColor;
+                }
 
                 input[type='checkbox'] {
                     visibility: hidden;
@@ -74,8 +106,15 @@
                     background-color: transparent;
                 }
 
-                &:hover input ~ .checkbox {
+                &:hover input:not(:disabled) ~ .checkbox {
                     background-color: $primaryBtnColorHover;
+                }
+
+                input:disabled ~ .checkbox {
+                    opacity: 0.7;
+                    background-color: #f9f9f9;
+                    color: #666; // Dim the text color for disabled inputs
+                    cursor: not-allowed;
                 }
 
                 input:checked ~ .checkbox {
@@ -100,6 +139,12 @@
                     display: block;
                 }
             }
+        }
+        .marginEdit {
+            margin-bottom: 1rem;
+        }
+        .marginView {
+            margin-bottom: 1.5rem;
         }
     }
 }

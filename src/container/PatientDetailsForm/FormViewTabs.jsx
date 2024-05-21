@@ -5,7 +5,6 @@ import TreatmentGoal from './TreatmentGoal';
 import ComplaintNHistoryForm from './ComplaintNHistoryForm';
 
 import './FormViewTabs.scss';
-import './PatientDetailsAddEditLayout.scss';
 
 function FormViewTabs() {
     return (

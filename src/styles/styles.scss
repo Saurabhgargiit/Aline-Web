@@ -8,11 +8,16 @@ $backgroundhovering: #ffffff14;
 $whiteColor: #fff;
 $linkBackgroundColorHover: $backgroundheaderfooterColor;
 $linklabelColorHover: $whiteColor;
+$formBackgroundColor: #e5f6f8;
 
 $navigatorlinkColor: #029aae;
 
 //Error Message
 $erroMsgColor: #ff0000e3;
+
+//Feel colors
+$negativeColor: $erroMsgColor;
+$positiveColor: #008000;
 
 //Borders
 $darkBorder: #9c9db5;

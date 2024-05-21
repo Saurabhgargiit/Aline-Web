@@ -1,70 +1,179 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function ComplaintNHistoryForm() {
-    const [id, setId] = useState('');
-    const [name, setName] = useState('');
-    const nameChangeHandler = (e) => {
-        const value = e.target.value;
-        setName(() => value);
+function ComplaintNHistoryForm({ isEdit = true, formData }) {
+    // State to hold form data, initialized from props
+    const [formValues, setFormValues] = useState({
+        chiefComplaint: '',
+        crownBridges: false,
+        crownBridgesDetails: '',
+        implants: false,
+        implantsDetails: '',
+        veneers: false,
+        veneersDetails: '',
+        previousTreatment: false,
+        previousTreatmentDetails: '',
+        composites: false,
+        compositesDetails: '',
+        historyOthers: '',
+    });
+
+    const [errors, setErrors] = useState({});
+
+    // Validation function
+    const validateForm = () => {
+        let tempErrors = {};
+        let isValid = true;
+
+        if (!formValues.chiefComplaint.trim()) {
+            tempErrors.chiefComplaint = 'Chief complaint is required.';
+            isValid = false;
+        }
+
+        const detailFields = [
+            'crownBridges',
+            'implants',
+            'veneers',
+            'previousTreatment',
+            'composites',
+        ];
+        detailFields.forEach((field) => {
+            if (formValues[field] && !formValues[`${field}Details`].trim()) {
+                tempErrors[`${field}Details`] = "Details are required when selected 'Yes'.";
+                isValid = false;
+            }
+        });
+
+        setErrors(tempErrors);
+        return isValid;
     };
+
+    // Handle form submission
+    const handleSubmit = () => {
+        if (validateForm()) {
+            console.log('Form is valid, submit data:', formValues);
+            // Submit logic here
+        } else {
+            console.log('Form has errors:', errors);
+        }
+    };
+
+    //Effect hook to update state when the formData prop changes
+    useEffect(() => {
+        if (formData) {
+            setFormValues(formData);
+        }
+    }, [formData]);
+
+    useEffect(() => {
+        if (Object.keys(errors).length) {
+            validateForm();
+        }
+    }, [formValues]);
+
     return (
         <div className='patientAddEditTopContainer'>
             <div className='patientAddEditContainer'>
-                <div className='patient-detials-input-fields gap-8 sub-heading'>
-                    <label htmlFor='chief-complaint'>Chief Complaint*</label>
-                    <input id='chief-complaint' type='text'></input>
+                <div
+                    className={`patient-detials-input-fields gap-8 sub-heading ${
+                        isEdit ? 'marginEdit' : 'marginView'
+                    }`}
+                >
+                    <label htmlFor='chief-complaint'>Chief Complaint:*</label>
+                    <textarea
+                        id='chief-complaint'
+                        name='chief-complaint'
+                        rows='3'
+                        placeholder='Enter details here...'
+                        disabled={!isEdit}
+                        value={formValues.chiefComplaint}
+                        onChange={(e) =>
+                            setFormValues({ ...formValues, chiefComplaint: e.target.value })
+                        }
+                    ></textarea>
+                    {errors.chiefComplaint && <p className='error-Msg'>{errors.chiefComplaint}</p>}
                 </div>
-                <div className='font500 center-position heading'>
+                {/* <div className='font500 center-position heading'>
                     <span>~~~~~~~~~~~~~~~~~~~~Previous Dental History~~~~~~~~~~~~~~~~~~~~</span>
-                </div>
-                <div className='patient-detials-input-fields gap-8'>
-                    <label htmlFor='crown-bridges' className='checkbox-container sub-heading'>
-                        Crown/Bridges
-                        <input id='crown-bridges' type='checkbox' />
-                        <span className='checkbox'></span>
-                    </label>
-                    <label htmlFor='crown-bridges-details'>If Yes, Details</label>
-                    <input id='crown-bridges-details' type='text' disabled />
-                </div>
-                <div className='patient-detials-input-fields gap-8'>
-                    <label htmlFor='implants' className='checkbox-container sub-heading'>
-                        Implants
-                        <input id='implants' type='checkbox' />
-                        <span className='checkbox'></span>
-                    </label>
-                    <label htmlFor='implants-details'>If Yes, Details</label>
-                    <input id='implants-details' type='text' disabled />
-                </div>
-                <div className='patient-detials-input-fields gap-8'>
-                    <label htmlFor='veneers' className='checkbox-container sub-heading'>
-                        Veneers
-                        <input id='veneers' type='checkbox' />
-                        <span className='checkbox'></span>
-                    </label>
-                    <label htmlFor='veneers-details'>If Yes, Details</label>
-                    <input id='veneers-details' type='text' disabled />
-                </div>
-                <div className='patient-detials-input-fields gap-8'>
-                    <label htmlFor='previous-treat' className='checkbox-container sub-heading'>
-                        Previous Orthodontic Treatment
-                        <input id='previous-treat' type='checkbox' />
-                        <span className='checkbox'></span>
-                    </label>
-                    <label htmlFor='previous-treat-details'>If Yes, Details</label>
-                    <input id='previous-treat-details' type='text' disabled />
-                </div>
-                <div className='patient-detials-input-fields gap-8'>
-                    <label htmlFor='composites' className='checkbox-container sub-heading'>
-                        Composites/Buildup
-                        <input id='composites' type='checkbox' />
-                        <span className='checkbox'></span>
-                    </label>
-                    <label htmlFor='composites-details'>If Yes, Details</label>
-                    <input id='composites-details' type='text' disabled />
-                </div>
+                </div> */}
+                {Object.entries({
+                    crownBridges: 'Crown/Bridges',
+                    implants: 'Implants',
+                    veneers: 'Veneers',
+                    previousTreatment: 'Previous Orthodontic Treatment',
+                    composites: 'Composites/Buildup',
+                }).map(([key, label]) => (
+                    <div
+                        className={`patient-detials-input-fields gap-8 ${
+                            isEdit ? 'marginEdit' : 'marginView'
+                        }`}
+                        key={key}
+                    >
+                        <label htmlFor={key} className='checkbox-container sub-heading'>
+                            {label + ':'}
+                            {isEdit && (
+                                <>
+                                    <input
+                                        type='checkbox'
+                                        id={key}
+                                        checked={formValues[key]}
+                                        onChange={(e) => {
+                                            setFormValues({
+                                                ...formValues,
+                                                [key]: e.target.checked,
+                                            });
+                                        }}
+                                        disabled={!isEdit}
+                                    />
+
+                                    <span className='checkbox'></span>
+                                </>
+                            )}
+                            {!isEdit && (
+                                <span className={`info ${formValues[key] ? 'yes' : 'no'}`}>
+                                    {formValues[key] ? 'Yes' : 'No'}
+                                </span>
+                            )}
+                        </label>
+
+                        {(isEdit || formValues[key]) && (
+                            <>
+                                {isEdit && (
+                                    <label htmlFor={formValues[`${key}Details`]}>
+                                        If Yes, Details:{' '}
+                                    </label>
+                                )}
+                                <input
+                                    type='text'
+                                    id={formValues[`${key}Details`]}
+                                    value={formValues[`${key}Details`]}
+                                    onChange={(e) => {
+                                        setFormValues({
+                                            ...formValues,
+                                            [`${key}Details`]: e.target.value,
+                                        });
+                                    }}
+                                    disabled={!isEdit || !formValues[key]}
+                                />
+                                {errors[`${key}Details`] && (
+                                    <p className='error-Msg'>{errors[`${key}Details`]}</p>
+                                )}
+                            </>
+                        )}
+                    </div>
+                ))}
                 <div className='patient-detials-input-fields gap-8 sub-heading'>
-                    <label htmlFor='others'>Others</label>
-                    <input id='others' type='text'></input>
+                    <label htmlFor='historyOthers'>Others:</label>
+                    <textarea
+                        id='historyOthers'
+                        name='historyOthers'
+                        rows='3'
+                        placeholder={isEdit ? 'Enter details here...' : 'No other details given'}
+                        disabled={!isEdit}
+                        value={formValues.historyOthers}
+                        onChange={(e) =>
+                            setFormValues({ ...formValues, historyOthers: e.target.value })
+                        }
+                    ></textarea>
                 </div>
             </div>
         </div>
