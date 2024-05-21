@@ -5,12 +5,13 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 const Button = ({
     className = '',
     postionClass = '',
-    title = '',
+    title = '', //not to be given when svg is used
     svg,
     onClickCallBk,
     disabled = false,
     type = 'neutral',
     tooltip = '',
+    placement = 'top',
     ariaLabel = '',
 }) => {
     const clickHandler = (e) => {
@@ -22,7 +23,7 @@ const Button = ({
     return !!tooltip.trim() ? (
         <OverlayTrigger
             key={id + title + tooltip}
-            placement='top'
+            placement={placement}
             overlay={<Tooltip id={id + title + tooltip}>{tooltip}</Tooltip>}
         >
             <div className={postionClass}>

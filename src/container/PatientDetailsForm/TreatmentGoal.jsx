@@ -77,9 +77,9 @@ function TreatmentGoal({ isEdit = true, formData }) {
         correction: '',
         arches: [], //should be one of the defaultArchValues (mandatory)
         ipr: [], //should be one of the defaultIPRValues (mandatory)
-        iprDetails: '', //mandatory if "noRestrictions" not selected
+        iprDetails: '', //mandatory if "selectiveIPR"  selected
         attachments: [], //should be one of the defaultArchValues (mandatory)
-        attachmentsDetails: '', //mandatory if "noRestrictions" not selected
+        attachmentsDetails: '', //mandatory if "selectiveAttachments"  selected
         treatmentGoalOthers: '', //No mandatory
     });
 
@@ -112,14 +112,14 @@ function TreatmentGoal({ isEdit = true, formData }) {
         }
         if (!formValues.ipr.length) {
             newErrors.ipr = 'Please select an IPR option.';
-        } else if (!formValues.ipr.includes('noRestrictionIPR') && !formValues.iprDetails.trim()) {
+        } else if (formValues.ipr.includes('selectiveIPR') && !formValues.iprDetails.trim()) {
             newErrors.iprDetails = 'Details are required for IPR.';
         }
 
         if (!formValues.attachments.length) {
             newErrors.attachments = 'Please select an attachment option.';
         } else if (
-            !formValues.attachments.includes('noRestrictionAttachments') &&
+            formValues.attachments.includes('selectiveAttachments') &&
             !formValues.attachmentsDetails.trim()
         ) {
             newErrors.attachmentsDetails = 'Details are required for attachments.';
