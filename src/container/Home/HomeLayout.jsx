@@ -37,7 +37,7 @@ const HomeLayout = ({}) => {
                 setUserAdded={setUserAdded}
             />
             <Button
-                postionClass={'home-page-button-pos'}
+                postionClass={'home-page-button-pos rightPos'}
                 className={'home-page-add-button'}
                 svg={<SVG src={require('../../assets/icons/plus.svg').default} />}
                 onClickCallBk={modalOpenHandler}

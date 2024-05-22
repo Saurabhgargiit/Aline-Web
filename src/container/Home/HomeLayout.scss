@@ -1,8 +1,7 @@
-@import "../../styles/styles.scss";
+@import '../../styles/styles.scss';
 
 .home-page-button-pos {
     position: fixed;
-    right: 20px;
     bottom: 70px;
 
     .home-page-add-button {
@@ -25,4 +24,7 @@
             }
         }
     }
+}
+.rightPos {
+    right: 20px;
 }
