@@ -3,15 +3,15 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import SVG from 'react-inlinesvg';
 
-import TreatmentInputs from './TreatmentInputs';
-import TreatmentGoal from './TreatmentGoal';
 import ComplaintNHistoryForm from './ComplaintNHistoryForm';
+import TreatmentGoal from './TreatmentGoal';
+import PhotosScans from './PhotosScans';
 import Button from '../../../components/Button/Button';
 
 import './FormViewTabs.scss';
 
 function FormViewTabs() {
-    const [isEdit, setIsEdit] = useState(false);
+    const [isEdit, setIsEdit] = useState(true);
 
     const editHandler = () => {
         if (!isEdit) {
@@ -42,7 +42,7 @@ function FormViewTabs() {
                     <TreatmentGoal isEdit={isEdit} />
                 </Tab>
                 <Tab eventKey='longer-tab' title='Photos & Scans'>
-                    <TreatmentInputs isEdit={isEdit} />
+                    <PhotosScans isEdit={isEdit} />
                 </Tab>
             </Tabs>
             <Button
