@@ -17,17 +17,31 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                         <nav>
                             <ul>
                                 <li className=''>
-                                    <Link to={pathNamePrefix + '/details'} onClick={() => {}}>
+                                    <Link
+                                        to={pathNamePrefix + '/details'}
+                                        onClick={() => {}}
+                                        className={pathname.includes('/details') ? 'active' : ''}
+                                    >
                                         Details and Photos
                                     </Link>
                                 </li>
                                 <li className=''>
-                                    <Link to={pathNamePrefix + '/treatmentPlan'} onClick={() => {}}>
+                                    <Link
+                                        to={pathNamePrefix + '/treatmentPlan'}
+                                        onClick={() => {}}
+                                        className={
+                                            pathname.includes('/treatmentPlan') ? 'active' : ''
+                                        }
+                                    >
                                         Treatment Plan
                                     </Link>
                                 </li>
                                 <li className=''>
-                                    <Link to={pathNamePrefix + '/progress'} onClick={() => {}}>
+                                    <Link
+                                        to={pathNamePrefix + '/progress'}
+                                        onClick={() => {}}
+                                        className={pathname.includes('/progress') ? 'active' : ''}
+                                    >
                                         Treatment Progress Update
                                     </Link>
                                 </li>
@@ -35,12 +49,19 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                                     <Link
                                         to={pathNamePrefix + '/rebootRequested'}
                                         onClick={() => {}}
+                                        className={
+                                            pathname.includes('/rebootRequested') ? 'active' : ''
+                                        }
                                     >
                                         Reboot Requested
                                     </Link>
                                 </li>
                                 <li className=''>
-                                    <Link to={pathNamePrefix + '/rebootPlan'} onClick={() => {}}>
+                                    <Link
+                                        to={pathNamePrefix + '/rebootPlan'}
+                                        onClick={() => {}}
+                                        className={pathname.includes('/rebootPlan') ? 'active' : ''}
+                                    >
                                         Reboot Plan Details
                                     </Link>
                                 </li>

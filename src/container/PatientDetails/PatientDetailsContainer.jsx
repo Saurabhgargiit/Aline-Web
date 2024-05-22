@@ -1,7 +1,7 @@
 import React from 'react';
 import './PatientDetailsContainer.scss';
-import FormViewTabs from '../PatientDetailsForm/FormViewTabs';
-import PatientDetailsLayout from './PatientDetailsLayout/PatientDetailsLayout';
+import FormViewTabs from './PatientDetailsForm/FormViewTabs';
+import PatientDetailsLayout from '../PatientDetailsLayout/PatientDetailsLayout';
 
 const PatientDetailsContainer = () => {
     return (

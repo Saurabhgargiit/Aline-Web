@@ -10,7 +10,8 @@ $linkBackgroundColorHover: $backgroundheaderfooterColor;
 $linklabelColorHover: $whiteColor;
 $formBackgroundColor: #e5f6f8;
 
-$navigatorlinkColor: #029aae;
+// $navigatorlinkColor: #029aae;
+$navigatorlinkColor: $backgroundheaderfooterColor;
 
 //Error Message
 $erroMsgColor: #ff0000e3;
@@ -25,13 +26,14 @@ $inputFieldBorder: #bdc1c6;
 $rowBorderColor: #5f63684d;
 $primaryBorderSuttle: #dee2e6;
 
+$rowBorder: 1px solid $rowBorderColor;
+$sideRowBorder: 0.75px solid #66cdd9;
+
 //Btn Colors
 $neutralBtnColor: #fff;
 $neutralBtnColorHover: #f0f0f5;
 $primaryBtnColor: $backgroundheaderfooterColor;
 $primaryBtnColorHover: #029aae;
-
-$rowBorder: 1px solid $rowBorderColor;
 
 //Pagination colors
 $paginationDigitNumber: $backgroundheaderfooterColor;

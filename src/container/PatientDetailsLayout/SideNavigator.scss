@@ -1,14 +1,15 @@
-@import '../../../styles/styles.scss';
+@import '../../styles/styles.scss';
 
 .side-navigator-layout {
     background-color: #fff;
     height: 100%;
-    max-width: 240px;
+    max-width: 265px;
     width: 55%;
     position: fixed;
     top: 56px;
     left: 0;
-    border-right: $rowBorder;
+    border-top: $sideRowBorder;
+    border-right: $sideRowBorder;
     color: $primaryText;
     .side-navigator-container {
         width: 100%;
@@ -24,8 +25,12 @@
                 list-style: none;
                 margin: 0;
                 padding: 0;
+                .active {
+                    background-color: $navigatorlinkColor;
+                    color: $linklabelColorHover;
+                }
                 li {
-                    border-bottom: $rowBorder;
+                    border-bottom: $sideRowBorder;
                 }
             }
 

@@ -2,6 +2,10 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import HomeLayout from '../container/Home/HomeLayout';
 import AdminLayout from '../container/Admin/AdminLayout';
 import PatientDetailsContainer from '../container/PatientDetails/PatientDetailsContainer';
+import TreatmentPlanContainer from '../container/TreatmentPlan/TreatmentPlanContainer';
+import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress';
+import RebootRequest from '../container/RebootRequest/RebootRequest';
+import RebootPlan from '../container/RebootPlan/RebootPlan';
 
 // Define a simple route configuration
 const routeConfig = [
@@ -13,10 +17,10 @@ const routeConfig = [
         path: '/patientDetails/:patientID',
         children: [
             { path: 'details', element: <PatientDetailsContainer /> },
-            { path: 'treatmentPlan', element: <div>Treatment Plan</div> },
-            { path: 'progress', element: <div>Treatment Progress</div> },
-            { path: 'rebootRequested', element: <div>Reboot Request</div> },
-            { path: 'rebootPlan', element: <div>Treatment Plan</div> },
+            { path: 'treatmentPlan', element: <TreatmentPlanContainer /> },
+            { path: 'progress', element: <TreatMentProgress /> },
+            { path: 'rebootRequested', element: <RebootRequest /> },
+            { path: 'rebootPlan', element: <RebootPlan /> },
         ],
     },
 ];
