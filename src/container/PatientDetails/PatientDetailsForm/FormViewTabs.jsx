@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import react, { useCallback, useState, useRef } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import SVG from 'react-inlinesvg';
@@ -11,7 +11,15 @@ import Button from '../../../components/Button/Button';
 import './FormViewTabs.scss';
 
 function FormViewTabs() {
-    const [isEdit, setIsEdit] = useState(true);
+    const [isEdit, setIsEdit] = useState(false);
+    const [tabKey, setTabKey] = useState('home');
+
+    const [complaintForm, setComplaintForm] = useState({});
+    const [treatmentGoalForm, setTreatmentGoalForm] = useState({});
+
+    const firstLoad = useRef(false);
+    firstLoad.current = true;
+    console.log(firstLoad.current);
 
     const editHandler = () => {
         if (!isEdit) {
@@ -19,29 +27,47 @@ function FormViewTabs() {
         }
     };
 
-    const cancelHandler = () => {
-        if (isEdit) {
-            setIsEdit(false);
-        }
+    const cancelHandler = useCallback(() => {
+        setIsEdit(false);
+        setComplaintForm({}); //set to redux state value
+        setTreatmentGoalForm({}); //set to redux state value
+    }, []);
+
+    const clickHandler = useCallback((key) => {
+        setTabKey(key);
+    }, []);
+
+    const tabClickHandler = (key) => {
+        if (key === tabKey) return;
+        clickHandler(key);
     };
 
     return (
         <>
             <Tabs
-                defaultActiveKey='home'
                 id='justify-tab-example'
                 className='patient-details-tabs-container'
+                activeKey={tabKey}
+                onSelect={(key) => tabClickHandler(key)}
                 justify
             >
-                <Tab eventKey='home' title='Complaint & History'>
-                    <ComplaintNHistoryForm isEdit={isEdit} />
+                <Tab eventKey='home' title='Complaint & History' disabled={isEdit}>
+                    <ComplaintNHistoryForm
+                        isEdit={isEdit}
+                        clickHandler={clickHandler}
+                        cancelHandler={cancelHandler}
+                        formData={complaintForm}
+                        setFormData={setComplaintForm}
+                    />
                 </Tab>
-                <Tab eventKey='profile' title='Treatment Goal'>
-                    <TreatmentGoal isEdit={isEdit} />
+                <Tab eventKey='profile' title='Treatment Goal' disabled={isEdit}>
+                    <TreatmentGoal
+                        isEdit={isEdit}
+                        clickHandler={clickHandler}
+                        formData={treatmentGoalForm}
+                        setFormData={setTreatmentGoalForm}
+                    />
                 </Tab>
-                {/* <Tab eventKey='longer-tab' title='Photos & Scans'>
-                    <PhotosScans isEdit={isEdit} />
-                </Tab> */}
             </Tabs>
             <Button
                 postionClass={'home-page-button-pos rightPosEdit'}

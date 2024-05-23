@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import Button from '../../../components/Button/Button';
+
 // Constants for arch, IPR, and attachment options
 const archOptions = [
     { key: 'bothArches', label: 'Both Arches' },
@@ -43,7 +45,7 @@ function renderCheckboxGroup(
                         <input
                             type='checkbox'
                             id={option.key}
-                            checked={formValues[mainKey].includes(option.key)}
+                            checked={formValues[mainKey]?.includes(option.key)}
                             onChange={() => handleChange(option.key, mainKey)}
                             disabled={!isEdit}
                         />
@@ -60,7 +62,7 @@ function renderCheckboxGroup(
                         type='text'
                         value={formValues[`${mainKey}Details`]}
                         onChange={(e) => handleInputChange(`${mainKey}Details`, e.target.value)}
-                        disabled={!isEdit || formValues[mainKey].includes(options[0].key)}
+                        disabled={!isEdit || formValues[mainKey]?.includes(options[0].key)}
                     />
                     {errors[`${mainKey}Details`] && (
                         <p className='error-Msg'>{errors[[`${mainKey}Details`]]}</p>
@@ -71,7 +73,7 @@ function renderCheckboxGroup(
     );
 }
 
-function TreatmentGoal({ isEdit = true, formData }) {
+function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
     // State to hold form data, initialized from props
     const [formValues, setFormValues] = useState({
         correction: '',
@@ -103,24 +105,24 @@ function TreatmentGoal({ isEdit = true, formData }) {
 
     const validateForm = () => {
         let newErrors = {};
-        if (!formValues.correction.trim()) {
+        if (!formValues.correction?.trim()) {
             newErrors.correction = 'Correction details are required.';
         }
 
-        if (!formValues.arches.length) {
+        if (!formValues.arches?.length) {
             newErrors.arches = 'Please select arches.';
         }
-        if (!formValues.ipr.length) {
+        if (!formValues.ipr?.length) {
             newErrors.ipr = 'Please select an IPR option.';
-        } else if (formValues.ipr.includes('selectiveIPR') && !formValues.iprDetails.trim()) {
+        } else if (formValues.ipr?.includes('selectiveIPR') && !formValues.iprDetails?.trim()) {
             newErrors.iprDetails = 'Details are required for IPR.';
         }
 
-        if (!formValues.attachments.length) {
+        if (!formValues.attachments?.length) {
             newErrors.attachments = 'Please select an attachment option.';
         } else if (
-            formValues.attachments.includes('selectiveAttachments') &&
-            !formValues.attachmentsDetails.trim()
+            formValues.attachments?.includes('selectiveAttachments') &&
+            !formValues.attachmentsDetails?.trim()
         ) {
             newErrors.attachmentsDetails = 'Details are required for attachments.';
         }
@@ -220,9 +222,19 @@ function TreatmentGoal({ isEdit = true, formData }) {
                         }
                     ></textarea>
                 </div>
-                <button type='submit' disabled={!isEdit} onClick={handleSubmit}>
-                    Submit
-                </button>
+                <div className='buttons pt-4'>
+                    <Button
+                        postionClass='mx-5'
+                        title='Back'
+                        onClickCallBk={() => clickHandler('home')}
+                    />
+                    <Button
+                        postionClass='mx-5'
+                        className={!isEdit ? 'noVisible' : ''}
+                        title='Save'
+                        type='primary'
+                    />
+                </div>
             </div>
         </div>
     );

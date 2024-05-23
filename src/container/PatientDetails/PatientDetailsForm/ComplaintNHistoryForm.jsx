@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+import Button from '../../../components/Button/Button';
 
-function ComplaintNHistoryForm({ isEdit = true, formData }) {
+function ComplaintNHistoryForm({
+    isEdit = true,
+    formData,
+    setFormData,
+    clickHandler,
+    cancelHandler,
+}) {
     // State to hold form data, initialized from props
     const [formValues, setFormValues] = useState({
         chiefComplaint: '',
@@ -24,7 +31,7 @@ function ComplaintNHistoryForm({ isEdit = true, formData }) {
         let tempErrors = {};
         let isValid = true;
 
-        if (!formValues.chiefComplaint.trim()) {
+        if (!formValues.chiefComplaint?.trim()) {
             tempErrors.chiefComplaint = 'Chief complaint is required.';
             isValid = false;
         }
@@ -37,7 +44,7 @@ function ComplaintNHistoryForm({ isEdit = true, formData }) {
             'composites',
         ];
         detailFields.forEach((field) => {
-            if (formValues[field] && !formValues[`${field}Details`].trim()) {
+            if (formValues[field] && !formValues[`${field}Details`]?.trim()) {
                 tempErrors[`${field}Details`] = "Details are required when selected 'Yes'.";
                 isValid = false;
             }
@@ -48,12 +55,12 @@ function ComplaintNHistoryForm({ isEdit = true, formData }) {
     };
 
     // Handle form submission
-    const handleSubmit = () => {
-        if (validateForm()) {
-            console.log('Form is valid, submit data:', formValues);
-            // Submit logic here
+    const handleNext = () => {
+        if (!isEdit || validateForm()) {
+            isEdit && setFormData(formValues);
+            clickHandler('profile');
         } else {
-            console.log('Form has errors:', errors);
+            window.scrollTo(0, 0);
         }
     };
 
@@ -92,9 +99,9 @@ function ComplaintNHistoryForm({ isEdit = true, formData }) {
                     ></textarea>
                     {errors.chiefComplaint && <p className='error-Msg'>{errors.chiefComplaint}</p>}
                 </div>
-                {/* <div className='font500 center-position heading'>
+                <div className='font500 center-position heading'>
                     <span>~~~~~~~~~~~~~~~~~~~~Previous Dental History~~~~~~~~~~~~~~~~~~~~</span>
-                </div> */}
+                </div>
                 {Object.entries({
                     crownBridges: 'Crown/Bridges',
                     implants: 'Implants',
@@ -175,9 +182,23 @@ function ComplaintNHistoryForm({ isEdit = true, formData }) {
                         }
                     ></textarea>
                 </div>
+                <div className='buttons pt-4'>
+                    <Button
+                        postionClass='mx-5'
+                        className={!isEdit ? 'noVisible' : ''}
+                        title='Cancel'
+                        onClickCallBk={cancelHandler}
+                    />
+                    <Button
+                        postionClass='mx-5'
+                        title='Next'
+                        type='primary'
+                        onClickCallBk={handleNext}
+                    />
+                </div>
             </div>
         </div>
     );
 }
 
-export default ComplaintNHistoryForm;
+export default memo(ComplaintNHistoryForm);

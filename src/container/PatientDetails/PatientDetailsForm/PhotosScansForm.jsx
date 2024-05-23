@@ -12,7 +12,7 @@ import '../PatientDetailsContainer.scss';
 import './FormViewTabs.scss';
 
 function PhotosScansForm() {
-    const [isEdit, setIsEdit] = useState(true);
+    const [isEdit, setIsEdit] = useState(false);
 
     const editHandler = () => {
         if (!isEdit) {
