@@ -22,7 +22,18 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                                         onClick={() => {}}
                                         className={pathname.includes('/details') ? 'active' : ''}
                                     >
-                                        Details and Photos
+                                        Patient Details
+                                    </Link>
+                                </li>
+                                <li className=''>
+                                    <Link
+                                        to={pathNamePrefix + '/photosScans'}
+                                        onClick={() => {}}
+                                        className={
+                                            pathname.includes('/photosScans') ? 'active' : ''
+                                        }
+                                    >
+                                        Photos and Scans
                                     </Link>
                                 </li>
                                 <li className=''>

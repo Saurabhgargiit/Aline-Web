@@ -25,8 +25,6 @@ function FormViewTabs() {
         }
     };
 
-    console.log(`../../../assets/icons/${!isEdit ? 'edit-2' : 'close'}.svg`);
-
     return (
         <>
             <Tabs
@@ -41,9 +39,9 @@ function FormViewTabs() {
                 <Tab eventKey='profile' title='Treatment Goal'>
                     <TreatmentGoal isEdit={isEdit} />
                 </Tab>
-                <Tab eventKey='longer-tab' title='Photos & Scans'>
+                {/* <Tab eventKey='longer-tab' title='Photos & Scans'>
                     <PhotosScans isEdit={isEdit} />
-                </Tab>
+                </Tab> */}
             </Tabs>
             <Button
                 postionClass={'home-page-button-pos rightPosEdit'}

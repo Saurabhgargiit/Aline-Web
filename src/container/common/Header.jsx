@@ -38,12 +38,27 @@ const Header = ({ title, leftBtnHanlder }) => {
         }
 
         const paths = location.pathname.split('/');
-        if (paths.includes('patientDetails') && paths[paths.length - 1] === 'details') {
+        if (paths.includes('patientDetails')) {
+            let title = '';
+            switch (true) {
+                case paths[paths.length - 1] === 'details': {
+                    title = 'Patient Details';
+                    break;
+                }
+                case paths[paths.length - 1] === 'photosScans': {
+                    title = 'Photos and Scans';
+                    break;
+                }
+                default: {
+                    title = 'Aline Patient Manager';
+                    break;
+                }
+            }
             setHeaderDetails((prevState) => {
                 return {
                     ...prevState,
                     leftButton: iconVar('back', BackIcon, 'Back', '', () => navigate('/home')),
-                    title: 'Patient Details',
+                    title: title,
                 };
             });
             return;

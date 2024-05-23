@@ -2,6 +2,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import HomeLayout from '../container/Home/HomeLayout';
 import AdminLayout from '../container/Admin/AdminLayout';
 import PatientDetailsContainer from '../container/PatientDetails/PatientDetailsContainer';
+import PhotosScansForm from '../container/PatientDetails/PatientDetailsForm/PhotosScansForm';
 import TreatmentPlanContainer from '../container/TreatmentPlan/TreatmentPlanContainer';
 import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress';
 import RebootRequest from '../container/RebootRequest/RebootRequest';
@@ -17,6 +18,7 @@ const routeConfig = [
         path: '/patientDetails/:patientID',
         children: [
             { path: 'details', element: <PatientDetailsContainer /> },
+            { path: 'photosScans', element: <PhotosScansForm /> },
             { path: 'treatmentPlan', element: <TreatmentPlanContainer /> },
             { path: 'progress', element: <TreatMentProgress /> },
             { path: 'rebootRequested', element: <RebootRequest /> },
