@@ -48,17 +48,17 @@ function FormViewTabs() {
         if (fromResp) {
             const temp = {
                 ...patientTreatmentGoal,
-                arches: [patientTreatmentGoal.arches],
-                ipr: [patientTreatmentGoal.ipr],
-                attachments: [patientTreatmentGoal.attachments],
+                arches: [patientTreatmentGoal?.arches],
+                ipr: [patientTreatmentGoal?.ipr],
+                attachments: [patientTreatmentGoal?.attachments],
             };
             return temp;
         } else {
             const temp = {
                 ...patientTreatmentGoal,
-                arches: patientTreatmentGoal.arches[0],
-                ipr: patientTreatmentGoal.ipr[0],
-                attachments: patientTreatmentGoal.attachments[0],
+                arches: patientTreatmentGoal?.arches[0],
+                ipr: patientTreatmentGoal?.ipr[0],
+                attachments: patientTreatmentGoal?.attachments[0],
             };
             return temp;
         }
@@ -131,18 +131,20 @@ function FormViewTabs() {
     }, []);
 
     useEffect(() => {
+        console.log(fetchedPatientDetails);
         if (
             fetchedPatientDetails.result === 'success' &&
             fetchedPatientDetails.data !== undefined
         ) {
+            // if (String.toString(fetchedPatientDetails.data) !== {}) {
             const { patientPreviousDentalHistoryDetails, patientTreatmentGoal } =
                 fetchedPatientDetails.data;
 
-            convertFormat(patientTreatmentGoal);
             setDentalHistory(() => patientPreviousDentalHistoryDetails || {});
-            setTreatmentGoalForm(convertFormat(patientTreatmentGoal) || {});
+            setTreatmentGoalForm(patientTreatmentGoal ? convertFormat(patientTreatmentGoal) : {});
             setisLoading(false);
             setErrMsg('');
+            // }
         } else if (fetchedPatientDetails.result === 'error') {
             setErrMsg(fetchedPatientDetails?.data ?? somethingWentWrong);
             setisLoading(false);
