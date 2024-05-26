@@ -4,16 +4,18 @@ import { useParams } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import SVG from 'react-inlinesvg';
+import { toast, Bounce } from 'react-toastify';
 
 import ComplaintNHistoryForm from './ComplaintNHistoryForm';
 import TreatmentGoal from './TreatmentGoal';
 import Button from '../../../components/Button/Button';
 import Loader from '../../common/Loader/Loader';
-
 import { withReducer } from '../../../hoc/withReducer';
+
 import getPatientDetailsReducer from '../../../store/reducers/patientreducer/getPatientDetailsReducer';
 import { getPatientDetailsAction } from '../../../store/actions/patientaction/getPatientDetailsAction';
 import { somethingWentWrong } from '../../../utils/globalConstants';
+import { putCall } from '../../../utils/commonfunctions/apicallactions';
 
 import './FormViewTabs.scss';
 
@@ -42,15 +44,26 @@ function FormViewTabs() {
         }
     };
 
-    const convertFormat = (patientTreatmentGoal) => {
-        const temp = {
-            ...patientTreatmentGoal,
-            arches: [patientTreatmentGoal.arches],
-            ipr: [patientTreatmentGoal.ipr],
-            attachments: [patientTreatmentGoal.attachments],
-        };
-        return temp;
+    const convertFormat = (patientTreatmentGoal, fromResp = true) => {
+        if (fromResp) {
+            const temp = {
+                ...patientTreatmentGoal,
+                arches: [patientTreatmentGoal.arches],
+                ipr: [patientTreatmentGoal.ipr],
+                attachments: [patientTreatmentGoal.attachments],
+            };
+            return temp;
+        } else {
+            const temp = {
+                ...patientTreatmentGoal,
+                arches: patientTreatmentGoal.arches[0],
+                ipr: patientTreatmentGoal.ipr[0],
+                attachments: patientTreatmentGoal.attachments[0],
+            };
+            return temp;
+        }
     };
+
     const cancelHandler = useCallback(() => {
         setIsEdit(false);
         setDentalHistory(fetchedPatientDetails.data?.patientPreviousDentalHistoryDetails ?? {}); //set to redux state value
@@ -70,6 +83,46 @@ function FormViewTabs() {
     //api function for getting the patient Details
     const getPatientDetails = () => {
         dispatch(getPatientDetailsAction('GET_PATIENT_DETAILS', [patientID]));
+    };
+
+    //api function for updating the patient details
+    const addPatientDetails = () => {
+        debugger;
+        const treatmentGoalReqBody = convertFormat(treatmentGoalForm, false);
+        let payload = {
+            patientPreviousDentalHistoryDetails: { ...dentalHistory, patientID },
+            patientTreatmentGoal: { ...treatmentGoalReqBody, patientID },
+        };
+
+        let params = {};
+
+        putCall(payload, 'UPDATE_PATIENT_DETAILS', [], params).then((data) => {
+            if (data.result === 'success') {
+                toast.success(`Patient details modified successully.`, {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                setIsEdit(false);
+                setisLoading(true);
+                getPatientDetails();
+            } else if (data.result === 'error') {
+                toast.error(data.error ?? 'data.error', {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+            }
+            // setLoading(false);
+        });
     };
 
     //@@@@@@@@@@@@@@useEffect@@@@@@@@@@@@@
@@ -99,6 +152,7 @@ function FormViewTabs() {
     useEffect(() => {
         if (submitFlag) {
             console.log(dentalHistory, treatmentGoalForm);
+            addPatientDetails();
             setSubmitFlag(() => false);
         }
     }, [submitFlag]);

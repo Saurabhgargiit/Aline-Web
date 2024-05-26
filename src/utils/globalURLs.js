@@ -29,4 +29,5 @@ export class ApiRelativePaths {
     //Patient Details
     static GET_PATIENT_DETAILS =
         '/api/v1/aline/patientDentalDetails/getPatientDentalDetailByPatientID';
+    static UPDATE_PATIENT_DETAILS = '/api/v1/aline/patientDentalDetails/updatePatientDentalDetail';
 }
