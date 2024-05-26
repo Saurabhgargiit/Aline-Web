@@ -7,7 +7,6 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
     const { patientID } = useParams();
     const pathname = window.location.pathname;
     const pathNamePrefix = '/patientDetails/' + patientID;
-    console.log(pathNamePrefix);
 
     return (
         <div className='displayFlex'>

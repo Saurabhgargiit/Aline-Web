@@ -8,3 +8,6 @@ export const SET_ALL_USERS = 'SET_ALL_USERS';
 
 //Home page Patient related
 export const SET_ALL_PATIENTS = 'SET_ALL_PATIENTS';
+
+//Patient Details Page
+export const SET_PATIENT_DETAILS = 'SET_PATIENT_DETAILS';

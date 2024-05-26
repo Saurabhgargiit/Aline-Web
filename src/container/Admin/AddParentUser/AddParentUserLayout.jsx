@@ -21,7 +21,7 @@ function AddParentUserLayout({}) {
                 onClose={ctx.closeModalHandler}
                 onSubmit={createUserHandler}
                 close={'Close'}
-                submit={'Create'}
+                submit={ctx.isEdit ? 'Update' : 'Create'}
                 disabled={ctx.loading}
             />
         </Modal>

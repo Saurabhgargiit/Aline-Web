@@ -1,27 +1,32 @@
 import React, { useState, useEffect, memo } from 'react';
 import Button from '../../../components/Button/Button';
 
+const labels = {
+    crownsBridges: 'Crown/Bridges',
+    implants: 'Implants',
+    veneers: 'Veneers',
+    previousTreatment: 'Previous Orthodontic Treatment',
+    composites: 'Composites/Buildup',
+};
+
 function ComplaintNHistoryForm({
     isEdit = true,
     formData,
     setFormData,
     clickHandler,
     cancelHandler,
+    cancelFlag,
 }) {
-    // State to hold form data, initialized from props
+    const initObj = {};
+    Object.keys(labels).forEach((el) => {
+        initObj[el] = {};
+        initObj[el]['flag'] = false;
+        initObj[el]['details'] = '';
+    });
     const [formValues, setFormValues] = useState({
         chiefComplaint: '',
-        crownBridges: false,
-        crownBridgesDetails: '',
-        implants: false,
-        implantsDetails: '',
-        veneers: false,
-        veneersDetails: '',
-        previousTreatment: false,
-        previousTreatmentDetails: '',
-        composites: false,
-        compositesDetails: '',
         historyOthers: '',
+        ...initObj,
     });
 
     const [errors, setErrors] = useState({});
@@ -36,15 +41,8 @@ function ComplaintNHistoryForm({
             isValid = false;
         }
 
-        const detailFields = [
-            'crownBridges',
-            'implants',
-            'veneers',
-            'previousTreatment',
-            'composites',
-        ];
-        detailFields.forEach((field) => {
-            if (formValues[field] && !formValues[`${field}Details`]?.trim()) {
+        Object.keys(labels).forEach((field) => {
+            if (formValues[field]?.flag && !formValues[field]['details']?.trim()) {
                 tempErrors[`${field}Details`] = "Details are required when selected 'Yes'.";
                 isValid = false;
             }
@@ -64,12 +62,27 @@ function ComplaintNHistoryForm({
         }
     };
 
+    const checkBoxHandler = (e, key) => {
+        setFormValues((prevState) => {
+            return {
+                ...prevState,
+                [key]: {
+                    ...prevState[key],
+                    flag: e.target.checked,
+                    details: !e.target.checked ? '' : prevState[key].details,
+                },
+            };
+        });
+    };
+
     //Effect hook to update state when the formData prop changes
     useEffect(() => {
-        if (formData) {
+        console.log(formData);
+        if (Object.keys(formData).length !== 0) {
             setFormValues(formData);
         }
-    }, [formData]);
+    }, [formData, cancelFlag]);
+    // console.log('Form Values:', formValues);
 
     useEffect(() => {
         if (Object.keys(errors).length) {
@@ -102,13 +115,7 @@ function ComplaintNHistoryForm({
                 <div className='font500 center-position heading'>
                     <span>~~~~~~~~~~~~~~~~~~~~Previous Dental History~~~~~~~~~~~~~~~~~~~~</span>
                 </div>
-                {Object.entries({
-                    crownBridges: 'Crown/Bridges',
-                    implants: 'Implants',
-                    veneers: 'Veneers',
-                    previousTreatment: 'Previous Orthodontic Treatment',
-                    composites: 'Composites/Buildup',
-                }).map(([key, label]) => (
+                {Object.entries(labels).map(([key, label]) => (
                     <div
                         className={`patient-detials-input-fields gap-8 ${
                             isEdit ? 'marginEdit' : 'marginView'
@@ -122,13 +129,8 @@ function ComplaintNHistoryForm({
                                     <input
                                         type='checkbox'
                                         id={key}
-                                        checked={formValues[key]}
-                                        onChange={(e) => {
-                                            setFormValues({
-                                                ...formValues,
-                                                [key]: e.target.checked,
-                                            });
-                                        }}
+                                        checked={formValues[key]?.flag}
+                                        onChange={(e) => checkBoxHandler(e, key)}
                                         disabled={!isEdit}
                                     />
 
@@ -136,13 +138,13 @@ function ComplaintNHistoryForm({
                                 </>
                             )}
                             {!isEdit && (
-                                <span className={`info ${formValues[key] ? 'yes' : 'no'}`}>
-                                    {formValues[key] ? 'Yes' : 'No'}
+                                <span className={`info ${formValues[key]?.flag ? 'yes' : 'no'}`}>
+                                    {formValues[key]?.flag ? 'Yes' : 'No'}
                                 </span>
                             )}
                         </label>
 
-                        {(isEdit || formValues[key]) && (
+                        {(isEdit || (formValues[key] && formValues[key]?.flag)) && (
                             <>
                                 {isEdit && (
                                     <label htmlFor={formValues[`${key}Details`]}>
@@ -152,14 +154,19 @@ function ComplaintNHistoryForm({
                                 <input
                                     type='text'
                                     id={formValues[`${key}Details`]}
-                                    value={formValues[`${key}Details`]}
+                                    value={formValues[key].details}
                                     onChange={(e) => {
                                         setFormValues({
                                             ...formValues,
-                                            [`${key}Details`]: e.target.value,
+                                            [key]: {
+                                                ...formValues[key],
+                                                details: e.target.value,
+                                            },
                                         });
                                     }}
-                                    disabled={!isEdit || !formValues[key]}
+                                    disabled={
+                                        !isEdit || !(formValues[key] && formValues[key]?.flag)
+                                    }
                                 />
                                 {errors[`${key}Details`] && (
                                     <p className='error-Msg'>{errors[`${key}Details`]}</p>
@@ -201,4 +208,5 @@ function ComplaintNHistoryForm({
     );
 }
 
+// export default ComplaintNHistoryForm;
 export default memo(ComplaintNHistoryForm);
