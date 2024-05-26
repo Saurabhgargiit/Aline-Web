@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import Button from '../../../components/Button/Button';
 
@@ -15,65 +15,20 @@ const iprOptions = [
     { key: 'noIPR', label: 'No IPR' },
 ];
 
-const attachmentOptions = [
+const attachmentsOptions = [
     { key: 'noRestrictionAttachments', label: 'No Restriction' },
     { key: 'selectiveAttachments', label: 'Selective attachments' },
     { key: 'noAttachments', label: 'No attachments' },
 ];
 
-// Helper function to render checkbox groups
-function renderCheckboxGroup(
-    label,
-    mainKey,
-    detailsLabel,
-    options,
-    formValues,
-    handleChange,
-    errors,
-    isEdit,
-    handleInputChange
-) {
-    return (
-        <div
-            className={`patient-detials-input-fields gap-8 ${isEdit ? 'marginEdit' : 'marginView'}`}
-        >
-            <span className='mb-2 sub-heading'>{label}*</span>
-            <div className='arches-container'>
-                {options.map((option) => (
-                    <label key={option.key} htmlFor={option.key} className='checkbox-container'>
-                        {option.label}
-                        <input
-                            type='checkbox'
-                            id={option.key}
-                            checked={formValues[mainKey]?.includes(option.key)}
-                            onChange={() => handleChange(option.key, mainKey)}
-                            disabled={!isEdit}
-                        />
-                        <span className='checkbox'></span>
-                    </label>
-                ))}
-            </div>
-            {errors[mainKey] && <p className='error-Msg'>{errors[mainKey]}</p>}
-            {mainKey !== 'arches' && (
-                <>
-                    <label htmlFor={`'${mainKey}details`}>{detailsLabel} Details</label>
-                    <input
-                        id={`'${mainKey}details`}
-                        type='text'
-                        value={formValues[`${mainKey}Details`]}
-                        onChange={(e) => handleInputChange(`${mainKey}Details`, e.target.value)}
-                        disabled={!isEdit || formValues[mainKey]?.includes(options[0].key)}
-                    />
-                    {errors[`${mainKey}Details`] && (
-                        <p className='error-Msg'>{errors[[`${mainKey}Details`]]}</p>
-                    )}
-                </>
-            )}
-        </div>
-    );
-}
-
-function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
+function TreatmentGoal({
+    isEdit = true,
+    formData,
+    setFormData,
+    clickHandler,
+    cancelFlag,
+    setSubmitFlag,
+}) {
     // State to hold form data, initialized from props
     const [formValues, setFormValues] = useState({
         correction: '',
@@ -87,7 +42,7 @@ function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
 
     const [errors, setErrors] = useState({});
 
-    // Handles changing of input fields
+    // Handles changing of input text fields
     const handleInputChange = (key, value) => {
         setFormValues((prev) => ({
             ...prev,
@@ -95,11 +50,26 @@ function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
         }));
     };
 
+    console.log(formValues);
+
     // Handles checkbox changes
-    const handleCheckboxChange = (optionKey, arrayKey) => {
+    const handleCheckboxChange = (optionKey, mainKey) => {
+        if (['ipr', 'attachments'].includes(mainKey)) {
+            const obj = Object.keys({ iprOptions, attachmentsOptions }).filter(
+                ([key]) => key === `${mainKey}Options`
+            );
+            if (Object.keys(obj)[1] !== optionKey) {
+                setFormValues((prev) => ({
+                    ...prev,
+                    [mainKey]: [optionKey],
+                    [mainKey + 'Details']: '',
+                }));
+                return;
+            }
+        }
         setFormValues((prev) => ({
             ...prev,
-            [arrayKey]: [optionKey],
+            [mainKey]: [optionKey],
         }));
     };
 
@@ -131,19 +101,75 @@ function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
     };
 
     // Handles the form submission
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = () => {
         if (validateForm()) {
-            console.log('Submitting form with values:', formValues);
-            // Submit logic goes here
+            setFormData(formValues);
+            setSubmitFlag(() => true);
+        } else {
+            window.scrollTo(0, 0);
         }
     };
 
+    // Helper function to render checkbox groups
+    function renderCheckboxGroup(
+        label,
+        mainKey,
+        detailsLabel,
+        options,
+        formValues,
+        handleChange,
+        errors,
+        isEdit,
+        handleInputChange
+    ) {
+        return (
+            <div
+                className={`patient-detials-input-fields gap-8 ${
+                    isEdit ? 'marginEdit' : 'marginView'
+                }`}
+            >
+                <span className='mb-2 sub-heading'>{label}*</span>
+                <div className='arches-container'>
+                    {options.map((option) => (
+                        <label key={option.key} htmlFor={option.key} className='checkbox-container'>
+                            {option.label}
+                            <input
+                                type='checkbox'
+                                id={option.key}
+                                checked={formValues[mainKey]?.includes(option.key)}
+                                onChange={() => handleChange(option.key, mainKey)}
+                                disabled={!isEdit}
+                            />
+                            <span className='checkbox'></span>
+                        </label>
+                    ))}
+                </div>
+                {errors[mainKey] && <p className='error-Msg'>{errors[mainKey]}</p>}
+                {mainKey !== 'arches' && (
+                    <>
+                        <label htmlFor={`'${mainKey}details`}>{detailsLabel} Details</label>
+                        <input
+                            id={`'${mainKey}details`}
+                            type='text'
+                            value={formValues[`${mainKey}Details`]}
+                            onChange={(e) => handleInputChange(`${mainKey}Details`, e.target.value)}
+                            disabled={!isEdit || !formValues[mainKey]?.includes(options[1].key)}
+                        />
+                        {errors[`${mainKey}Details`] && (
+                            <p className='error-Msg'>{errors[[`${mainKey}Details`]]}</p>
+                        )}
+                    </>
+                )}
+            </div>
+        );
+    }
+
+    //Effect hook to update state when the formData prop changes
     useEffect(() => {
-        if (formData) {
+        if (Object.keys(formData).length !== 0) {
             setFormValues(formData);
         }
-    }, [formData]);
+    }, [formData, cancelFlag]);
 
     useEffect(() => {
         if (Object.keys(errors).length) {
@@ -200,7 +226,7 @@ function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
                     'Any Restriction on Attachments',
                     'attachments',
                     'Attachments',
-                    attachmentOptions,
+                    attachmentsOptions,
                     formValues,
                     handleCheckboxChange,
                     errors,
@@ -233,6 +259,7 @@ function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
                         className={!isEdit ? 'noVisible' : ''}
                         title='Save'
                         type='primary'
+                        onClickCallBk={() => handleSubmit()}
                     />
                 </div>
             </div>
@@ -240,4 +267,4 @@ function TreatmentGoal({ isEdit = true, formData, clickHandler }) {
     );
 }
 
-export default TreatmentGoal;
+export default memo(TreatmentGoal);

@@ -317,7 +317,7 @@ const UserList = ({ role, userID }) => {
             />
         )
     ) : (
-        <Loader />
+        <Loader className={'positionRelative top56 center-position'} />
     );
 };
 

@@ -248,7 +248,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                     />
                 )
             ) : (
-                <Loader />
+                <Loader className={'positionRelative top56 center-position'} />
             )}
             <DeleteConfirmationModal
                 modalOpen={deleteModalOpen}

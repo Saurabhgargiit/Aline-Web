@@ -8,10 +8,12 @@ import SVG from 'react-inlinesvg';
 import ComplaintNHistoryForm from './ComplaintNHistoryForm';
 import TreatmentGoal from './TreatmentGoal';
 import Button from '../../../components/Button/Button';
+import Loader from '../../common/Loader/Loader';
 
 import { withReducer } from '../../../hoc/withReducer';
 import getPatientDetailsReducer from '../../../store/reducers/patientreducer/getPatientDetailsReducer';
 import { getPatientDetailsAction } from '../../../store/actions/patientaction/getPatientDetailsAction';
+import { somethingWentWrong } from '../../../utils/globalConstants';
 
 import './FormViewTabs.scss';
 
@@ -20,6 +22,8 @@ function FormViewTabs() {
     const [tabKey, setTabKey] = useState('home');
     const [isLoading, setisLoading] = useState(true);
     const [cancelFlag, setCancelFlag] = useState(false);
+    const [submitFlag, setSubmitFlag] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
 
     const [dentalHistory, setDentalHistory] = useState({});
     const [treatmentGoalForm, setTreatmentGoalForm] = useState({});
@@ -38,10 +42,19 @@ function FormViewTabs() {
         }
     };
 
+    const convertFormat = (patientTreatmentGoal) => {
+        const temp = {
+            ...patientTreatmentGoal,
+            arches: [patientTreatmentGoal.arches],
+            ipr: [patientTreatmentGoal.ipr],
+            attachments: [patientTreatmentGoal.attachments],
+        };
+        return temp;
+    };
     const cancelHandler = useCallback(() => {
         setIsEdit(false);
         setDentalHistory(fetchedPatientDetails.data?.patientPreviousDentalHistoryDetails ?? {}); //set to redux state value
-        setTreatmentGoalForm(fetchedPatientDetails.data?.patientTreatmentGoal ?? {}); //set to redux state value
+        setTreatmentGoalForm(convertFormat(fetchedPatientDetails.data?.patientTreatmentGoal) ?? {}); //set to redux state value
         setCancelFlag((state) => !state);
     }, [fetchedPatientDetails]);
 
@@ -71,61 +84,79 @@ function FormViewTabs() {
         ) {
             const { patientPreviousDentalHistoryDetails, patientTreatmentGoal } =
                 fetchedPatientDetails.data;
-            // const { patientBasicInfoFromResponse, patientDetailInfoFromResponse } =
-            //     separateDetails(userList);
+
+            convertFormat(patientTreatmentGoal);
             setDentalHistory(() => patientPreviousDentalHistoryDetails || {});
-            setTreatmentGoalForm(patientTreatmentGoal || {});
-            // setUserDetailInfo(() => userDetailInfoFromResponse);
+            setTreatmentGoalForm(convertFormat(patientTreatmentGoal) || {});
             setisLoading(false);
+            setErrMsg('');
         } else if (fetchedPatientDetails.result === 'error') {
-            // setErrMsg(somethingWentWrong);
+            setErrMsg(fetchedPatientDetails?.data ?? somethingWentWrong);
             setisLoading(false);
-            // setIsError(true);
         }
     }, [fetchedPatientDetails]);
 
-    return (
-        <>
-            <Tabs
-                id='justify-tab-example'
-                className='patient-details-tabs-container'
-                activeKey={tabKey}
-                onSelect={(key) => tabClickHandler(key)}
-                justify
-            >
-                <Tab eventKey='home' title='Complaint & History' disabled={isEdit}>
-                    <ComplaintNHistoryForm
-                        isEdit={isEdit}
-                        clickHandler={clickHandler}
-                        cancelHandler={cancelHandler}
-                        formData={dentalHistory}
-                        setFormData={setDentalHistory}
-                        cancelFlag={cancelFlag}
-                    />
-                </Tab>
-                <Tab eventKey='profile' title='Treatment Goal' disabled={isEdit}>
-                    <TreatmentGoal
-                        isEdit={isEdit}
-                        clickHandler={clickHandler}
-                        formData={treatmentGoalForm}
-                        setFormData={setTreatmentGoalForm}
-                    />
-                </Tab>
-            </Tabs>
-            <Button
-                postionClass={'home-page-button-pos rightPosEdit'}
-                className={'home-page-add-button'}
-                svg={
-                    !isEdit ? (
-                        <SVG src={require(`../../../assets/icons/edit-2.svg`).default} />
-                    ) : (
-                        <SVG src={require(`../../../assets/icons/close.svg`).default} />
-                    )
-                }
-                onClickCallBk={!isEdit ? editHandler : cancelHandler}
-                tooltip={!isEdit ? 'Edit' : 'Cancel'}
-            />
-        </>
+    useEffect(() => {
+        if (submitFlag) {
+            console.log(dentalHistory, treatmentGoalForm);
+            setSubmitFlag(() => false);
+        }
+    }, [submitFlag]);
+
+    return !isLoading ? (
+        !errMsg ? (
+            <>
+                <Tabs
+                    id='justify-tab-example'
+                    className='patient-details-tabs-container'
+                    activeKey={tabKey}
+                    onSelect={(key) => tabClickHandler(key)}
+                    justify
+                >
+                    <Tab eventKey='home' title='Complaint & History' disabled={isEdit}>
+                        <ComplaintNHistoryForm
+                            isEdit={isEdit}
+                            clickHandler={clickHandler}
+                            cancelHandler={cancelHandler}
+                            formData={dentalHistory}
+                            setFormData={setDentalHistory}
+                            cancelFlag={cancelFlag}
+                        />
+                    </Tab>
+                    <Tab eventKey='profile' title='Treatment Goal' disabled={isEdit}>
+                        <TreatmentGoal
+                            isEdit={isEdit}
+                            clickHandler={clickHandler}
+                            formData={treatmentGoalForm}
+                            setFormData={setTreatmentGoalForm}
+                            cancelFlag={cancelFlag}
+                            setSubmitFlag={setSubmitFlag}
+                        />
+                    </Tab>
+                </Tabs>
+                <Button
+                    postionClass={'home-page-button-pos rightPosEdit'}
+                    className={'home-page-add-button'}
+                    svg={
+                        !isEdit ? (
+                            <SVG src={require(`../../../assets/icons/edit-2.svg`).default} />
+                        ) : (
+                            <SVG src={require(`../../../assets/icons/close.svg`).default} />
+                        )
+                    }
+                    onClickCallBk={!isEdit ? editHandler : cancelHandler}
+                    tooltip={!isEdit ? 'Edit' : 'Cancel'}
+                />
+            </>
+        ) : (
+            <div className='positionRelative top56 center-position'>
+                <p>{errMsg}</p>
+            </div>
+        )
+    ) : (
+        <div className='positionRelative top56 center-position'>
+            <Loader />
+        </div>
     );
 }
 

@@ -77,12 +77,10 @@ function ComplaintNHistoryForm({
 
     //Effect hook to update state when the formData prop changes
     useEffect(() => {
-        console.log(formData);
         if (Object.keys(formData).length !== 0) {
             setFormValues(formData);
         }
     }, [formData, cancelFlag]);
-    // console.log('Form Values:', formValues);
 
     useEffect(() => {
         if (Object.keys(errors).length) {
