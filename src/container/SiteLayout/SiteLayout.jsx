@@ -68,7 +68,9 @@ const SiteLayout = ({ location, navigate }) => {
     };
 
     return isLoading ? (
-        <Loader />
+        <div className='positionRelative top56 center-position'>
+            <Loader />
+        </div>
     ) : !isError ? (
         <>
             <SideSectionLayout
