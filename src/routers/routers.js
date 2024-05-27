@@ -1,12 +1,14 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import HomeLayout from '../container/Home/HomeLayout';
 import AdminLayout from '../container/Admin/AdminLayout';
+
 import PatientDetailsContainer from '../container/PatientDetails/PatientDetailsContainer';
 import PhotosScansForm from '../container/PatientDetails/PatientDetailsForm/PhotosScansForm';
 import TreatmentPlanContainer from '../container/TreatmentPlan/TreatmentPlanContainer';
 import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress';
 import RebootRequest from '../container/RebootRequest/RebootRequest';
 import RebootPlan from '../container/RebootPlan/RebootPlan';
+import PatientDetailsLayout from '../container/PatientDetailsLayout/PatientDetailsLayout';
 
 // Define a simple route configuration
 const routeConfig = [
@@ -16,6 +18,7 @@ const routeConfig = [
     { path: '/login', element: <Navigate to='/home' /> },
     {
         path: '/patientDetails/:patientID',
+        element: <PatientDetailsLayout />,
         children: [
             { path: 'details', element: <PatientDetailsContainer /> },
             { path: 'photosScans', element: <PhotosScansForm /> },
@@ -33,7 +36,8 @@ const Routers = () => {
             {routeConfig.map((route) => {
                 if (route.children) {
                     return (
-                        <Route path={route.path} key={route.path}>
+                        <Route path={route.path} key={route.path} element={route.element}>
+                            <Route index element={<Navigate to='details' />} />
                             {route.children.map((child) => (
                                 <Route path={child.path} element={child.element} key={child.path} />
                             ))}

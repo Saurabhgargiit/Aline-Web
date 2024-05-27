@@ -1,24 +1,24 @@
 import React from 'react';
-import './PatientDetailsLayout.scss';
+import { Outlet } from 'react-router-dom';
+
 import SideNavigator from './SideNavigator';
 import PatientInfoCenter from './PatientInfoCenter';
 
-//its HOC for details layout containing mid section, left section and right section
+import './PatientDetailsLayout.scss';
 
-function PatientDetailsLayout(Component) {
-    const ComponentWithSections = (props) => {
-        return (
-            <div className='patientDetailsLayout'>
-                {/* Left side Component : Navigator */}
-                <SideNavigator />
-                {/* middle component */}
-                <Component {...props} />
-                {/* <div>Right Side Section</div> */}
-                <PatientInfoCenter />
-            </div>
-        );
-    };
-    return ComponentWithSections;
+//Component for nested routes
+
+function PatientDetailsLayout() {
+    return (
+        <div className='patientDetailsLayout'>
+            {/* Left side Component : Navigator */}
+            <SideNavigator />
+            {/* middle component */}
+            <Outlet />
+            {/* <div>Right Side Section</div> */}
+            <PatientInfoCenter />
+        </div>
+    );
 }
 
 export default PatientDetailsLayout;

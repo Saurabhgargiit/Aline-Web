@@ -4,7 +4,6 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import SVG from 'react-inlinesvg';
 
-import PatientDetailsLayout from '../../PatientDetailsLayout/PatientDetailsLayout';
 import PhotosScans from './PhotosScans';
 import Button from '../../../components/Button/Button';
 
@@ -64,4 +63,4 @@ function PhotosScansForm() {
     );
 }
 
-export default PatientDetailsLayout(PhotosScansForm);
+export default PhotosScansForm;
