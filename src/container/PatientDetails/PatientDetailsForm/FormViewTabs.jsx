@@ -1,4 +1,4 @@
-import react, { useCallback, useState, useRef, useEffect } from 'react';
+import react, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
@@ -35,12 +35,10 @@ function FormViewTabs() {
     const fetchedPatientDetails = useSelector((state) => state.getPatientDetails.patientDetails);
     const dispatch = useDispatch();
 
-    const firstLoad = useRef(false);
-    firstLoad.current = true;
-
     const editHandler = () => {
         if (!isEdit) {
             setIsEdit(true);
+            setTabKey('home');
         }
     };
 
