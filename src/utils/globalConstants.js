@@ -37,3 +37,6 @@ export const noDataInfo = 'There is no data to show.';
 //LIMITS
 export const MAXIMUM_RESULTS_ON_ONE_PAGE_IN_ADMIN = 9;
 export const MAXIMUM_RESULTS_ON_ONE_PAGE_ON_HOME_PAGE = 10;
+
+//DEFAULT IMAGE
+export const DEFAULT_IMAGE = 'https://d2rdbjk9w0dffy.cloudfront.net/assets/anonymous-user.jpeg';
