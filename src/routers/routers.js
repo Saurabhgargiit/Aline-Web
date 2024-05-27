@@ -1,17 +1,51 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import HomeLayout from '../container/Home/HomeLayout';
 import AdminLayout from '../container/Admin/AdminLayout';
+
 import PatientDetailsContainer from '../container/PatientDetails/PatientDetailsContainer';
-import PatientDetailsLayout from '../container/PatientDetails/PatientDetailsLayout';
+import PhotosScansForm from '../container/PatientDetails/PatientDetailsForm/PhotosScansForm';
+import TreatmentPlanContainer from '../container/TreatmentPlan/TreatmentPlanContainer';
+import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress';
+import RebootRequest from '../container/RebootRequest/RebootRequest';
+import RebootPlan from '../container/RebootPlan/RebootPlan';
+import PatientDetailsLayout from '../container/PatientDetailsLayout/PatientDetailsLayout';
+
+// Define a simple route configuration
+const routeConfig = [
+    { path: '/', element: <Navigate to='/home' /> },
+    { path: '/home', element: <HomeLayout /> },
+    { path: '/users', element: <AdminLayout /> },
+    { path: '/login', element: <Navigate to='/home' /> },
+    {
+        path: '/patientDetails/:patientID',
+        element: <PatientDetailsLayout />,
+        children: [
+            { path: 'details', element: <PatientDetailsContainer /> },
+            { path: 'photosScans', element: <PhotosScansForm /> },
+            { path: 'treatmentPlan', element: <TreatmentPlanContainer /> },
+            { path: 'progress', element: <TreatMentProgress /> },
+            { path: 'rebootRequested', element: <RebootRequest /> },
+            { path: 'rebootPlan', element: <RebootPlan /> },
+        ],
+    },
+];
 
 const Routers = () => {
     return (
         <Routes>
-            <Route path='/' element={<Navigate to={'/home'} />} />
-            <Route path='/home' element={<HomeLayout />} />
-            <Route path='/users' element={<AdminLayout />} />
-            <Route path='/login' element={<Navigate to={'/home'} />} />
-            <Route path='patientDetails/:patientID' element={<PatientDetailsContainer />} />
+            {routeConfig.map((route) => {
+                if (route.children) {
+                    return (
+                        <Route path={route.path} key={route.path} element={route.element}>
+                            <Route index element={<Navigate to='details' />} />
+                            {route.children.map((child) => (
+                                <Route path={child.path} element={child.element} key={child.path} />
+                            ))}
+                        </Route>
+                    );
+                }
+                return <Route path={route.path} element={route.element} key={route.path} />;
+            })}
         </Routes>
     );
 };

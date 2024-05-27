@@ -2,7 +2,7 @@ import React from 'react';
 
 const Loader = (props) => {
     return (
-        <div className='app-spinner'>
+        <div className={props.className ? props.className : ''}>
             <img
                 className='img-fluid'
                 src={require('../../../assets/images/Loader/loading.gif')}

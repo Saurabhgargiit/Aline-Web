@@ -8,9 +8,17 @@ $backgroundhovering: #ffffff14;
 $whiteColor: #fff;
 $linkBackgroundColorHover: $backgroundheaderfooterColor;
 $linklabelColorHover: $whiteColor;
+$formBackgroundColor: #e5f6f8;
+
+// $navigatorlinkColor: #029aae;
+$navigatorlinkColor: $backgroundheaderfooterColor;
 
 //Error Message
 $erroMsgColor: #ff0000e3;
+
+//Feel colors
+$negativeColor: $erroMsgColor;
+$positiveColor: #008000;
 
 //Borders
 $darkBorder: #9c9db5;
@@ -18,13 +26,14 @@ $inputFieldBorder: #bdc1c6;
 $rowBorderColor: #5f63684d;
 $primaryBorderSuttle: #dee2e6;
 
+$rowBorder: 1px solid $rowBorderColor;
+$sideRowBorder: 0.75px solid #66cdd9;
+
 //Btn Colors
 $neutralBtnColor: #fff;
 $neutralBtnColorHover: #f0f0f5;
 $primaryBtnColor: $backgroundheaderfooterColor;
 $primaryBtnColorHover: #029aae;
-
-$rowBorder: 1px solid $rowBorderColor;
 
 //Pagination colors
 $paginationDigitNumber: $backgroundheaderfooterColor;
@@ -42,6 +51,10 @@ $paginationBorderColor: $backgroundheaderfooterColor;
     position: relative;
     // top: 56px;
     margin-bottom: 112px;
+}
+
+.positionRelative {
+    position: relative;
 }
 
 .top56 {
@@ -113,6 +126,13 @@ $paginationBorderColor: $backgroundheaderfooterColor;
     cursor: pointer;
 }
 
+.buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
 //@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .font400 {
@@ -156,6 +176,12 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
 //@@@@@@@@@@height@@@@@@@@@@@@@@@@@@@
 .height1rem {
     height: 1rem;
+}
+
+//@@@@@@@@@gap@@@@@@@@@@@@@@
+
+.gap-8 {
+    gap: 0.5rem;
 }
 
 .app-spinner {

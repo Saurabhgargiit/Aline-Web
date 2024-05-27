@@ -1,7 +1,6 @@
 import React from 'react';
 import './PatientDetailsContainer.scss';
-import FormViewTabs from '../PatientDetailsForm/FormViewTabs';
-import PatientDetailsLayout from './PatientDetailsLayout';
+import FormViewTabs from './PatientDetailsForm/FormViewTabs';
 
 const PatientDetailsContainer = () => {
     return (
@@ -13,4 +12,4 @@ const PatientDetailsContainer = () => {
     );
 };
 
-export default PatientDetailsLayout(PatientDetailsContainer);
+export default PatientDetailsContainer;

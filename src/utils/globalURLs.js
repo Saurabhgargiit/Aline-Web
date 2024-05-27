@@ -25,4 +25,10 @@ export class ApiRelativePaths {
     static UPDATE_PATIENT = '/api/v1/aline/patient/updatePatient';
     static UPDATE_STATUS = '/api/v1/aline/patient/updatePatientStatus';
     static DELETE_PATIENT = '/api/v1/aline/patient/deletePatient';
+
+    //Patient Details
+    static GET_PATIENT_DETAILS =
+        '/api/v1/aline/patientDentalDetails/getPatientDentalDetailByPatientID';
+    static UPDATE_PATIENT_DETAILS = '/api/v1/aline/patientDentalDetails/updatePatientDentalDetail';
+    static GET_PATIENT_N_USER_INFO = '/api/v1/aline/patient/getUserDetailsForPatientID';
 }

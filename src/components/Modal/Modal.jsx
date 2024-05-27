@@ -22,7 +22,7 @@ export const ModalContent = ({ children, className }) => {
 
 export const ModalFooter = ({ onClose, close = '', onSubmit, submit = '', disabled = false }) => {
     return (
-        <div className='modalfooter p-4'>
+        <div className='buttons modalFooterBorder p-4'>
             {!!close && <Button onClickCallBk={onClose} title={close} disabled={disabled} />}
             {!!submit && (
                 <Button

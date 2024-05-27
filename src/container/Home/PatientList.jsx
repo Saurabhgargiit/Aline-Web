@@ -39,6 +39,19 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     //api function for getting the patients
     const getAllPatients = () => {
         // const role = CommonUtils.getPayloadRole();
+        const queryBody = {
+            fromDateOfScan: '2024-05-25T16:55:39.219Z',
+            toDateOfScan: '2024-05-25T16:55:39.219Z',
+            patientID: ['string'],
+            name: 'string',
+            gender: 'string',
+            clinicID: ['string'],
+            doctorID: ['string'],
+            status: 'scanned',
+            fromAge: 0,
+            toAge: 0,
+            nationality: 'string',
+        };
         const query = {
             // role: role,
             pageNumber: 0,
@@ -116,7 +129,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     };
 
     const navgationHandler = (patientInfo) => {
-        !!patientInfo.id && navigate('/patientDetails/' + patientInfo.id);
+        !!patientInfo.id && navigate('/patientDetails/' + patientInfo.id + '/details');
     };
 
     //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@
@@ -127,7 +140,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
 
     useEffect(() => {
         if (fetchedAllPatients.result === 'success' && fetchedAllPatients.data !== undefined) {
-            const patientList = fetchedAllPatients.data;
+            const patientList = fetchedAllPatients.data?.content;
             // const { patientBasicInfoFromResponse, patientDetailInfoFromResponse } =
             //     separateDetails(userList);
             setPatientBasicInfo(() => patientList || {});
@@ -235,7 +248,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                     />
                 )
             ) : (
-                <Loader />
+                <Loader className={'positionRelative top56 center-position'} />
             )}
             <DeleteConfirmationModal
                 modalOpen={deleteModalOpen}
