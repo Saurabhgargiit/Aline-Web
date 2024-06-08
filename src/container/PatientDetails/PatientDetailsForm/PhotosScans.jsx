@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import AWS from 'aws-sdk';
 
-AWS.config.region = process.env.REACT_APP_S3_REGION;
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: process.env.REACT_APP_S3_IDENTITY_POOL_ID,
-});
+import Button from '../../../components/Button/Button';
 
-const s3 = new AWS.S3({
-    apiVersion: '2006-03-01',
-    params: { Bucket: process.env.REACT_APP_S3_BUCKET },
-});
+import { uploadToS3 } from '../../../utils/aws';
 
 function PhotosScans({ isEdit }) {
     const [formValues, setFormValues] = useState({});
@@ -51,39 +44,27 @@ function PhotosScans({ isEdit }) {
         }
     };
 
-    const uploadFile = (label) => {
+    const uploadFile = async (label) => {
         const files = formValues[label];
         if (!files.file) return;
 
-        const key = `${patientID}/${label}-${Date.now()}-${files.file.name}`;
-        const upload = new AWS.S3.ManagedUpload({
-            params: {
-                Bucket: s3.config.params.Bucket,
-                Key: key,
-                Body: files.file,
-                ContentDisposition: 'inline',
-                ContentType: files.file.type,
-            },
-        });
+        const photoKey = `${patientID}/${label}-${Date.now()}-${files.file.name}`;
 
-        const promise = upload.promise();
-
-        promise.then(
-            function (data) {
-                const { Location, key } = data;
-                setSelectedFiles((prev) => ({ ...prev, [label]: { url: Location, key: key } }));
-                console.log('Successfully uploaded file:', data);
-            },
-            function (err) {
-                console.error('There was an error uploading your file: ', err.message);
-                alert('Error uploading file: ' + err.message);
-            }
-        );
+        try {
+            const { Location, key } = await uploadToS3(photoKey, files);
+            setSelectedFiles((prev) => ({ ...prev, [label]: { url: Location, key: key } }));
+            console.log('Successfully uploaded file:', Location);
+        } catch (err) {
+            console.error('There was an error uploading your file: ', err.message);
+            alert('There was an error uploading your file: ', err.message);
+        }
     };
 
     const submitHandler = () => {
         //post selectedFiles to backend
     };
+
+    const cancelHandler = () => {};
 
     const clearFile = (key) => {
         const readFiles = formValues[key];
@@ -170,6 +151,21 @@ function PhotosScans({ isEdit }) {
                         </div>
                     );
                 })}
+                <div className='buttons pt-4'>
+                    <Button
+                        postionClass='mx-5'
+                        className={!isEdit ? 'noVisible' : ''}
+                        title='Cancel'
+                        onClickCallBk={cancelHandler}
+                    />
+                    <Button
+                        postionClass='mx-5'
+                        className={!isEdit ? 'noVisible' : ''}
+                        title='Save'
+                        type='primary'
+                        onClickCallBk={submitHandler}
+                    />
+                </div>
             </div>
         </div>
     );
