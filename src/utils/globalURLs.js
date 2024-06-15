@@ -33,6 +33,7 @@ export class ApiRelativePaths {
     static GET_PATIENT_N_USER_INFO = '/api/v1/aline/patient/getUserDetailsForPatientID';
 
     //Photos & Scans
-    static GET_PHOTOS = 'GET_PHOTOS';
-    static SAVE_PHOTOS = 'SAVE_PHOTOS';
+    static GET_PHOTOS_SCANS_URLS =
+        '/api/v1/aline/patientPhotoScans/getPatientPhotoScansByPatientID';
+    static ADD_URLS_TO_DATABASE = '/api/v1/aline/patientPhotoScans/updatePatientPhotoScans';
 }

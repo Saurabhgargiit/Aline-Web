@@ -10,14 +10,14 @@ const s3 = new AWS.S3({
     params: { Bucket: process.env.REACT_APP_S3_BUCKET },
 });
 
-export const uploadToS3 = async (key, files) => {
+export const uploadToS3 = async (key, file) => {
     const upload = new AWS.S3.ManagedUpload({
         params: {
             Bucket: s3.config.params.Bucket,
             Key: key,
-            Body: files.file,
-            ContentDisposition: 'inline',
-            ContentType: files.file.type,
+            Body: file,
+            ContentDisposition: 'attachment; filename="' + file.name + '"',
+            ContentType: file.type,
         },
     });
 
@@ -27,6 +27,7 @@ export const uploadToS3 = async (key, files) => {
         const { Location, key } = data;
         return { Location, key };
     } catch (err) {
-        return err;
+        console.error('error in aws upload:', err);
+        throw new Error(err);
     }
 };

@@ -11,3 +11,6 @@ export const SET_ALL_PATIENTS = 'SET_ALL_PATIENTS';
 
 //Patient Details Page
 export const SET_PATIENT_DETAILS = 'SET_PATIENT_DETAILS';
+
+//Patient Photos & Scans
+export const SET_PHOTOS_SCANS = 'SET_PHOTOS_SCANS';

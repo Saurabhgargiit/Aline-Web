@@ -85,7 +85,6 @@ function FormViewTabs() {
 
     //api function for updating the patient details
     const addPatientDetails = () => {
-        debugger;
         const treatmentGoalReqBody = convertFormat(treatmentGoalForm, false);
         let payload = {
             patientPreviousDentalHistoryDetails: { ...dentalHistory, patientID },
@@ -129,7 +128,6 @@ function FormViewTabs() {
     }, []);
 
     useEffect(() => {
-        console.log(fetchedPatientDetails);
         if (
             fetchedPatientDetails.result === 'success' &&
             fetchedPatientDetails.data !== undefined
@@ -151,7 +149,6 @@ function FormViewTabs() {
 
     useEffect(() => {
         if (submitFlag) {
-            console.log(dentalHistory, treatmentGoalForm);
             addPatientDetails();
             setSubmitFlag(() => false);
         }
