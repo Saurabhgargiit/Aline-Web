@@ -1,14 +1,24 @@
+import React, { Suspense, lazy } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import HomeLayout from '../container/Home/HomeLayout';
-import AdminLayout from '../container/Admin/AdminLayout';
+import Loader from '../container/common/Loader/Loader';
 
-import PatientDetailsContainer from '../container/PatientDetails/PatientDetailsContainer';
-import PhotosScansForm from '../container/PatientDetails/PatientDetailsForm/PhotosScansForm';
-import TreatmentPlanContainer from '../container/TreatmentPlan/TreatmentPlanContainer';
-import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress';
-import RebootRequest from '../container/RebootRequest/RebootRequest';
-import RebootPlan from '../container/RebootPlan/RebootPlan';
-import PatientDetailsLayout from '../container/PatientDetailsLayout/PatientDetailsLayout';
+const HomeLayout = lazy(() => import('../container/Home/HomeLayout'));
+const AdminLayout = lazy(() => import('../container/Admin/AdminLayout'));
+const PatientDetailsContainer = lazy(() =>
+    import('../container/PatientDetails/PatientDetailsContainer')
+);
+const PhotosScansForm = lazy(() =>
+    import('../container/PatientDetails/PatientDetailsForm/PhotosScansForm')
+);
+const TreatmentPlanContainer = lazy(() =>
+    import('../container/TreatmentPlan/TreatmentPlanContainer')
+);
+const TreatMentProgress = lazy(() => import('../container/TreatMentProgress/TreatMentProgress'));
+const RebootRequest = lazy(() => import('../container/RebootRequest/RebootRequest'));
+const RebootPlan = lazy(() => import('../container/RebootPlan/RebootPlan'));
+const PatientDetailsLayout = lazy(() =>
+    import('../container/PatientDetailsLayout/PatientDetailsLayout')
+);
 
 // Define a simple route configuration
 const routeConfig = [
@@ -32,21 +42,27 @@ const routeConfig = [
 
 const Routers = () => {
     return (
-        <Routes>
-            {routeConfig.map((route) => {
-                if (route.children) {
-                    return (
-                        <Route path={route.path} key={route.path} element={route.element}>
-                            <Route index element={<Navigate to='details' />} />
-                            {route.children.map((child) => (
-                                <Route path={child.path} element={child.element} key={child.path} />
-                            ))}
-                        </Route>
-                    );
-                }
-                return <Route path={route.path} element={route.element} key={route.path} />;
-            })}
-        </Routes>
+        <Suspense fallback={<Loader />}>
+            <Routes>
+                {routeConfig.map((route) => {
+                    if (route.children) {
+                        return (
+                            <Route path={route.path} key={route.path} element={route.element}>
+                                <Route index element={<Navigate to='details' />} />
+                                {route.children.map((child) => (
+                                    <Route
+                                        path={child.path}
+                                        element={child.element}
+                                        key={child.path}
+                                    />
+                                ))}
+                            </Route>
+                        );
+                    }
+                    return <Route path={route.path} element={route.element} key={route.path} />;
+                })}
+            </Routes>
+        </Suspense>
     );
 };
 
