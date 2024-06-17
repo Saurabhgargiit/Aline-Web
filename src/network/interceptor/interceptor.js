@@ -29,9 +29,8 @@ axiosInstance.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
-if (process.env.REACT_APP_ENV === 'development') {
-    axiosInstance.defaults.baseURL = 'http://localhost:3001';
-}
+
+axiosInstance.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 createAxiosResponseInterceptor(axiosInstance);
 

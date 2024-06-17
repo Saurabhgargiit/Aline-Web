@@ -31,9 +31,8 @@ export const loginAction = (isLoggedIn, fromLogin, loginInfo = {}) => {
 export const getLoginData = (url_path, data) => {
     return (dispatch) => {
         const path = ApiRelativePaths[url_path];
-        if (process.env.REACT_APP_ENV === 'development') {
-            axios.defaults.baseURL = 'http://localhost:3001';
-        }
+        axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
         axios
             .post(path, data, {
                 headers: {
