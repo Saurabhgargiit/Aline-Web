@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# Patient Treatment Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The Patient Treatment Tracker is a comprehensive solution designed for doctors, clinics, and orthodontic treatment companies to efficiently manage and track patient treatments. This project utilizes a modern technology stack to deliver a robust, secure, and scalable application.(It is not yet completed and under progress)
 
-In the project directory, you can run:
+## Main Features
 
-### `npm start`
+-   **Patient List**: The landing page displays a list of patients with their current treatment status.
+-   **Patient Details**: Clicking on a patient opens a detailed view with related treatment information and links.
+-   **Admin Features**: Accessible via the menu on the home page, providing administrative functionalities.
+-   **Authentication & Authorization**: Production-ready authentication and authorization to ensure secure access.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technology Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+-   **Frontend**: React.js
+-   **Backend**: Spring Boot
+-   **Database**: MongoDB
+-   **Data Storage & Hosting**: AWS S3 (data storage and static hosting), AWS EC2 (backend hosting)
 
-### `npm test`
+## Live Project
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+You can access the live project [here](http://www.alinefrontendqa.com.s3-website.ap-south-1.amazonaws.com/login).
 
-### `npm run build`
+## Demo Credentials
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Admin Role:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-   **Email**: saurabh+admin@gmail.com
+-   **Password**: 1234567890
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Clinic Role:
 
-### `npm run eject`
+-   **Email**: saurabh+clinic@gmail.com
+-   **Password**: 1234567890
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Landing Page**:
+    - Displays a list of patients with their current treatment status.
+2. **Patient Details**:
+    - Click on a patient from the list to view detailed information and related links.
+3. **Admin Features**:
+    - Accessible via the menu on the home page, provides features for administrative tasks.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## License
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This project is licensed under the MIT License.
 
-## Learn More
+## Contact
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For any inquiries, please contact Saurabh Garg at saurabhgarg.iitbhu@gmail.com.
