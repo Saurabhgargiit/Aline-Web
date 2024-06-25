@@ -22,6 +22,11 @@ The Patient Treatment Tracker is a comprehensive solution designed for doctors, 
 
 You can access the live project [here](http://www.alinefrontendqa.com.s3-website.ap-south-1.amazonaws.com/login).
 
+## Screenshot
+
+<img width="1440" alt="Screenshot 2024-06-25 at 1 15 13 AM" src="https://github.com/Saurabhgargiit/Aline-Web/assets/15964659/bb8f3b08-960d-4038-9a4a-9caf60658478">
+
+
 ## Demo Credentials
 
 ### Admin Role:
@@ -33,15 +38,6 @@ You can access the live project [here](http://www.alinefrontendqa.com.s3-website
 
 -   **Email**: saurabh+clinic@gmail.com
 -   **Password**: 1234567890
-
-## Usage
-
-1. **Landing Page**:
-    - Displays a list of patients with their current treatment status.
-2. **Patient Details**:
-    - Click on a patient from the list to view detailed information and related links.
-3. **Admin Features**:
-    - Accessible via the menu on the home page, provides features for administrative tasks.
 
 ## License
 
