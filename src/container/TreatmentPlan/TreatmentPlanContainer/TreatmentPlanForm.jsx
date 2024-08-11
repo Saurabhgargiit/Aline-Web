@@ -77,7 +77,7 @@ const TreatmentPlanForm = ({ isEdit, cancelHandler }) => {
     );
   }
   return (
-    <div className="patientAddEditTopContainer">
+    <div className="patientAddEditTopContainer mb-4">
       <div className="patientAddEditContainer">
         <div className={`patient-detials-input-fields gap-8 marginEdit`}>
           <span className="mb-2 sub-heading">Malocclusion Tags </span>

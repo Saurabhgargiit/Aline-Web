@@ -15,7 +15,7 @@ function ChatComponent() {
       setMessages([
         ...messages,
         {
-          name: currentUser + 1,
+          name: currentUser,
           role: currentRole,
           date: currentDate,
           comment,
