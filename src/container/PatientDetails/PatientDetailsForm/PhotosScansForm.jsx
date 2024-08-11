@@ -16,108 +16,121 @@ import '../PatientDetailsContainer.scss';
 import './FormViewTabs.scss';
 
 function PhotosScansForm() {
-    const [isEdit, setIsEdit] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [cancelFlag, setCancelFlag] = useState(false);
-    // const [submitFlag, setSubmitFlag] = useState(false);
-    const [errMsg, setErrMsg] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cancelFlag, setCancelFlag] = useState(false);
+  // const [submitFlag, setSubmitFlag] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
-    const [photosScans, setPhotosScans] = useState({});
+  const [photosScans, setPhotosScans] = useState({});
 
-    const fetchedPhotosScans = useSelector((state) => state.getPhotosScans.photosScans);
-    const dispatch = useDispatch();
+  const fetchedPhotosScans = useSelector(
+    state => state.getPhotosScans.photosScans
+  );
+  const dispatch = useDispatch();
 
-    const { patientID } = useParams();
+  const { patientID } = useParams();
 
-    //api function for getting the patient Details
-    const getPhotosScans = (patientID) => {
-        dispatch(getPhotosScansAction('GET_PHOTOS_SCANS_URLS', [patientID]));
-    };
+  //api function for getting the patient Details
+  const getPhotosScans = patientID => {
+    dispatch(getPhotosScansAction('GET_PHOTOS_SCANS_URLS', [patientID]));
+  };
 
-    const editHandler = () => {
-        if (!isEdit) {
-            setIsEdit(true);
-        }
-    };
+  const editHandler = () => {
+    if (!isEdit) {
+      setIsEdit(true);
+    }
+  };
 
-    const cancelHandler = useCallback(() => {
-        setIsEdit(false);
-        setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {}); //set to redux state value
-        setCancelFlag((state) => !state);
-    }, [fetchedPhotosScans]);
+  const cancelHandler = useCallback(() => {
+    setIsEdit(false);
+    setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {}); //set to redux state value
+    setCancelFlag(state => !state);
+  }, [fetchedPhotosScans]);
 
-    const convertFormat = (obj, filterVal) => {
-        const formattedObj = {};
-        Object.keys(obj).forEach((key) => {
-            if (key !== filterVal) {
-                formattedObj[key] = [{ url: obj[key][0], key: '' }];
-            }
-        });
-        return formattedObj;
-    };
+  const convertFormat = (obj, filterVal) => {
+    const formattedObj = {};
+    Object.keys(obj).forEach(key => {
+      if (key !== filterVal) {
+        formattedObj[key] = [{ url: obj[key][0], key: '' }];
+      }
+    });
+    return formattedObj;
+  };
 
-    //@@@@@@@@@@@@@@useEffect@@@@@@@@@@@@@
-    useEffect(() => {
-        getPhotosScans(patientID);
-    }, []);
+  //@@@@@@@@@@@@@@useEffect@@@@@@@@@@@@@
+  useEffect(() => {
+    getPhotosScans(patientID);
+  }, []);
 
-    useEffect(() => {
-        if (fetchedPhotosScans.result === 'success' && fetchedPhotosScans.data !== undefined) {
-            console.log(fetchedPhotosScans);
-            setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {});
-            setIsLoading(false);
-            setErrMsg('');
-            // }
-        } else if (fetchedPhotosScans.result === 'error') {
-            setErrMsg(fetchedPhotosScans.data ?? somethingWentWrong);
-            setIsLoading(false);
-        }
-    }, [fetchedPhotosScans]);
+  useEffect(() => {
+    if (
+      fetchedPhotosScans.result === 'success' &&
+      fetchedPhotosScans.data !== undefined
+    ) {
+      console.log(fetchedPhotosScans);
+      setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {});
+      setIsLoading(false);
+      setErrMsg('');
+      // }
+    } else if (fetchedPhotosScans.result === 'error') {
+      setErrMsg(fetchedPhotosScans.data ?? somethingWentWrong);
+      setIsLoading(false);
+    }
+  }, [fetchedPhotosScans]);
 
-    return !isLoading ? (
-        !errMsg ? (
-            <div className='PatientDetailsContainer'>
-                <div className=''>
-                    <>
-                        <div id='justify-tab-example' className='patient-details-tabs-container'>
-                            <PhotosScans
-                                isEdit={isEdit}
-                                setIsEdit={setIsEdit}
-                                formData={photosScans}
-                                getPhotosScans={getPhotosScans}
-                                setIsLoading={setIsLoading}
-                                cancelHandler={cancelHandler}
-                                cancelFlag={cancelFlag}
-                            />
-                        </div>
-                        <Button
-                            postionClass={'home-page-button-pos rightPosEdit'}
-                            className={'home-page-add-button'}
-                            svg={
-                                !isEdit ? (
-                                    <SVG
-                                        src={require(`../../../assets/icons/edit-2.svg`).default}
-                                    />
-                                ) : (
-                                    <SVG src={require(`../../../assets/icons/close.svg`).default} />
-                                )
-                            }
-                            onClickCallBk={!isEdit ? editHandler : cancelHandler}
-                            tooltip={!isEdit ? 'Edit' : 'Cancel'}
-                        />
-                    </>
-                </div>
+  return !isLoading ? (
+    !errMsg ? (
+      <div className="PatientDetailsContainer">
+        <div className="">
+          <>
+            <div
+              id="justify-tab-example"
+              className="patient-details-tabs-container"
+            >
+              <PhotosScans
+                isEdit={isEdit}
+                setIsEdit={setIsEdit}
+                formData={photosScans}
+                getPhotosScans={getPhotosScans}
+                setIsLoading={setIsLoading}
+                cancelHandler={cancelHandler}
+                cancelFlag={cancelFlag}
+              />
             </div>
-        ) : (
-            <div className='positionRelative top56 center-position'>
-                <p>{errMsg}</p>
-            </div>
-        )
-    ) : (
-        <div className='positionRelative top56 center-position'>
-            <Loader />
+            <Button
+              postionClass={'home-page-button-pos rightPosEdit'}
+              className={'home-page-add-button'}
+              svg={
+                !isEdit ? (
+                  <SVG
+                    src={require(`../../../assets/icons/edit-2.svg`).default}
+                  />
+                ) : (
+                  <SVG
+                    src={require(`../../../assets/icons/close.svg`).default}
+                  />
+                )
+              }
+              onClickCallBk={!isEdit ? editHandler : cancelHandler}
+              tooltip={!isEdit ? 'Edit' : 'Cancel'}
+            />
+          </>
         </div>
-    );
+      </div>
+    ) : (
+      <div className="positionRelative top56 center-position">
+        <p>{errMsg}</p>
+      </div>
+    )
+  ) : (
+    <div className="positionRelative top56 center-position">
+      <Loader />
+    </div>
+  );
 }
 
-export default withReducer('getPhotosScans', getPhotosScansReducer)(PhotosScansForm);
+export default withReducer(
+  'getPhotosScans',
+  getPhotosScansReducer
+)(PhotosScansForm);

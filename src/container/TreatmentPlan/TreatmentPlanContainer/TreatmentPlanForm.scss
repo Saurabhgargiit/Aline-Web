@@ -1,0 +1,38 @@
+.attachment-btn {
+  height: 2rem;
+  width: auto;
+  border: none;
+  background-color: transparent;
+}
+
+.step-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  .label {
+  }
+  .step-input {
+    max-width: 60px;
+  }
+}
+
+.dropdown-width {
+  width: 16rem;
+  .dropdown-button {
+    background-color: #fff;
+  }
+}
+.tags-container {
+  max-width: 100%;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  max-width: fit-content;
+}
+.price-quote {
+  max-width: 100px;
+}

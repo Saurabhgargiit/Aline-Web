@@ -12,6 +12,7 @@ $formBackgroundColor: #e5f6f8;
 
 // $navigatorlinkColor: #029aae;
 $navigatorlinkColor: $backgroundheaderfooterColor;
+$subplanBgColor: $formBackgroundColor;
 
 //Error Message
 $erroMsgColor: #ff0000e3;
@@ -41,158 +42,213 @@ $paginationBorderColor: $backgroundheaderfooterColor;
 
 //Functions
 @function rem-calc($size) {
-    $remSize: calc($size / 16);
-    @return #{$remSize}rem;
+  $remSize: calc($size / 16);
+  @return #{$remSize}rem;
 }
 
 //@@@@@@@ Common classes@@@@
 
 .top-bottom-position-container {
-    position: relative;
-    // top: 56px;
-    margin-bottom: 112px;
+  position: relative;
+  // top: 56px;
+  margin-bottom: 112px;
 }
 
 .positionRelative {
-    position: relative;
+  position: relative;
 }
 
 .top56 {
-    top: 3.5rem;
+  top: 3.5rem;
 }
 
 .top112 {
-    top: 7rem;
+  top: 7rem;
 }
 
 .modal-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(38, 39, 59, 0.8);
-    z-index: 1300;
-    min-height: 100%;
-    min-width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(38, 39, 59, 0.8);
+  z-index: 1300;
+  min-height: 100%;
+  min-width: 100%;
 }
 
 .label-input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    // margin-bottom: 1rem;
-    input {
-        height: 2rem;
-        border: 1px solid $inputFieldBorder;
-        border-radius: 4px;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  // margin-bottom: 1rem;
+  input {
+    height: 2rem;
+    border: 1px solid $inputFieldBorder;
+    border-radius: 4px;
+  }
 }
 
 .center-position {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .row-border {
-    border-bottom: $rowBorder;
+  border-bottom: $rowBorder;
 }
 
 .error-Msg {
-    color: $erroMsgColor;
-    font-size: 0.75rem;
-    font-weight: 700;
+  color: $erroMsgColor;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .input-error {
-    // border: 2px solid $erroMsgColor !important; /* Red border to indicate error */
-    background-color: #ffe6e6 !important; /* Light red background */
+  // border: 2px solid $erroMsgColor !important; /* Red border to indicate error */
+  background-color: #ffe6e6 !important; /* Light red background */
 }
 
 .displayFlex {
-    display: flex;
+  display: flex;
 }
 
 .noDisplay {
-    display: none;
+  display: none;
 }
 
 .noVisible {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .buttons {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
 //@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .font400 {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .font600 {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .font500 {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .font700 {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
 
 @each $size in $sizes {
-    .font#{$size} {
-        font-size: #{$size}px;
-    }
+  .font#{$size} {
+    font-size: #{$size}px;
+  }
 }
 
 //@@@@@@@@@@@@@@@@width@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .w-75 {
-    width: 75%;
+  width: 75%;
 }
 
 .w-30 {
-    width: 30%;
+  width: 30%;
 }
 
 .w-25 {
-    width: 25%;
+  width: 25%;
 }
 
 //@@@@@@@@@@height@@@@@@@@@@@@@@@@@@@
 .height1rem {
-    height: 1rem;
+  height: 1rem;
 }
 
 //@@@@@@@@@gap@@@@@@@@@@@@@@
 
 .gap-8 {
-    gap: 0.5rem;
+  gap: 0.5rem;
 }
 
 .app-spinner {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  z-index: 20;
+  /* height: 100%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-container {
+  width: max-content;
+  height: 100%;
+  padding-right: 2rem;
+  position: relative;
+  cursor: pointer;
+  display: block;
+
+  input[type='checkbox'] {
+    visibility: hidden;
+  }
+
+  .checkbox {
     position: absolute;
-    top: 0;
-    width: 100%;
-    text-align: center;
-    height: 100%;
-    z-index: 20;
-    /* height: 100%; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    // top: rem-calc(18);
+    width: 1.3rem;
+    height: 1.3rem;
+    border: solid 1px;
+    background-color: $whiteColor;
+  }
+
+  &:hover input:not(:disabled) ~ .checkbox {
+    background-color: $primaryBtnColorHover;
+  }
+
+  input:disabled ~ .checkbox {
+    opacity: 0.7;
+    background-color: #f9f9f9;
+    color: #666; // Dim the text color for disabled inputs
+    cursor: not-allowed;
+  }
+
+  input:checked ~ .checkbox {
+    background-color: $backgroundheaderfooterColor;
+    border: solid 1.5px;
+  }
+
+  .checkbox::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid $whiteColor;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  input:checked ~ .checkbox::after {
+    display: block;
+  }
 }
