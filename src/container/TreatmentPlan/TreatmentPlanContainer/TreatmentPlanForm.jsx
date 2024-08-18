@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast, Bounce } from 'react-toastify';
+
 import { Badge } from 'react-bootstrap';
 
 import TextArea from '../../../components/TextArea/TextArea';
@@ -6,19 +9,59 @@ import Dropdown from '../../../components/Dropdown/Dropdown';
 import MultiSelectDropdown from '../../../components/Dropdown/MultiSelectDropdown';
 import Button from '../../../components/Button/Button';
 import { plans, steps, tags, currencies } from '../treatmentPlanConstants';
+import { putCall } from '../../../utils/commonfunctions/apicallactions';
+import FileUploader from '../../../components/FileUploader/FileUploader';
 
-import { ReactComponent as AttachmentIcon } from '../../../assets/icons/attachment.svg';
 
 import './TreatmentPlanForm.scss';
 
-const TreatmentPlanForm = ({ isEdit, cancelHandler }) => {
+
+
+const TreatmentPlanForm = ({ isEdit, cancelHandler,cancelFlag }) => {
   const [errors, setErrors] = useState({});
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
 
-  const [formValues, setFormValues] = useState({
-    chiefComplaint: '',
-    historyOthers: '',
-  });
+  const [formValues, setFormValues] = useState({});
+
+  // const [selectedFiles, setSelectedFiles] = useState(initState(labels, [{ url: '', key: '' }]));
+
+  const { patientID } = useParams();
+
+
+  // const submitHandler = () => {
+  //     //post selectedFiles to backend
+  //     const payload = { ...selectedFiles };
+  //     payload['patientID'] = patientID;
+
+  //     putCall(payload, 'ADD_URLS_TO_DATABASE', []).then((data) => {
+  //         if (data.result === 'success') {
+  //             toast.success(`Photos & Scans modified successully.`, {
+  //                 position: 'top-right',
+  //                 hideProgressBar: false,
+  //                 autoClose: 2000,
+  //                 closeOnClick: true,
+  //                 // pauseOnHover: true,
+  //                 theme: 'light',
+  //                 transition: Bounce,
+  //             });
+  //             setIsLoading(true);
+
+  //         } else if (data.result === 'error') {
+  //             toast.error(data.error ?? 'data.error', {
+  //                 position: 'top-right',
+  //                 hideProgressBar: false,
+  //                 autoClose: 2000,
+  //                 closeOnClick: true,
+  //                 // pauseOnHover: true,
+  //                 theme: 'light',
+  //                 transition: Bounce,
+  //             });
+  //         }
+  //         // setLoading(false);
+  //     });
+  // };
+
 
   const handleInputChange = () => {};
 
@@ -32,7 +75,6 @@ const TreatmentPlanForm = ({ isEdit, cancelHandler }) => {
 
   const handleCheckboxChange = () => {};
 
-  const uploadIPRHandler = () => {};
 
   const uploadVideoHandler = () => {};
 
@@ -167,24 +209,18 @@ const TreatmentPlanForm = ({ isEdit, cancelHandler }) => {
         </div>
 
         <div
-          className={`patient-detials-input-fields gap-8 ${
+          className={`patient-detials-input-fields gap-8 pdf-container ${
             isEdit ? 'marginEdit' : 'marginView'
-          }`}
+          } `}
         >
           <span className="mb-2 sub-heading">IPR and Attachment Report</span>
-          <div className="arches-container">
-            <Button
-              svg={<AttachmentIcon />}
-              ariaLabel="upload-pdf button"
-              tooltip="Upload pdf"
-              className="attachment-btn"
-              onClickCallBk={uploadIPRHandler}
-            />
+          <div className="arches-container pdf-container">
+            <FileUploader label='IPR_Report' fileType='pdf' onUploadComplete={(fileData) => console.log(fileData)} patientID={patientID}/>
           </div>
         </div>
 
         <div
-          className={`patient-detials-input-fields gap-8 ${
+          className={`patient-detials-input-fields gap-8 pdf-container ${
             isEdit ? 'marginEdit' : 'marginView'
           }`}
         >
@@ -193,15 +229,17 @@ const TreatmentPlanForm = ({ isEdit, cancelHandler }) => {
             <label className="">Plan URL</label>
             <input type="text" />
           </div>
-          <div className="arches-container">
+          <div className="arches-container pdf-container">
             <label className="">Upload Video</label>
-            <Button
+            <FileUploader label='Treatment_Video' fileType='video' onUploadComplete={(fileData) => console.log(fileData)} patientID={patientID} styleClassName={'pdf-container'}/>
+
+            {/* <Button
               svg={<AttachmentIcon />}
               ariaLabel="upload-video button"
               tooltip="Upload Video"
               className="attachment-btn"
               onClickCallBk={uploadVideoHandler}
-            />
+            /> */}
           </div>
         </div>
 

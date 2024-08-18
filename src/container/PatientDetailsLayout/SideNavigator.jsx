@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
@@ -35,6 +35,12 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
     { name: 'Reboot Requested', path: '/rebootRequested' },
     { name: 'Reboot Plan Details', path: '/rebootPlan' },
   ];
+
+  useEffect(()=>{
+    if(!pathname.includes('treatmentPlan')){
+      setTreatmentPlanExpanded(false);
+    }
+  },[pathname])
 
   return (
     <div className="displayFlex">
