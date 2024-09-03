@@ -17,7 +17,7 @@ const routeConfig = [
   { path: '/users', element: <AdminLayout /> },
   { path: '/login', element: <Navigate to="/home" /> },
   {
-    path: '/patientDetails/:patientID',
+    path: '/patientDetails/:patientID/:rebootID',
     element: <PatientDetailsLayout />,
     children: [
       { path: 'details', element: <PatientDetailsContainer /> },

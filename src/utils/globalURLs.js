@@ -36,4 +36,9 @@ export class ApiRelativePaths {
     static GET_PHOTOS_SCANS_URLS =
         '/api/v1/aline/patientPhotoScans/getPatientPhotoScansByPatientID';
     static ADD_URLS_TO_DATABASE = '/api/v1/aline/patientPhotoScans/updatePatientPhotoScans';
+
+
+    //Treatment Plans
+    static GET_TREATMENTPLAN_MAPPING = '/api/v1/aline/dentalDetailsMapping/getPlanMapping';
+
 }
