@@ -15,5 +15,8 @@ export const SET_PATIENT_DETAILS = 'SET_PATIENT_DETAILS';
 //Patient Photos & Scans
 export const SET_PHOTOS_SCANS = 'SET_PHOTOS_SCANS';
 
-//Treatment Plans
+//Treatment Plans & related comments
 export const SET_PLANDETAILS_MAPPING = 'SET_PLANDETAILS_MAPPING';
+export const SET_PLAN_DETAILS = 'SET_PLAN_DETAILS';
+export const SET_PLAN_COMMENTS = 'SET_PLAN_COMMENTS';
+

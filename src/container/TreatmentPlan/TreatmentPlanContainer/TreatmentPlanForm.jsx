@@ -6,10 +6,11 @@ import { Badge } from 'react-bootstrap';
 
 import TextArea from '../../../components/TextArea/TextArea';
 import Dropdown from '../../../components/Dropdown/Dropdown';
+import Loader from '../../common/Loader/Loader';
 import MultiSelectDropdown from '../../../components/Dropdown/MultiSelectDropdown';
 import Button from '../../../components/Button/Button';
 import { plans, steps, tags, currencies } from '../treatmentPlanConstants';
-import { putCall } from '../../../utils/commonfunctions/apicallactions';
+import { postCall, putCall } from '../../../utils/commonfunctions/apicallactions';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 
 
@@ -17,7 +18,7 @@ import './TreatmentPlanForm.scss';
 
 
 
-const TreatmentPlanForm = ({ isEdit, existingData, cancelHandler,cancelFlag }) => {
+const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, planId, redirectToCurrentDraft, redirectToLatestDraft }) => {
   const [errors, setErrors] = useState({});
   const [selectedTags, setSelectedTags] = useState(existingData?.malocclusionTag || []);
 
@@ -36,43 +37,48 @@ const TreatmentPlanForm = ({ isEdit, existingData, cancelHandler,cancelFlag }) =
     treatmentSimulationsAttachments: existingData?.treatmentSimulationsAttachments || [],
   });
 
-  // const [selectedFiles, setSelectedFiles] = useState(initState(labels, [{ url: '', key: '' }]));
 
-  const { patientID, rebootID } = useParams();
+  const { patientID, rebootID } = useParams();  
 
 
-  // const submitHandler = () => {
-  //     //post selectedFiles to backend
-  //     const payload = { ...selectedFiles };
-  //     payload['patientID'] = patientID;
+  const saveHandler = () => {
+      //post selectedFiles to backend
+      const payload = { ...formValues };
+      payload['malocclusionTag'] = selectedTags;
+      payload['patientID'] = patientID;
+      payload['id'] = isEdit ? planId : null;
+      payload['treatmentPlanID'] = null;
+      setIsLoading(true);
+      postCall(payload, 'CREATE_TREATMENT_PLAN', [patientID, rebootID]).then((data) => {
+          if (data.result === 'success') {
+              toast.success(`Treatment Plan Added.`, {
+                  position: 'top-right',
+                  hideProgressBar: false,
+                  autoClose: 2000,
+                  closeOnClick: true,
+                  // pauseOnHover: true,
+                  theme: 'light',
+                  transition: Bounce,
+              });
+              setIsLoading(true);
+              isEdit? redirectToCurrentDraft(planId) : redirectToLatestDraft() 
 
-  //     putCall(payload, 'ADD_URLS_TO_DATABASE', []).then((data) => {
-  //         if (data.result === 'success') {
-  //             toast.success(`Photos & Scans modified successully.`, {
-  //                 position: 'top-right',
-  //                 hideProgressBar: false,
-  //                 autoClose: 2000,
-  //                 closeOnClick: true,
-  //                 // pauseOnHover: true,
-  //                 theme: 'light',
-  //                 transition: Bounce,
-  //             });
-  //             setIsLoading(true);
+          } else if (data.result === 'error') {
+              toast.error(data.error ?? 'data.error', {
+                  position: 'top-right',
+                  hideProgressBar: false,
+                  autoClose: 2000,
+                  closeOnClick: true,
+                  // pauseOnHover: true,
+                  theme: 'light',
+                  transition: Bounce,
+              });
+              setIsLoading(false);
+          }
+          // setLoading(false);
+      });
+  };
 
-  //         } else if (data.result === 'error') {
-  //             toast.error(data.error ?? 'data.error', {
-  //                 position: 'top-right',
-  //                 hideProgressBar: false,
-  //                 autoClose: 2000,
-  //                 closeOnClick: true,
-  //                 // pauseOnHover: true,
-  //                 theme: 'light',
-  //                 transition: Bounce,
-  //             });
-  //         }
-  //         // setLoading(false);
-  //     });
-  // };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -84,14 +90,6 @@ const TreatmentPlanForm = ({ isEdit, existingData, cancelHandler,cancelFlag }) =
 
 
 
-
-  // const tagChangeHandler = (e, value) => {
-  //   if (e.target.checked) {
-  //     setSelectedTags(prev => [...prev, value]);
-  //   } else {
-  //     setSelectedTags(prev => selectedTags.filter(el => el !== value));
-  //   }
-  // };
   const tagChangeHandler = (e, value) => {
     if (e.target.checked) {
       setSelectedTags((prev) => [...prev, value]);
@@ -163,6 +161,9 @@ const TreatmentPlanForm = ({ isEdit, existingData, cancelHandler,cancelFlag }) =
     );
   }
   return (
+    isLoading ? 
+      <Loader/> 
+    :
     <div className="patientAddEditTopContainer mb-4">
       <div className="patientAddEditContainer">
         <div className={`patient-detials-input-fields gap-8 marginEdit`}>
@@ -308,8 +309,8 @@ const TreatmentPlanForm = ({ isEdit, existingData, cancelHandler,cancelFlag }) =
 
         <div className="arches-container">
           <Button title="Cancel" onClickCallBk={cancelHandler} />
-          <Button title="Save as Draft" type="primary" />
-          <Button title="Save and Share" type="primary" />
+          <Button title="Save" type="primary" onClickCallBk={saveHandler}/>
+          {/* <Button title="Share" type="primary" onClickCallBk={shareHandler}/> */}
         </div>
       </div>
     </div>

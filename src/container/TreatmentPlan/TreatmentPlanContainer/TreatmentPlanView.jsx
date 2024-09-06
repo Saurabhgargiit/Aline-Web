@@ -7,7 +7,9 @@ import Button from '../../../components/Button/Button';
 import { plans, steps, tags } from '../treatmentPlanConstants';
 import TreatmentPlanModal from './TreatmentPlanModal';
 
-const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
+const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo }) => {
+
+
   function renderCheckboxGroup(label, options, formValues) {
     return (
       <section className={`patient-detials-input-fields gap-8 marginView`}>
@@ -26,7 +28,7 @@ const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
                 id={option.key}
                 min={0}
                 disabled
-                value={10}
+                value={planInfo[option.value]}
               />
             </div>
           ))}
@@ -34,16 +36,40 @@ const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
       </section>
     );
   }
-  const cancelHandler = () => {};
+  const {
+    caseAssessment,
+    treatmentPlanSummary,
+    malocclusionTag,
+    upperSteps,
+    lowerSteps,
+    expectedDuration,
+    treatmentPlanCategory,
+    price,
+    iprAndAttachmentReports,
+    treatmentSimulationsURL,
+    treatmentSimulationsAttachments,
+  } = planInfo;
+  
   return (
     <div className="patientAddEditTopContainer  mb-4">
       <div className="patientAddEditContainer">
         <div className={`patient-detials-input-fields gap-8 marginEdit`}>
           <span className="mb-2 sub-heading">Malocclusion Tags </span>
           <div className="tags-container">
-            <Badge pill bg={'primary'} className="tag">
+            {/* <Badge pill bg={'primary'} className="tag">
               {'label'}
-            </Badge>
+            </Badge> */}
+            {malocclusionTag && malocclusionTag.length > 0 ? (
+              malocclusionTag.map((tag, index) => (
+                <Badge pill bg="primary" className="tag" key={index}>
+                  {tag}
+                </Badge>
+              ))
+            ) : (
+              <Badge pill bg="secondary" className="tag">
+                No Tags
+              </Badge>
+            )}
           </div>
         </div>
         <label
@@ -53,9 +79,7 @@ const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
         >
           Case Assessment:
           <p>
-            The patient is having issues in front side kfdskg fjdhfkjhsdkjghiaer
-            ifgdkj kjdnfdkjlsan kjfkjsdg kjgfkjsfdgdfs kgkjdsfhgkjs wejiuwqyriu
-            w
+            {caseAssessment || 'No assessment provided'}
           </p>
         </label>
 
@@ -66,9 +90,7 @@ const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
         >
           Treatment Plan Summary:
           <p>
-            The patient is having issues in front side kfdskg fjdhfkjhsdkjghiaer
-            ifgdkj kjdnfdkjlsan kjfkjsdg kjgfkjsfdgdfs kgkjdsfhgkjs wejiuwqyriu
-            w
+          {treatmentPlanSummary || 'No summary provided'}
           </p>
         </label>
 
@@ -79,12 +101,12 @@ const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
           <div className="arches-container">
             <div className="step-container">
               <label className="">
-                Plan Type: &nbsp; <span>Light</span>
+                Plan Type: &nbsp; <span>{treatmentPlanCategory}</span>
               </label>
             </div>
             <div className="step-container">
               <label className="">
-                Price Quotation: &nbsp; <span>1500 AED</span>
+                Price Quotation: &nbsp; <span>{price?.price} {price?.currency?.toUpperCase()}</span>
               </label>
             </div>
           </div>
@@ -92,16 +114,54 @@ const TreatmentPlanView = ({ approveHandler, reqModFn }) => {
 
         <div className={`patient-detials-input-fields gap-8 marginView`}>
           <span className="mb-2 sub-heading">IPR and Attachment Report</span>
-          <div className="arches-container"></div>
+          <div className="arches-container">
+          {iprAndAttachmentReports && iprAndAttachmentReports.length > 0 ? (
+              iprAndAttachmentReports.map((report, index) => (
+                <div key={index}>
+                  <a href={report.url} target="_blank" rel="noopener noreferrer">
+                    View Attachment {index + 1}
+                  </a>
+                </div>
+              ))
+            ) : (
+              <p>No IPR and attachment reports</p>
+            )}
+          </div>
         </div>
 
         <div className={`patient-detials-input-fields gap-8 marginView`}>
           <span className="mb-2 sub-heading">Treatment Simulation</span>
           <div className="arches-container">
-            <label className="">Plan URL</label>
+            <label className="">
+              Plan URL: &nbsp;
+              {treatmentSimulationsURL.length > 0 ? (
+                <a
+                  href={treatmentSimulationsURL[0]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Simulation
+                </a>
+              ) : (
+                'No URL provided'
+              )}
+            </label>
           </div>
           <div className="arches-container">
-            <label className="">Upload Video</label>
+            <label className="">
+              Upload Video: &nbsp;
+              {treatmentSimulationsAttachments.length > 0 ? (
+                <a
+                  href={treatmentSimulationsAttachments[0]?.url}
+                  target="_blank"
+                  // rel="noopener noreferrer"
+                >
+                  View Video
+                </a>
+              ) : (
+                'No video uploaded'
+              )}
+            </label>
           </div>
         </div>
 

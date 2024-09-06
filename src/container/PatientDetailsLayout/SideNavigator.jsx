@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import { getCall } from '../../utils/commonfunctions/apicallactions';
-import { sidenNavigatorAction } from '../../store/actions/sidenNavigatorAction';
+import { getPlanDetailsMapping } from '../../store/actions/sidenNavigatorAction';
 
 import { ReactComponent as UpIcon } from '../../assets/icons/up-icon.svg';
 import { ReactComponent as DownIcon } from '../../assets/icons/down.svg';
@@ -49,12 +49,12 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   },[pathname])
 
   //api function for getting the plan Details Mapping
-  const getPlanDetailsMapping = () => {
-    dispatch(sidenNavigatorAction('GET_TREATMENTPLAN_MAPPING', [patientID, rebootID||0]));
-  };
+  // const getPlanDetailsMapping = () => {
+  //   dispatch(sidenNavigatorAction('GET_TREATMENTPLAN_MAPPING', [patientID, rebootID||0]));
+  // };
 
   useEffect(() => {
-    getPlanDetailsMapping();
+    getPlanDetailsMapping(dispatch, patientID, rebootID||0);
   }, [patientID, rebootID]);
 
   useEffect(() => {

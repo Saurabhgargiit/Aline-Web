@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import * as actionTypes from '../actionTypes';
 import { ApiRelativePaths, _agent } from '../../utils/globalURLs';
 import axiosInstance from '../../network/interceptor/interceptor';
@@ -32,4 +33,8 @@ export const sidenNavigatorAction = (url_path, dynamicVal = [], query = {}) => {
                 dispatch(setPlanDetailsMapping(finalErr));
             });
     };
+};
+
+export const getPlanDetailsMapping = (dispatch, patientID, rebootID) => {
+    dispatch(sidenNavigatorAction('GET_TREATMENTPLAN_MAPPING', [patientID, rebootID]));
 };
