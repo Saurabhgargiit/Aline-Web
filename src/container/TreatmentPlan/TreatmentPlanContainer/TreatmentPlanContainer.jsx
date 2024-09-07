@@ -13,6 +13,7 @@ import { CommonUtils } from '../../../utils/commonfunctions/commonfunctions';
 import { CommonConstants } from '../../../utils/globalConstants';
 import { getPlanDetailsAndCommentsAction } from '../../../store/actions/treatementPlan/treatmentplanAndCommentsAction';
 import * as actionTypes from '../../../store/actionTypes';
+import FillerPage from '../../FillerPages/FillerPage';
 
 const modalInitialState = {
   isOpen: false,
@@ -31,7 +32,7 @@ const TreatmentPlanContainer = () => {
 
   const [modalDetails, setModalDetails] = useState(modalInitialState);
   
-  const { patientID, rebootID } = useParams();
+  const { patientID, rebootID, planType } = useParams();
   const {pathname, search} = useLocation();
 
   const {isLab, isAdmin, checkSanityFailed} =CommonUtils;
@@ -166,6 +167,8 @@ const TreatmentPlanContainer = () => {
       getPlanDetailsMapping(dispatch, patientID, rebootID||0);
     }
   },[redirectionInfo])
+
+  if(planType === 'noPlan')return <FillerPage message={'No plan shared yet.'}/>
 
   return (
     <div className="PatientDetailsContainer">

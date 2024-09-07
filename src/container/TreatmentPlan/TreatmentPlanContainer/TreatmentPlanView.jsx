@@ -134,9 +134,9 @@ const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo }) => {
           <div className="arches-container">
             <label className="">
               Plan URL: &nbsp;
-              {treatmentSimulationsURL.length > 0 ? (
+              {treatmentSimulationsURL && treatmentSimulationsURL.length > 0 ? (
                 <a
-                  href={treatmentSimulationsURL[0]}
+                  href={treatmentSimulationsURL[0]?.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -150,7 +150,7 @@ const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo }) => {
           <div className="arches-container">
             <label className="">
               Upload Video: &nbsp;
-              {treatmentSimulationsAttachments.length > 0 ? (
+              {treatmentSimulationsAttachments && treatmentSimulationsAttachments.length > 0 ? (
                 <a
                   href={treatmentSimulationsAttachments[0]?.url}
                   target="_blank"

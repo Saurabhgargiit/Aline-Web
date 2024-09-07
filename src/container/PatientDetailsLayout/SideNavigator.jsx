@@ -114,14 +114,8 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                       <Link
                         to={
                           item.name === 'Treatment Plan' && item.plans.length >0
-                            // ? pathNamePrefix +
-                            //   item.path +
-                            //   '/' 
-                            //   +
-                            //   removeWhitespace(item.plans[0]?.name)
-                            // : pathNamePrefix + item.path
                             ? `${pathNamePrefix}${item.path}/${removeWhitespace(item.plans[0]?.name)}?${item.plans[0]?.value}`
-                              : `${pathNamePrefix}${item.path}`
+                              : `${pathNamePrefix}${item.path}/noPlan`
                         }
                         className={
                           'plan-link ' +
@@ -134,7 +128,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                         }}
                       >
                         {item.name}{' '}
-                        {item.name === 'Treatment Plan' && (
+                        {item.name === 'Treatment Plan' && item.plans.length >0 && (
                           <span>
                             {isTreatmentPlanExpanded ? (
                               <UpIcon />

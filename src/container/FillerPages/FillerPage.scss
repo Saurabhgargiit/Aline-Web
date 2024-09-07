@@ -1,0 +1,14 @@
+@import '../../styles/styles.scss';
+
+.no-plan{
+    border: 0.75px solid #66cdd9 !important;
+    border-radius: 0.375rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.no-plan h1{
+    color: $erroMsgColor;
+}

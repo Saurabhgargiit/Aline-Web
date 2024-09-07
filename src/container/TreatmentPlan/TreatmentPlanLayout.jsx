@@ -5,6 +5,8 @@ import TreatmentPlanContainer from './TreatmentPlanContainer/TreatmentPlanContai
 
 import treatmentplanAndCommentsReducer from '../../store/reducers/treatmentplanAndCommentsReducer/treatmentplanAndCommentsReducer';
 import { withReducer } from '../../hoc/withReducer';
+import { useParams } from 'react-router-dom';
+import FillerPage from '../FillerPages/FillerPage';
 
 const TreatmentPlanLayout = () => {
   return (

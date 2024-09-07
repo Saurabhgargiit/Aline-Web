@@ -9,6 +9,7 @@ import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress'
 import RebootRequest from '../container/RebootRequest/RebootRequest';
 import RebootPlan from '../container/RebootPlan/RebootPlan';
 import PatientDetailsLayout from '../container/PatientDetailsLayout/PatientDetailsLayout';
+import FillerPage from '../container/FillerPages/FillerPage';
 
 // Define a simple route configuration
 const routeConfig = [
@@ -22,12 +23,13 @@ const routeConfig = [
     children: [
       { path: 'details', element: <PatientDetailsContainer /> },
       { path: 'photosScans', element: <PhotosScansForm /> },
-      { path: 'treatmentPlan/:planID', element: <TreatmentPlanLayout /> },
+      { path: 'treatmentPlan/:planType', element: <TreatmentPlanLayout /> },
       { path: 'progress', element: <TreatMentProgress /> },
       { path: 'rebootRequested', element: <RebootRequest /> },
       { path: 'rebootPlan', element: <RebootPlan /> },
     ],
   },
+  { path:'*', element: <FillerPage message={'Page Not Found. Please enter correct url.'}/>}
 ];
 
 const Routers = () => {
