@@ -40,6 +40,8 @@ export class ApiRelativePaths {
 
     //Treatment Plans
     static GET_TREATMENTPLAN_MAPPING = '/api/v1/aline/dentalDetailsMapping/getPlanMapping';
-    static CREATE_TREATMENT_PLAN= '/api/v1/aline/treatmentPlan/createPlan';
+    static CREATE_TREATMENT_PLAN= '/api/v1/aline/treatmentPlan/saveDraft'; //POST 
+    static UPDATE_TREATMENT_PLAN= '/api/v1/aline/treatmentPlan/updateDraft'; //PULL
     static GET_TREATMENT_PLAN_DETAILS = '/api/v1/aline/treatmentPlan/getPlan';
+
 }

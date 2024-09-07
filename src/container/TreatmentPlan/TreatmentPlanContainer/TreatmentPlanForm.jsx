@@ -39,6 +39,7 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
 
 
   const { patientID, rebootID } = useParams();  
+  console.log(isEdit);
 
 
   const saveHandler = () => {

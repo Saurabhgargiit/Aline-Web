@@ -113,9 +113,10 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                     <li>
                       <Link
                         to={
-                          item.name === 'Treatment Plan' && item.plans.length >0
-                            ? `${pathNamePrefix}${item.path}/${removeWhitespace(item.plans[0]?.name)}?${item.plans[0]?.value}`
-                              : `${pathNamePrefix}${item.path}/noPlan`
+                          item.name === 'Treatment Plan'
+                            ?  item.plans.length >0 ? `${pathNamePrefix}${item.path}/${removeWhitespace(item.plans[0]?.name)}?${item.plans[0]?.value}`
+                            : `${pathNamePrefix}${item.path}/noPlan`
+                              : `${pathNamePrefix}${item.path}`
                         }
                         className={
                           'plan-link ' +

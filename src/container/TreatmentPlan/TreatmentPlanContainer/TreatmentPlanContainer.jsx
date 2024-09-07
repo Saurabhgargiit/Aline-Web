@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SVG from 'react-inlinesvg';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/Button/Button';
 import TreatmentPlanForm from './TreatmentPlanForm';
@@ -14,6 +14,7 @@ import { CommonConstants } from '../../../utils/globalConstants';
 import { getPlanDetailsAndCommentsAction } from '../../../store/actions/treatementPlan/treatmentplanAndCommentsAction';
 import * as actionTypes from '../../../store/actionTypes';
 import FillerPage from '../../FillerPages/FillerPage';
+import Loader from '../../common/Loader/Loader';
 
 const modalInitialState = {
   isOpen: false,
@@ -21,26 +22,29 @@ const modalInitialState = {
 };
 
 const TreatmentPlanContainer = () => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [redirectionInfo, setRedirectionInfo] = useState({});
+  const [isEdit, setIsEdit] = useState(false);      //When add plan is clicked to 
+  const [redirectionInfo, setRedirectionInfo] = useState({}); //when edit/add plans are done
   const [loading, setLoading] = useState(true);
   const [tabs, setTabs] = useState([]);
-  const [activeKey, setActiveKey] = useState('');
-
+  const [activeKey, setActiveKey] = useState(''); 
+  
   const [planLoading, setPlanLoading] = useState(true);
   const [planInfo, setPlanInfo] = useState({});
+  const [planEdit, setPlanEdit] = useState(false);  //when edit plan button is clicked, it is flag to decide for put/post call in form
 
   const [modalDetails, setModalDetails] = useState(modalInitialState);
   
   const { patientID, rebootID, planType } = useParams();
   const {pathname, search} = useLocation();
+  const navigate = useNavigate();
 
   const {isLab, isAdmin, checkSanityFailed} =CommonUtils;
-  
   const userRole = localStorage.getItem(CommonConstants.USER_ROLE);
+  const showAddEditPlanButton = isLab(userRole) || isAdmin(userRole);
+
   const dispatch = useDispatch();
   const planDetailsMapping = useSelector((state) =>state.sidenNavigatorReducer?.planDetailsMapping);
-  const planDetails = useSelector((state) =>state.treatmentplanAndComments?.planDetails);
+  const planDetails = useSelector((state) =>state.treatmentplanAndComments?.planDetails); //source of truth for loaded plan
 
 
   useEffect(() => {
@@ -78,16 +82,25 @@ const TreatmentPlanContainer = () => {
           setActiveKey(tabActiveKey);
           break;
         }
+        case (pathname.includes('noPlan') && JSON.stringify(redirectionInfo) !== '{}' && redirectionInfo['draft'] !== undefined):{
+          navigate(`/patientDetails/${patientID}/${rebootID}/treatmentPlan/DraftPlans?draft=0`);
+          break;
+        } 
         default:
           break;        
       }
       setLoading(false);
     }
-  }, [planDetailsMapping, search]);
+  }, [planDetailsMapping.data, search]);
 
   useEffect(()=>{
     setPlanLoading(true);
-    getPlanDetails();
+    console.log(activeKey);
+    if(activeKey){
+      getPlanDetails(activeKey);
+
+    }
+    
   },[activeKey])
 
   useEffect(()=>{
@@ -100,7 +113,8 @@ const TreatmentPlanContainer = () => {
     }
   },[planDetails])
 
-  const getPlanDetails =() =>{
+  const getPlanDetails =(activeKeyId) =>{
+    console.log(activeKey);
     const queryParams ={};
     const searchParams = new URLSearchParams(search);
     
@@ -120,7 +134,7 @@ const TreatmentPlanContainer = () => {
       default:
         break;
     }
-    dispatch(getPlanDetailsAndCommentsAction(actionTypes.SET_PLAN_DETAILS, 'GET_TREATMENT_PLAN_DETAILS', [patientID, activeKey, rebootID],queryParams))
+    dispatch(getPlanDetailsAndCommentsAction(actionTypes.SET_PLAN_DETAILS, 'GET_TREATMENT_PLAN_DETAILS', [patientID, activeKeyId, rebootID],queryParams))
   }
 
  
@@ -154,11 +168,18 @@ const TreatmentPlanContainer = () => {
     setIsEdit(false);
   };
 
+  const settoLoading = () =>{
+    setIsEdit(false);
+    setLoading(true);
+  }
+
   const redirectToCurrentDraft =(planId) =>{
+    settoLoading();
     setRedirectionInfo({draft: planId});
   }
   
   const redirectToLatestDraft =() =>{
+    settoLoading()
     setRedirectionInfo({draft: 'latest'});
   }
   
@@ -168,33 +189,45 @@ const TreatmentPlanContainer = () => {
     }
   },[redirectionInfo])
 
-  if(planType === 'noPlan')return <FillerPage message={'No plan shared yet.'}/>
+  if(planType === 'noPlan' && !isEdit){
+    let btnDetails = {};
+    if(showAddEditPlanButton){
+      btnDetails ={
+        title : "Add Plan",
+        onClickCallBk : addOptionHandler,
+        type: 'primary',
+      }
+    }
+    return <FillerPage message={'No plan shared yet.'} btnDetails={btnDetails}/>
+  }
 
   return (
     <div className="PatientDetailsContainer">
       <div className="patient-details-tabs-container">
-        {isEdit ? (
-          <TreatmentPlanForm 
-            cancelHandler={cancelHandler} 
-            dispatch={dispatch} 
-            redirectToCurrentDraft ={redirectToCurrentDraft} 
-            redirectToLatestDraft ={redirectToLatestDraft}
-          />
-        ) : (
-          <TreatmentPlanViewTabs
-            approveHandler={approveHandler}
-            reqModFn={reqModFn}
-            tabs={tabs}
-            activeKey={activeKey}
-            setActiveKey={setActiveKey}
-            loading={loading}
-            planLoading={planLoading}
-            planInfo ={planInfo}
-          />
-        )}
+        {
+        loading ? 
+          <Loader/> 
+          :
+          isEdit ?  <TreatmentPlanForm 
+                      cancelHandler={cancelHandler} 
+                      dispatch={dispatch} 
+                      redirectToCurrentDraft ={redirectToCurrentDraft} 
+                      redirectToLatestDraft ={redirectToLatestDraft}
+                    />
+                  : <TreatmentPlanViewTabs
+                      approveHandler={approveHandler}
+                      reqModFn={reqModFn}
+                      tabs={tabs}
+                      activeKey={activeKey}
+                      setActiveKey={setActiveKey}
+                      loading={loading}
+                      planLoading={planLoading}
+                      planInfo ={planInfo}
+                    />
+        } 
       </div>
       {!isEdit &&
-        (isAdmin(userRole) || isLab(userRole)) && (
+        showAddEditPlanButton && (
           <Button
             postionClass={'home-page-button-pos rightPosEdit'}
             className={'home-page-add-button'}
