@@ -26,11 +26,11 @@ export const plans = [
 ];
 
 export const steps = [
-  { key: 'upper', value: 'upper', label: 'Upper' },
-  { key: 'lower', value: 'lower', label: 'Lower' },
+  { key: 'upperSteps', value: 'upperSteps', label: 'Upper' },
+  { key: 'lowerSteps', value: 'lowerSteps', label: 'Lower' },
   {
-    key: 'duration',
-    value: 'duration',
+    key: 'expectedDuration',
+    value: 'expectedDuration',
     label: 'Expected Duration (in Months)',
   },
 ];

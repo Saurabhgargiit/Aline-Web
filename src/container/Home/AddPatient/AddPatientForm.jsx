@@ -40,7 +40,6 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal, setUserAdd
     } = fetchedUserInfo;
 
     const validateField = (name, value) => {
-        console.log(value);
         switch (name) {
             case 'name':
             case 'doctorID':
@@ -249,7 +248,6 @@ const AddPatientForm = forwardRef(({ isEdit, initialData, closeModal, setUserAdd
         }
         const allValid = Object.values(formValidity).every(Boolean);
         if (allValid) {
-            console.log('Form Data:', formData);
             addPatientFn();
         } else {
             console.error('Validation errors:', formValidity);

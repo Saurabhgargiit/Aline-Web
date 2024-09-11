@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import { getCall } from '../../utils/commonfunctions/apicallactions';
+import { getPlanDetailsMapping } from '../../store/actions/sidenNavigatorAction';
+
 import { ReactComponent as UpIcon } from '../../assets/icons/up-icon.svg';
 import { ReactComponent as DownIcon } from '../../assets/icons/down.svg';
 
@@ -10,37 +14,92 @@ import './SideNavigator.scss';
 const SideNavigator = ({ sideSectionShowHandler }) => {
   const { removeWhitespace } = CommonUtils;
 
-  const email = localStorage.getItem('user_email');
-  const { patientID } = useParams();
+  const { patientID, rebootID } = useParams();
   const pathname = window.location.pathname;
-  const pathNamePrefix = '/patientDetails/' + patientID;
+  const pathNamePrefix = '/patientDetails/' + patientID + '/' + rebootID;
+
+  const dispatch = useDispatch()
+  const userRole = useSelector((state)=>state.userInfoReducer?.userInfo?.data?.role[0]);
+  const planDetailsMapping = useSelector((state) =>state.sidenNavigatorReducer?.planDetailsMapping);
 
   // State to manage the visibility of subplans
   const [isTreatmentPlanExpanded, setTreatmentPlanExpanded] = useState(false);
-  const [activeSubplan, setActiveSubplan] = useState(0);
+  const [treatmentPlanMapping, setTreatmentPlanMapping] = useState([]);
 
   // Navigation data structure
-  const navItems = [
+  const navItemsInitial = [
     { name: 'Rx Form', path: '/details' },
     { name: 'Photos and Scans', path: '/photosScans' },
     {
       name: 'Treatment Plan',
       path: '/treatmentPlan',
-      plans: [
-        { name: 'Plan A', index: 0 },
-        { name: 'Plan B', index: 1 },
-      ],
+      plans: [],
     },
     { name: 'Treatment Progress Update', path: '/progress' },
     { name: 'Reboot Requested', path: '/rebootRequested' },
     { name: 'Reboot Plan Details', path: '/rebootPlan' },
   ];
 
+  const [navItems, setNavItems] = useState(navItemsInitial);
+
   useEffect(()=>{
     if(!pathname.includes('treatmentPlan')){
       setTreatmentPlanExpanded(false);
     }
   },[pathname])
+
+  //api function for getting the plan Details Mapping
+  // const getPlanDetailsMapping = () => {
+  //   dispatch(sidenNavigatorAction('GET_TREATMENTPLAN_MAPPING', [patientID, rebootID||0]));
+  // };
+
+  useEffect(() => {
+    getPlanDetailsMapping(dispatch, patientID, rebootID||0);
+  }, [patientID, rebootID]);
+
+  useEffect(() => {
+    if (
+      planDetailsMapping?.result === 'success' &&
+      planDetailsMapping?.data !== undefined
+    ) {
+      const {treatmentPlanDraft, treatmentPlanHistory, treatmentPlanLatest} = planDetailsMapping?.data;
+
+      let childPlans = [];
+      if(treatmentPlanLatest && typeof treatmentPlanLatest ==='object' && Object.keys(treatmentPlanLatest).length >0 ){
+        const {id,treatmentPlanStatus} = treatmentPlanLatest;
+        childPlans[0] = {name: 'Latest Plan', index: id, value: `latest=${id}`};
+      }
+      if(treatmentPlanHistory && Array.isArray(treatmentPlanHistory) && typeof treatmentPlanHistory ==='object' && treatmentPlanHistory.length >0){
+        const temp = [];
+        for(let i=0; i< treatmentPlanHistory.length; i++){
+          const {id, treatmentPlanStatus} = treatmentPlanHistory[i];
+          temp.push({name: 'Plan '+ String.fromCharCode(65+id), index: id, value: `history=${id}`});
+        }
+        temp.sort((a,b) => b.index - a.index);
+        childPlans = [...childPlans, ...temp];
+      }
+      if((CommonUtils.isAdmin(userRole) || CommonUtils.isLab(userRole)) && treatmentPlanDraft && typeof treatmentPlanDraft ==='object' && Object.keys(treatmentPlanDraft).length >0){
+        const {id, treatmentPlanStatus} = treatmentPlanDraft;
+        childPlans.push({name: 'Draft Plans', index: id, value: `draft=${id}`});
+      }
+
+      setNavItems((items) => {
+        return items.map(item =>{
+          if(item.name === 'Treatment Plan'){
+            return {...item, plans: childPlans};
+          }
+          return item;
+        })
+      })
+      // setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {});
+      // setIsLoading(false);
+      // setErrMsg('');
+      // }
+    } else if (planDetailsMapping?.result === 'error') {
+      // setErrMsg(fetchedPhotosScans.data ?? somethingWentWrong);
+      // setIsLoading(false);
+    }
+  }, [planDetailsMapping]);
 
   return (
     <div className="displayFlex">
@@ -49,17 +108,15 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
           <div className="side-navigator-links">
             <nav>
               <ul>
-                {navItems.map((item, index) => (
-                  <React.Fragment key={index}>
+                {navItems.map((item, index) => {
+                  return(<React.Fragment key={index}>
                     <li>
                       <Link
                         to={
                           item.name === 'Treatment Plan'
-                            ? pathNamePrefix +
-                              item.path +
-                              '/' +
-                              removeWhitespace(item.plans[0].name)
-                            : pathNamePrefix + item.path
+                            ?  item.plans.length >0 ? `${pathNamePrefix}${item.path}/${removeWhitespace(item.plans[0]?.name)}?${item.plans[0]?.value}`
+                            : `${pathNamePrefix}${item.path}/noPlan`
+                              : `${pathNamePrefix}${item.path}`
                         }
                         className={
                           'plan-link ' +
@@ -72,7 +129,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                         }}
                       >
                         {item.name}{' '}
-                        {item.name === 'Treatment Plan' && (
+                        {item.name === 'Treatment Plan' && item.plans.length >0 && (
                           <span>
                             {isTreatmentPlanExpanded ? (
                               <UpIcon />
@@ -89,9 +146,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                         <li key={planIndex} className="subplan">
                           <div className="leftBox"></div>
                           <Link
-                            to={`${pathNamePrefix}${
-                              item.path
-                            }/${removeWhitespace(plan.name)}`}
+                            to={`${pathNamePrefix}${item.path}/${removeWhitespace(plan.name)}?${plan.value}`}
                             className={
                               'subplan-link ' +
                               (pathname.includes(
@@ -105,8 +160,11 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                           </Link>
                         </li>
                       ))}
-                  </React.Fragment>
-                ))}
+                  </React.Fragment>)
+
+                
+              }
+                )}
               </ul>
             </nav>
           </div>

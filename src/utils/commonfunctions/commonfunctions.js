@@ -162,4 +162,8 @@ export const CommonUtils = {
   removeWhitespace: str => {
     return str.replace(/\s+/g, '');
   },
+
+  checkSanityFailed: item =>{
+    return item === null || item === undefined;
+  }
 };

@@ -1,10 +1,11 @@
 import './Header.scss';
 import SearchBar from '../../components/Search';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ReactComponent as MenuListIcon } from '../../assets/icons/menuList.svg'; // Using SVGR
 import { ReactComponent as BackIcon } from '../../assets/icons/back.svg'; // Using SVGR
 import Button from '../../components/Button/Button';
+import Dropdown from '../../components/Dropdown/Dropdown';
 
 const Header = ({ title, leftBtnHanlder }) => {
     const [headerDetails, setHeaderDetails] = useState({
@@ -13,6 +14,17 @@ const Header = ({ title, leftBtnHanlder }) => {
     });
     const location = useLocation();
     const navigate = useNavigate();
+
+    const getRebootOptions = (len) =>{
+        const rebootOptions =[];
+        for(let i=0; i<len; i++){
+            rebootOptions.push({value: i, key: i, label: Number.toString(i)})
+        }
+    }
+    const [selectedReboot, setSelectedReboot] = useState(0);
+    const [patientID, setPatientID] = useState('');
+
+    const [rebootNumbers, setRebootNumbers] = useState(0); //0 means rebootnumbers value is unavailable. even for plan 1, reboot ID will be there.
 
     const iconVar = (key, Icon, label, iconClass = '', handler) => (
         <Button
@@ -67,6 +79,13 @@ const Header = ({ title, leftBtnHanlder }) => {
 
     useEffect(() => {
         headerDetailsFn();
+        if(location.pathname.includes('patientDetails')){
+            const pathNameArr = location.pathname.split('/');
+            const patientIDURL = pathNameArr[2];
+            const rebootID = +pathNameArr[3];
+            if(rebootID !== selectedReboot) setSelectedReboot(rebootID);
+            if(patientIDURL !== patientID )setPatientID(patientIDURL);
+        }
     }, [location.pathname]);
 
     return (
@@ -91,6 +110,7 @@ const Header = ({ title, leftBtnHanlder }) => {
                 <button className='app-header-button'>
                     <SVG src={require('../../assets/icons/reload.svg').default} />
                 </button> */}
+                {/* {location.pathname.includes('patientDetails') && <Dropdown/>} */}
             </div>
         </div>
     );

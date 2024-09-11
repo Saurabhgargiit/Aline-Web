@@ -1,14 +1,19 @@
+import react, {lazy, Suspense} from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import HomeLayout from '../container/Home/HomeLayout';
-import AdminLayout from '../container/Admin/AdminLayout';
+import Loader from '../container/common/Loader/Loader';
 
-import PatientDetailsContainer from '../container/PatientDetails/PatientDetailsContainer';
-import PhotosScansForm from '../container/PatientDetails/PatientDetailsForm/PhotosScansForm';
-import TreatmentPlanLayout from '../container/TreatmentPlan/TreatmentPlanLayout';
-import TreatMentProgress from '../container/TreatMentProgress/TreatMentProgress';
-import RebootRequest from '../container/RebootRequest/RebootRequest';
-import RebootPlan from '../container/RebootPlan/RebootPlan';
-import PatientDetailsLayout from '../container/PatientDetailsLayout/PatientDetailsLayout';
+
+const HomeLayout = lazy(() => import('../container/Home/HomeLayout'));
+const AdminLayout = lazy(() => import('../container/Admin/AdminLayout'));
+const PatientDetailsContainer = lazy(() => import('../container/PatientDetails/PatientDetailsContainer'));
+const PhotosScansForm = lazy(() => import('../container/PatientDetails/PatientDetailsForm/PhotosScansForm'));
+const TreatmentPlanLayout = lazy(() => import('../container/TreatmentPlan/TreatmentPlanLayout'));
+const TreatMentProgress = lazy(() => import('../container/TreatMentProgress/TreatMentProgress'));
+const RebootRequest = lazy(() => import('../container/RebootRequest/RebootRequest'));
+const RebootPlan = lazy(() => import('../container/RebootPlan/RebootPlan'));
+const PatientDetailsLayout = lazy(() => import('../container/PatientDetailsLayout/PatientDetailsLayout'));
+const FillerPage = lazy(() => import('../container/FillerPages/FillerPage'));
+
 
 // Define a simple route configuration
 const routeConfig = [
@@ -17,42 +22,45 @@ const routeConfig = [
   { path: '/users', element: <AdminLayout /> },
   { path: '/login', element: <Navigate to="/home" /> },
   {
-    path: '/patientDetails/:patientID',
+    path: '/patientDetails/:patientID/:rebootID',
     element: <PatientDetailsLayout />,
     children: [
       { path: 'details', element: <PatientDetailsContainer /> },
       { path: 'photosScans', element: <PhotosScansForm /> },
-      { path: 'treatmentPlan/:planID', element: <TreatmentPlanLayout /> },
+      { path: 'treatmentPlan/:planType', element: <TreatmentPlanLayout /> },
       { path: 'progress', element: <TreatMentProgress /> },
       { path: 'rebootRequested', element: <RebootRequest /> },
       { path: 'rebootPlan', element: <RebootPlan /> },
     ],
   },
+  { path:'*', element: <FillerPage message={'Page Not Found. Please check details or contact admin.'}/>}
 ];
 
 const Routers = () => {
   return (
-    <Routes>
-      {routeConfig.map(route => {
-        if (route.children) {
+    <Suspense fallback={<Loader/>}>
+      <Routes>
+        {routeConfig.map(route => {
+          if (route.children) {
+            return (
+              <Route path={route.path} key={route.path} element={route.element}>
+                <Route index element={<Navigate to="details" />} />
+                {route.children.map(child => (
+                  <Route
+                    path={child.path}
+                    element={child.element}
+                    key={child.path}
+                  />
+                ))}
+              </Route>
+            );
+          }
           return (
-            <Route path={route.path} key={route.path} element={route.element}>
-              <Route index element={<Navigate to="details" />} />
-              {route.children.map(child => (
-                <Route
-                  path={child.path}
-                  element={child.element}
-                  key={child.path}
-                />
-              ))}
-            </Route>
+            <Route path={route.path} element={route.element} key={route.path} />
           );
-        }
-        return (
-          <Route path={route.path} element={route.element} key={route.path} />
-        );
-      })}
-    </Routes>
+        })}
+      </Routes>
+    </Suspense>
   );
 };
 
