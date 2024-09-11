@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import TreatmentPlanView from './TreatmentPlanView';
 import Loader from '../../common/Loader/Loader';
 
-const TreatmentPlanViewTabs = ({ approveHandler, reqModFn, tabs, activeKey, setActiveKey, loading, planLoading, planInfo }) => {
+const TreatmentPlanViewTabs = ({ approveHandler, reqModFn, tabs, activeKey, setActiveKey, loading, planLoading, planInfo, isLabSideUser, editOptionHandler }) => {
 
   // const [loading, setLoading] = useState(true);
   // const [tabs, setTabs] = useState([]);
@@ -74,6 +74,8 @@ const TreatmentPlanViewTabs = ({ approveHandler, reqModFn, tabs, activeKey, setA
                 approveHandler={approveHandler}
                 reqModFn={reqModFn}
                 planInfo = {planInfo}
+                isLabSideUser={isLabSideUser}
+                editOptionHandler={editOptionHandler}
               />}
             </Tab>
           })

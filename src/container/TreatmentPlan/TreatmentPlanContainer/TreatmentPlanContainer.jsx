@@ -74,9 +74,10 @@ const TreatmentPlanContainer = () => {
           if(checkSanityFailed(treatmentPlanDraft)) break;
           const {id,treatmentPlanStatus, treatmentPlans} = treatmentPlanDraft;
           setTabs(treatmentPlans);
-          let tabActiveKey= treatmentPlans[0]?.id
+          let tabActiveKey= treatmentPlans[0]?.id;
           if(JSON.stringify(redirectionInfo) !== '{}' && redirectionInfo['draft'] !== undefined){
             tabActiveKey = redirectionInfo['draft'] === 'latest' ? treatmentPlans[treatmentPlans?.length-1]?.id : redirectionInfo['draft'];
+            if(redirectionInfo['draft'] !== 'latest') getPlanDetails(tabActiveKey);
           }
           setRedirectionInfo({});
           setActiveKey(tabActiveKey);
@@ -95,12 +96,9 @@ const TreatmentPlanContainer = () => {
 
   useEffect(()=>{
     setPlanLoading(true);
-    console.log(activeKey);
     if(activeKey){
       getPlanDetails(activeKey);
-
     }
-    
   },[activeKey])
 
   useEffect(()=>{
@@ -114,7 +112,6 @@ const TreatmentPlanContainer = () => {
   },[planDetails])
 
   const getPlanDetails =(activeKeyId) =>{
-    console.log(activeKey);
     const queryParams ={};
     const searchParams = new URLSearchParams(search);
     
@@ -136,9 +133,6 @@ const TreatmentPlanContainer = () => {
     }
     dispatch(getPlanDetailsAndCommentsAction(actionTypes.SET_PLAN_DETAILS, 'GET_TREATMENT_PLAN_DETAILS', [patientID, activeKeyId, rebootID],queryParams))
   }
-
- 
-  
 
   const reqModFn = () => {
     setModalDetails(prev => ({
@@ -164,12 +158,19 @@ const TreatmentPlanContainer = () => {
     setIsEdit(true);
   };
 
+  const editOptionHandler = () => {
+    setIsEdit(true);
+    setPlanEdit(true);
+  };
+
   const cancelHandler = () => {
     setIsEdit(false);
+    setPlanEdit(false);
   };
 
   const settoLoading = () =>{
     setIsEdit(false);
+    setPlanEdit(false);
     setLoading(true);
   }
 
@@ -213,6 +214,9 @@ const TreatmentPlanContainer = () => {
                       dispatch={dispatch} 
                       redirectToCurrentDraft ={redirectToCurrentDraft} 
                       redirectToLatestDraft ={redirectToLatestDraft}
+                      existingData={planEdit ? {...planDetails?.data} :{} }
+                      isEdit={planEdit}
+                      planId={activeKey}
                     />
                   : <TreatmentPlanViewTabs
                       approveHandler={approveHandler}
@@ -223,6 +227,8 @@ const TreatmentPlanContainer = () => {
                       loading={loading}
                       planLoading={planLoading}
                       planInfo ={planInfo}
+                      isLabSideUser = {showAddEditPlanButton}
+                      editOptionHandler={editOptionHandler}
                     />
         } 
       </div>
@@ -238,6 +244,18 @@ const TreatmentPlanContainer = () => {
             tooltip={'Add Treatment Option'}
           />
         )}
+        {/* {!isEdit &&
+        showAddEditPlanButton && (
+          <Button
+            postionClass={'home-page-button-pos rightPosEdit marginBottom56'}
+            className={'home-page-add-button'}
+            svg={
+              <SVG src={require(`../../../assets/icons/edit.svg`).default} />
+            }
+            onClickCallBk={editOptionHandler}
+            tooltip={'Edit Treatment Plan'}
+          />
+        )} */}
       <TreatmentPlanModal {...modalDetails} closeHanlder={closeHanlder} />
     </div>
   );

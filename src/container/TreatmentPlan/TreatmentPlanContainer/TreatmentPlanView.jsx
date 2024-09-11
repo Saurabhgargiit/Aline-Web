@@ -6,9 +6,11 @@ import Button from '../../../components/Button/Button';
 
 import { plans, steps, tags } from '../treatmentPlanConstants';
 import TreatmentPlanModal from './TreatmentPlanModal';
+import { useLocation } from 'react-router-dom';
 
-const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo }) => {
-
+const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo ,isLabSideUser, editOptionHandler }) => {
+  const location = useLocation();
+  const isDraftPlan = location.pathname.includes('DraftPlan');
 
   function renderCheckboxGroup(label, options, formValues) {
     return (
@@ -164,18 +166,28 @@ const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo }) => {
             </label>
           </div>
         </div>
-
+        
         <div className="arches-container">
-          <Button
+          {!isLabSideUser && !isDraftPlan && <Button
             title="Approve Plan"
             type="primary"
             onClickCallBk={approveHandler}
-          />
-          <Button
+          />}
+          {!isLabSideUser && !isDraftPlan && <Button
             title="Request for modification"
             type="primary"
             onClickCallBk={reqModFn}
-          />
+          />}
+          {isLabSideUser && isDraftPlan && <Button
+            title="Edit Treatment Plan"
+            type="primary"
+            onClickCallBk={editOptionHandler}
+          />}
+          {isLabSideUser && isDraftPlan && <Button
+            title="Share Plan with Clinic"
+            type="primary"
+            onClickCallBk={approveHandler}
+          />}
         </div>
       </div>
     </div>

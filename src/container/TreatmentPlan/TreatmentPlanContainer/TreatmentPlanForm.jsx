@@ -13,10 +13,7 @@ import { plans, steps, tags, currencies } from '../treatmentPlanConstants';
 import { postCall, putCall } from '../../../utils/commonfunctions/apicallactions';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 
-
 import './TreatmentPlanForm.scss';
-
-
 
 const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, planId, redirectToCurrentDraft, redirectToLatestDraft }) => {
   const [errors, setErrors] = useState({});
@@ -37,10 +34,7 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
     treatmentSimulationsAttachments: existingData?.treatmentSimulationsAttachments || [],
   });
 
-
   const { patientID, rebootID } = useParams();  
-  console.log(isEdit);
-
 
   const saveHandler = () => {
       //post selectedFiles to backend
@@ -50,9 +44,12 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
       payload['id'] = isEdit ? planId : null;
       payload['treatmentPlanID'] = null;
       setIsLoading(true);
-      postCall(payload, 'CREATE_TREATMENT_PLAN', [patientID, rebootID]).then((data) => {
+      const callFn = isEdit? putCall : postCall;
+      const successMsg = isEdit ? 'Treatment Plan Modified.' :'Treatment Plan Added.'
+      const url = isEdit? 'UPDATE_TREATMENT_PLAN' : 'CREATE_TREATMENT_PLAN';
+      callFn(payload, url, [patientID, rebootID]).then((data) => {
           if (data.result === 'success') {
-              toast.success(`Treatment Plan Added.`, {
+              toast.success(successMsg, {
                   position: 'top-right',
                   hideProgressBar: false,
                   autoClose: 2000,
@@ -269,7 +266,12 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
         >
           <span className="mb-2 sub-heading">IPR and Attachment Report</span>
           <div className="arches-container pdf-container">
-            <FileUploader label='IPR_Report' fileType='pdf' onUploadComplete={(fileData) => handleFileUpload('iprAndAttachmentReports', fileData)} patientID={patientID}/>
+            <FileUploader 
+              label='IPR_Report' 
+              fileType='pdf' 
+              onUploadComplete={(fileData) => handleFileUpload('iprAndAttachmentReports', fileData)} 
+              patientID={patientID}
+            />
           </div>
         </div>
 
