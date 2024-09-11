@@ -1,7 +1,9 @@
 import * as actionTypes from '../actionTypes';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 const planDetailsMappingInitialState = {
     planDetailsMapping: {},
+    isSideNavigatorVisible:CommonUtils.isLaptopScreen(),
     // rebootID{
 
     // }
@@ -15,6 +17,11 @@ const sidenNavigatorReducer = (state = planDetailsMappingInitialState, action) =
                 planDetailsMapping: action.planDetailsMapping,
             };
         }
+        case actionTypes.TOGGLE_SIDE_NAVIGATOR:
+            return {
+                ...state,
+                isSideNavigatorVisible: !state.isSideNavigatorVisible,
+            };
         default: {
             return state;
         }

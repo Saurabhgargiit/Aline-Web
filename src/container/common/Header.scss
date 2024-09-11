@@ -6,24 +6,35 @@
     background-color: $backgroundheaderfooterColor;
     position: fixed;
     z-index: 10;
+    display: flex;
+    align-items: center;
 
     .app-header-menu-button-container {
         width: fit-content;
-        left: 8px;
-        top: 8px;
-        position: relative;
-
+        margin: 5px;        
         svg {
             path {
                 fill: #fff;
             }
         }
+        
+        &.left-icon{
+            margin-right: 10px;
+        }
+        &.right-icon{
+            margin-left: 10px;
+        }
+    }
+
+    .logo-title-container{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
     }
 
     .app-header-img-container {
         position: relative;
-        left: 56px;
-        top: -28px;
         width: fit-content;
 
         img {
@@ -32,6 +43,9 @@
             background-color: transparent;
             border-radius: 20px;
         }
+    }
+    .growing-container{
+        flex-grow: 1;
     }
 
     .app-header-button {
@@ -50,18 +64,13 @@
     }
 
     .app-header-title {
-        position: relative;
-        left: 100px;
         color: #fff;
         background-color: transparent;
-        top: -60px;
         width: fit-content;
     }
 
     .app-header-filter-container {
-        position: absolute;
-        right: 8px;
-        top: 8px;
+        
         width: fit-content;
         display: flex;
         gap: 1px;

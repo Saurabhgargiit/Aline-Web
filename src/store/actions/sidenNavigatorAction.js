@@ -11,6 +11,13 @@ const setPlanDetailsMapping = (planDetailsMapping) => {
     };
 };
 
+export const toggleSideNavigator = () => {
+    return {
+        type: actionTypes.TOGGLE_SIDE_NAVIGATOR,
+        isSideNavigatorVisible: false,
+    };
+};
+
 export const sidenNavigatorAction = (url_path, dynamicVal = [], query = {}) => {
     return (dispatch) => {
         const path = ApiRelativePaths[url_path];

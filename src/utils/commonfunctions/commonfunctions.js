@@ -165,5 +165,8 @@ export const CommonUtils = {
 
   checkSanityFailed: item =>{
     return item === null || item === undefined;
+  },
+  isLaptopScreen: () => {
+    return window.innerWidth > 1024;
   }
 };

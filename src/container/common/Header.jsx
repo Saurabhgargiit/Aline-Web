@@ -1,19 +1,26 @@
-import './Header.scss';
-import SearchBar from '../../components/Search';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import { ReactComponent as MenuListIcon } from '../../assets/icons/menuList.svg'; // Using SVGR
 import { ReactComponent as BackIcon } from '../../assets/icons/back.svg'; // Using SVGR
 import Button from '../../components/Button/Button';
+import SearchBar from '../../components/Search';
 import Dropdown from '../../components/Dropdown/Dropdown';
+
+import { toggleSideNavigator } from '../../store/actions/sidenNavigatorAction';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import './Header.scss';
 
 const Header = ({ title, leftBtnHanlder }) => {
     const [headerDetails, setHeaderDetails] = useState({
         leftButton: null,
         title: null,
+        rightButton: null,
     });
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const getRebootOptions = (len) =>{
         const rebootOptions =[];
@@ -25,6 +32,10 @@ const Header = ({ title, leftBtnHanlder }) => {
     const [patientID, setPatientID] = useState('');
 
     const [rebootNumbers, setRebootNumbers] = useState(0); //0 means rebootnumbers value is unavailable. even for plan 1, reboot ID will be there.
+
+    const menuToggler = () =>{
+        dispatch(toggleSideNavigator())
+    }
 
     const iconVar = (key, Icon, label, iconClass = '', handler) => (
         <Button
@@ -44,6 +55,7 @@ const Header = ({ title, leftBtnHanlder }) => {
                     ...prevState,
                     leftButton: iconVar('menuList', MenuListIcon, 'Menu', '', leftBtnHanlder),
                     title: location.pathname === '/home' ? 'Patient List' : 'Users',
+                    rightButton: null,
                 };
             });
             return;
@@ -61,6 +73,10 @@ const Header = ({ title, leftBtnHanlder }) => {
                     title = 'Photos and Scans';
                     break;
                 }
+                case location.pathname.includes('treatmentPlan'):{
+                    title = 'Treatment Plan';
+                    break;
+                }
                 default: {
                     title = 'Aline Patient Manager';
                     break;
@@ -71,6 +87,7 @@ const Header = ({ title, leftBtnHanlder }) => {
                     ...prevState,
                     leftButton: iconVar('back', BackIcon, 'Back', '', () => navigate('/home')),
                     title: title,
+                    rightButton: iconVar('menuList', MenuListIcon, 'Menu', '', menuToggler)
                 };
             });
             return;
@@ -89,17 +106,17 @@ const Header = ({ title, leftBtnHanlder }) => {
     }, [location.pathname]);
 
     return (
-        <div className='app-header'>
-            <div className='app-header-menu-button-container'>
-                {/* <button className='app-header-button' onClick={leftBtnHanlder}> */}
+        <header className='app-header'>
+            <div className='app-header-menu-button-container left-icon'>
                 {headerDetails.leftButton}
-                {/* </button> */}
             </div>
-            <div className='app-header-img-container'>
-                <img src='/aline-images/logo.png'></img>
-            </div>
-            <div className='app-header-title font18 font600'>{headerDetails.title}</div>
-            <div className='app-header-filter-container'>
+            <div className='logo-title-container'>
+                <div className='app-header-img-container'>
+                    <img src='/aline-images/logo.png'></img>
+                </div>
+                <span className='app-header-title font18 font600'>{headerDetails.title}</span>
+                </div>
+            <div className='growing-container'>
                 {location.pathname === '/home' && <SearchBar />}
                 {/* <button className='app-header-button'>
                     <SVG src={require('../../assets/icons/search.svg').default} />
@@ -112,7 +129,10 @@ const Header = ({ title, leftBtnHanlder }) => {
                 </button> */}
                 {/* {location.pathname.includes('patientDetails') && <Dropdown/>} */}
             </div>
-        </div>
+            {!CommonUtils.isLaptopScreen() && <div className='app-header-menu-button-container right-icon'>
+                {headerDetails.rightButton}
+            </div>}
+        </header>
     );
 };
 
