@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import { getCall } from '../../utils/commonfunctions/apicallactions';
-import { getPlanDetailsMapping } from '../../store/actions/sidenNavigatorAction';
+import { getPlanDetailsMapping, toggleSideNavigator } from '../../store/actions/sidenNavigatorAction';
 
 import { ReactComponent as UpIcon } from '../../assets/icons/up-icon.svg';
 import { ReactComponent as DownIcon } from '../../assets/icons/down.svg';
@@ -21,10 +21,11 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const dispatch = useDispatch()
   const userRole = useSelector((state)=>state.userInfoReducer?.userInfo?.data?.role[0]);
   const planDetailsMapping = useSelector((state) =>state.sidenNavigatorReducer?.planDetailsMapping);
+  const isSideNavigatorVisible = useSelector((state) =>state.sidenNavigatorReducer?.isSideNavigatorVisible);
+  const isLaptopScreen = CommonUtils.isLaptopScreen();
 
   // State to manage the visibility of subplans
   const [isTreatmentPlanExpanded, setTreatmentPlanExpanded] = useState(false);
-  const [treatmentPlanMapping, setTreatmentPlanMapping] = useState([]);
 
   // Navigation data structure
   const navItemsInitial = [
@@ -103,7 +104,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
 
   return (
     <div className="displayFlex">
-      <aside className="side-navigator-layout">
+      <aside className={`side-navigator-layout ${isSideNavigatorVisible ? 'visible' : ''}`}>
         <div className="side-navigator-container">
           <div className="side-navigator-links">
             <nav>
@@ -125,7 +126,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                         onClick={() => {
                           if (item.name === 'Treatment Plan') {
                             setTreatmentPlanExpanded(!isTreatmentPlanExpanded);
-                          }
+                          } else if(!isLaptopScreen)dispatch(toggleSideNavigator());
                         }}
                       >
                         {item.name}{' '}
@@ -155,6 +156,9 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                                 ? 'active'
                                 : '')
                             }
+                            onClick={()=>{
+                              if(!isLaptopScreen)dispatch(toggleSideNavigator());
+                            }}
                           >
                             {plan.name}
                           </Link>

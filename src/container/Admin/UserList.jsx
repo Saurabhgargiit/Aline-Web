@@ -71,7 +71,6 @@ const UserList = ({ role, userID }) => {
         });
         return { userBasicInfoFromResponse, userDetailInfoFromResponse };
     };
-    console.log(deleteUserData);
     //Table headers
     const headers = [
         { key: 'name', id: 'name', label: 'Name', sortable: true, hidden: false, order: 'asc' },

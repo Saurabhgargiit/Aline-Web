@@ -7,10 +7,17 @@
   width: 55%;
   position: fixed;
   top: 56px;
-  left: 0;
+  // left: 0;
+  left: -100%; /* Hide it initially off-screen */
+  transition: left 0.3s ease; /* <--- UPDATED: Added transition for smooth sliding */
+
   border-top: $sideRowBorder;
   border-right: $sideRowBorder;
   color: $primaryText;
+  &.visible {
+    left: 0; /* When toggled, slide it into view */
+  }
+
   .side-navigator-container {
     width: 100%;
     display: flex;
@@ -80,4 +87,19 @@
   width: 2rem;
   height: auto;
   background-color: #4dc5d4;
+}
+
+/* Hide the SideNavigator and show toggle button only on mobile */
+@media (max-width: 1200px) {
+  .side-navigator-layout {
+    display: none; /* Hide the sidebar by default */
+    width: 80%;
+    max-width: 80%;
+    z-index: 9999;
+  }
+
+  .side-navigator-layout.visible {
+    display: block; /* Show the side navigator when toggled */
+    left: 0; /* Move the side navigator into view */
+  }
 }

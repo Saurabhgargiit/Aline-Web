@@ -15,6 +15,9 @@ export const SET_PATIENT_DETAILS = 'SET_PATIENT_DETAILS';
 //Patient Photos & Scans
 export const SET_PHOTOS_SCANS = 'SET_PHOTOS_SCANS';
 
+//side navigator show/hide
+export const TOGGLE_SIDE_NAVIGATOR = 'TOGGLE_SIDE_NAVIGATOR'
+
 //Treatment Plans & related comments
 export const SET_PLANDETAILS_MAPPING = 'SET_PLANDETAILS_MAPPING';
 export const SET_PLAN_DETAILS = 'SET_PLAN_DETAILS';

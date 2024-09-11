@@ -9,7 +9,7 @@ const createReducer = (asyncReducers) =>
     combineReducers({
         login: loginReducer,
         userInfoReducer: userInfoReducer,
-        sidenNavigatorReducer: sidenNavigatorReducer,
+        sidenNavigatorReducer: sidenNavigatorReducer,        
         ...asyncReducers,
     });
 
