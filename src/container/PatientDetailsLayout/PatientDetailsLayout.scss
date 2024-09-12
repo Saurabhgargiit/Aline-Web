@@ -3,12 +3,14 @@
 .patientDetailsLayout {
   position: relative;
   top: 56px;
-  display: flex;
-  justify-content: center;
+  // display: flex;
+  // justify-content: center;
 }
 
 .patient-details-tabs-container {
   width: 700px;
+  overflow: auto;
+  max-width: 100%;
   // position: relative;
   // // top: 56px;
   // left: 50%;
@@ -119,9 +121,17 @@
   }
 }
 
-@media (max-width:800px) {
+@media (max-width:768px) {
   .patient-details-tabs-container{
     width: 100%;
     max-width: 100%;
+  }
+}
+
+@media (min-width:768px) {
+  .patientDetailsLayout {
+
+    display: flex;
+    justify-content: center;
   }
 }
