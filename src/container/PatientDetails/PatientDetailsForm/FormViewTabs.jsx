@@ -17,7 +17,6 @@ import { getPatientDetailsAction } from '../../../store/actions/patientaction/ge
 import { somethingWentWrong } from '../../../utils/globalConstants';
 import { putCall } from '../../../utils/commonfunctions/apicallactions';
 
-import './FormViewTabs.scss';
 
 function FormViewTabs() {
     const [isEdit, setIsEdit] = useState(false);

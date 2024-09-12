@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalFooter } from '../../../components/Modal/Modal';
 import AddPatientForm from './AddPatientForm';
 // import AddPatientForm from './AddParentUserForm';
-// import './AddParentUser.scss';
 // import { AddParentUserContext } from './Context/AddParentUserContext';
 
 function AddPatientModal({ isOpen, isEdit = false, closeHanlder, initialData, setUserAdded }) {

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalFooter } from '../../../components/Modal/Modal';
 import AddParentUserForm from './AddParentUserForm';
-import './AddParentUser.scss';
 import { AddParentUserContext } from './Context/AddParentUserContext';
 
 function AddParentUserLayout({}) {

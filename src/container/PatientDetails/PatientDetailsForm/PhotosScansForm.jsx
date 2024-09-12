@@ -13,7 +13,6 @@ import { getPhotosScansAction } from '../../../store/actions/patientaction/getPh
 import { somethingWentWrong } from '../../../utils/globalConstants';
 
 import '../PatientDetailsContainer.scss';
-import './FormViewTabs.scss';
 
 function PhotosScansForm() {
   const [isEdit, setIsEdit] = useState(false);
