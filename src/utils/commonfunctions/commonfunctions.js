@@ -167,6 +167,6 @@ export const CommonUtils = {
     return item === null || item === undefined;
   },
   isLaptopScreen: () => {
-    return window.innerWidth > 1024;
+    return window.innerWidth > 1200;
   }
 };
