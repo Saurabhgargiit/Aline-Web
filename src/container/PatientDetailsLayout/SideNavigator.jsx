@@ -37,8 +37,8 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
       plans: [],
     },
     { name: 'Treatment Progress Update', path: '/progress' },
-    { name: 'Reboot Requested', path: '/rebootRequested' },
-    { name: 'Reboot Plan Details', path: '/rebootPlan' },
+    // { name: 'Reboot Requested', path: '/rebootRequested' },
+    // { name: 'Reboot Plan Details', path: '/rebootPlan' },
   ];
 
   const [navItems, setNavItems] = useState(navItemsInitial);
