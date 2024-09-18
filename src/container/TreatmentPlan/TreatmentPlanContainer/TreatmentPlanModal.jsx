@@ -13,19 +13,21 @@ function TreatmentPlanModal({
   closeHanlder,
   initialData,
   setUserAdded,
+  saveHandler
 }) {
   const formRef = useRef(null);
   const handleSubmit = () => {
     if (formRef.current) {
       formRef.current.submitForm(); // Invoke the child component's method directly
     }
+    saveHandler('sharePlan');
   };
 
   return (
     <Modal className="add-parent-box" open={isOpen}>
       <ModalHeader title={title} />
-      <ModalContent>
-        <TextArea
+      <ModalContent className={'mb-5'}>
+        {/* <TextArea
           posClassName={`patient-detials-input-fields`}
           key={'treatmentPlan'}
           label={'Comments'}
@@ -33,7 +35,8 @@ function TreatmentPlanModal({
           placeholder={'Add comments here'}
           //   value={}
           onChangeCallBack={e => {}}
-        />
+        /> */}
+        <div>Do you really want share this Plan?</div>
       </ModalContent>
       <ModalFooter
         onClose={closeHanlder}

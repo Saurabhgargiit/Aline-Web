@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SVG from 'react-inlinesvg';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { toast, Bounce } from 'react-toastify';
 
 import Button from '../../../components/Button/Button';
 import TreatmentPlanForm from './TreatmentPlanForm';
@@ -12,6 +13,7 @@ import { getPlanDetailsMapping } from '../../../store/actions/sidenNavigatorActi
 import { CommonUtils } from '../../../utils/commonfunctions/commonfunctions';
 import { CommonConstants } from '../../../utils/globalConstants';
 import { getPlanDetailsAndCommentsAction } from '../../../store/actions/treatementPlan/treatmentplanAndCommentsAction';
+import { putCall } from '../../../utils/commonfunctions/apicallactions';
 import * as actionTypes from '../../../store/actionTypes';
 import FillerPage from '../../FillerPages/FillerPage';
 import Loader from '../../common/Loader/Loader';
@@ -59,6 +61,12 @@ const TreatmentPlanContainer = () => {
           if(checkSanityFailed(treatmentPlanLatest)) break;
           const {id,treatmentPlanStatus, treatmentPlans} = treatmentPlanLatest;
           setTabs(treatmentPlans);
+          if(JSON.stringify(redirectionInfo) !== '{}' && redirectionInfo['latest'] !== undefined){
+            const tabActiveKey = redirectionInfo['latest'];
+            getPlanDetails(tabActiveKey);
+            setActiveKey(tabActiveKey);
+            setRedirectionInfo({});
+          }
           setActiveKey(treatmentPlans[0]?.id);
           break;
         }
@@ -71,6 +79,9 @@ const TreatmentPlanContainer = () => {
           break;
         }
         case searchParams.has('draft'):{
+          if(JSON.stringify(redirectionInfo) !== '{}' && redirectionInfo['latest'] !== undefined){
+            navigate(`/patientDetails/${patientID}/${rebootID}/treatmentPlan/LatestPlan?latest=0`);
+          }
           if(checkSanityFailed(treatmentPlanDraft)) break;
           const {id,treatmentPlanStatus, treatmentPlans} = treatmentPlanDraft;
           setTabs(treatmentPlans);
@@ -142,12 +153,16 @@ const TreatmentPlanContainer = () => {
     }));
   };
 
-  const approveHandler = () => {
+  const openModal =(title) =>{
     setModalDetails(prev => ({
       ...prev,
       isOpen: true,
-      title: 'Approve Plan',
+      title: title,
     }));
+  }
+
+  const approveHandler = () => {
+    openModal('Approve Plan');
   };
 
   const closeHanlder = () => {
@@ -180,8 +195,53 @@ const TreatmentPlanContainer = () => {
   }
   
   const redirectToLatestDraft =() =>{
-    settoLoading()
+    settoLoading();
     setRedirectionInfo({draft: 'latest'});
+  }
+
+  const redirectToLatest =(planId) =>{
+    setRedirectionInfo({latest: planId});
+  }
+
+  const sharePlanHandler =() =>{
+    openModal('Share Plan with Clinic');
+  }
+
+  const saveHandler = (type) => {
+    closeHanlder();
+    settoLoading();
+    const payload ={};
+    const callFn = putCall;
+    const successMsg = 'Treatment Plan Shared.'
+    const url = 'SHARE_PLAN_WITH_DOCTOR';
+    callFn(payload, url, [patientID, rebootID, activeKey]).then((data) => {
+        if (data.result === 'success') {
+            toast.success(successMsg, {
+                position: 'top-right',
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: true,
+                // pauseOnHover: true,
+                theme: 'light',
+                transition: Bounce,
+            });
+            // isEdit? redirectToCurrentDraft(planId) : redirectToLatestDraft() 
+            redirectToLatest(activeKey);
+
+        } else if (data.result === 'error') {
+            toast.error(data.error ?? 'data.error', {
+                position: 'top-right',
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: true,
+                // pauseOnHover: true,
+                theme: 'light',
+                transition: Bounce,
+            });
+            setLoading(false);
+        }
+        // setLoading(false);
+    });
   }
   
   useEffect(()=>{
@@ -229,6 +289,7 @@ const TreatmentPlanContainer = () => {
                       planInfo ={planInfo}
                       isLabSideUser = {showAddEditPlanButton}
                       editOptionHandler={editOptionHandler}
+                      sharePlanHandler={sharePlanHandler}
                     />
         } 
       </div>
@@ -256,7 +317,7 @@ const TreatmentPlanContainer = () => {
             tooltip={'Edit Treatment Plan'}
           />
         )} */}
-      <TreatmentPlanModal {...modalDetails} closeHanlder={closeHanlder} />
+      <TreatmentPlanModal {...modalDetails} closeHanlder={closeHanlder} saveHandler={saveHandler}/>
     </div>
   );
 };

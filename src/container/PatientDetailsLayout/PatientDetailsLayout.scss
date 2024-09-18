@@ -110,6 +110,15 @@
     }
   }
 }
+.tab-active{
+  background-color: $formBackgroundColor !important;
+  color: $backgroundheaderfooterColor !important;
+  border: $sideRowBorder !important;
+  border-bottom: none !important;
+}
+.tab-inactive{
+  color: $primaryText;
+}
 
 
 .rightPosEdit {

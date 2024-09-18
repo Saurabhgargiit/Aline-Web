@@ -74,7 +74,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
         const temp = [];
         for(let i=0; i< treatmentPlanHistory.length; i++){
           const {id, treatmentPlanStatus} = treatmentPlanHistory[i];
-          temp.push({name: 'Plan '+ String.fromCharCode(65+id), index: id, value: `history=${id}`});
+          temp.push({name: 'History rev0'+ (id+1), index: id, value: `history=${id}`});
         }
         temp.sort((a,b) => b.index - a.index);
         childPlans = [...childPlans, ...temp];
