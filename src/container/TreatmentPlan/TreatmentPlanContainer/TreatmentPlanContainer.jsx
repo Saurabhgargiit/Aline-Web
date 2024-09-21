@@ -49,6 +49,158 @@ const TreatmentPlanContainer = () => {
   const planDetails = useSelector((state) =>state.treatmentplanAndComments?.planDetails); //source of truth for loaded plan
 
 
+  //Modal Handlers
+  const openModal =(title, msg, type) =>{
+    setModalDetails(prev => ({
+      ...prev,
+      isOpen: true,
+      title: title,
+      msg: msg,
+      type: type,
+      saveHandler: saveHandler,
+    }));
+  }
+
+  const closeModalHandler = () => {
+    setModalDetails(prev => modalInitialState);
+  };
+
+  //Action Handlers
+  const reqModFn = () => {
+    openModal('Request for Modification', 'Are you sure that modification in plan is required?', 'reqMod');
+  };
+
+  const approveHandler = () => {
+    openModal('Approve Plan', 'Do you want to approve the plan?', 'approve');
+  };
+
+  const sharePlanHandler =() =>{
+    openModal('Share Plan with Clinic', 'Do you want to share the plan with clinic?', 'sharePlan');
+  }
+
+  //Add edit handler
+  const addOptionHandler = () => {
+    setIsEdit(true);
+  };
+
+  const editOptionHandler = () => {
+    setIsEdit(true);
+    setPlanEdit(true);
+  };
+
+  const cancelHandler = () => {
+    setIsEdit(false);
+    setPlanEdit(false);
+  };
+
+  const settoLoading = () =>{
+    setIsEdit(false);
+    setPlanEdit(false);
+    setLoading(true);
+  }
+
+  // Redirection Hanlders
+  const redirectToCurrentDraft =(planId) =>{
+    settoLoading();
+    setRedirectionInfo({draft: planId});
+  }
+  
+  const redirectToLatestDraft =() =>{
+    settoLoading();
+    setRedirectionInfo({draft: 'latest'});
+  }
+
+  const redirectToLatest =(planId) =>{
+    setRedirectionInfo({latest: planId});
+  }
+
+
+  //api Handler
+  const saveHandler = (key) => {
+    closeModalHandler();
+    settoLoading();
+    let successMsg, url;
+    let callFn = putCall;
+    switch (key) {
+      case 'sharePlan' : {
+        successMsg = 'Treatment Plan Shared.'
+        url = 'SHARE_PLAN_WITH_DOCTOR';
+        break;
+      }
+      case 'reqMod' : {
+        successMsg = 'Modification requested successfully.'
+        url = 'REQUEST_FOR_MODIFICATION';
+        break;
+      }
+      case 'approve' : {
+        successMsg = 'Treatment Plan Appoved successfully.'
+        url = 'APPROVE_PLAN';
+        break;
+      }
+      default:
+        break;
+    }
+    const payload ={};
+    callFn(payload, url, [patientID, rebootID, activeKey]).then((data) => {
+        if (data.result === 'success') {
+            toast.success(successMsg, {
+                position: 'top-right',
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: true,
+                // pauseOnHover: true,
+                theme: 'light',
+                transition: Bounce,
+            });
+            // isEdit? redirectToCurrentDraft(planId) : redirectToLatestDraft()
+            redirectToLatest(activeKey);
+
+        } else if (data.result === 'error') {
+            toast.error(data.error ?? 'data.error', {
+                position: 'top-right',
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: true,
+                // pauseOnHover: true,
+                theme: 'light',
+                transition: Bounce,
+            });
+            setLoading(false);
+        }
+        // setLoading(false);
+    });
+  }
+
+  const getPlanDetails =(activeKeyId) =>{
+    const queryParams ={};
+    const searchParams = new URLSearchParams(search);
+    
+    switch (true){
+      case searchParams.has('latest'): {
+        queryParams['planType']= 'LATEST';
+        break;
+      }
+      case searchParams.has('history'):{
+        queryParams['planType'] = 'HISTORY';
+        break;
+      }
+      case searchParams.has('draft'):{
+        queryParams['planType'] = 'DRAFT';
+        break;
+      }
+      default:
+        break;
+    }
+    dispatch(getPlanDetailsAndCommentsAction(actionTypes.SET_PLAN_DETAILS, 'GET_TREATMENT_PLAN_DETAILS', [patientID, activeKeyId, rebootID],queryParams))
+  }
+  
+  // useEffects
+  useEffect(()=>{
+    if(JSON.stringify(redirectionInfo) !== '{}'){
+      getPlanDetailsMapping(dispatch, patientID, rebootID||0);
+    }
+  },[redirectionInfo])
+
   useEffect(() => {
     if (
       planDetailsMapping?.result === 'success' &&
@@ -66,6 +218,7 @@ const TreatmentPlanContainer = () => {
             getPlanDetails(tabActiveKey);
             setActiveKey(tabActiveKey);
             setRedirectionInfo({});
+            break;
           }
           setActiveKey(treatmentPlans[0]?.id);
           break;
@@ -121,134 +274,6 @@ const TreatmentPlanContainer = () => {
       setPlanInfo(planDetails.data);
     }
   },[planDetails])
-
-  const getPlanDetails =(activeKeyId) =>{
-    const queryParams ={};
-    const searchParams = new URLSearchParams(search);
-    
-    switch (true){
-      case searchParams.has('latest'): {
-        queryParams['planType']= 'LATEST';
-        break;
-      }
-      case searchParams.has('history'):{
-        queryParams['planType'] = 'HISTORY';
-        break;
-      }
-      case searchParams.has('draft'):{
-        queryParams['planType'] = 'DRAFT';
-        break;
-      }
-      default:
-        break;
-    }
-    dispatch(getPlanDetailsAndCommentsAction(actionTypes.SET_PLAN_DETAILS, 'GET_TREATMENT_PLAN_DETAILS', [patientID, activeKeyId, rebootID],queryParams))
-  }
-
-  const reqModFn = () => {
-    setModalDetails(prev => ({
-      ...prev,
-      isOpen: true,
-      title: 'Request for Modification',
-    }));
-  };
-
-  const openModal =(title) =>{
-    setModalDetails(prev => ({
-      ...prev,
-      isOpen: true,
-      title: title,
-    }));
-  }
-
-  const approveHandler = () => {
-    openModal('Approve Plan');
-  };
-
-  const closeHanlder = () => {
-    setModalDetails(prev => modalInitialState);
-  };
-
-  const addOptionHandler = () => {
-    setIsEdit(true);
-  };
-
-  const editOptionHandler = () => {
-    setIsEdit(true);
-    setPlanEdit(true);
-  };
-
-  const cancelHandler = () => {
-    setIsEdit(false);
-    setPlanEdit(false);
-  };
-
-  const settoLoading = () =>{
-    setIsEdit(false);
-    setPlanEdit(false);
-    setLoading(true);
-  }
-
-  const redirectToCurrentDraft =(planId) =>{
-    settoLoading();
-    setRedirectionInfo({draft: planId});
-  }
-  
-  const redirectToLatestDraft =() =>{
-    settoLoading();
-    setRedirectionInfo({draft: 'latest'});
-  }
-
-  const redirectToLatest =(planId) =>{
-    setRedirectionInfo({latest: planId});
-  }
-
-  const sharePlanHandler =() =>{
-    openModal('Share Plan with Clinic');
-  }
-
-  const saveHandler = (type) => {
-    closeHanlder();
-    settoLoading();
-    const payload ={};
-    const callFn = putCall;
-    const successMsg = 'Treatment Plan Shared.'
-    const url = 'SHARE_PLAN_WITH_DOCTOR';
-    callFn(payload, url, [patientID, rebootID, activeKey]).then((data) => {
-        if (data.result === 'success') {
-            toast.success(successMsg, {
-                position: 'top-right',
-                hideProgressBar: false,
-                autoClose: 2000,
-                closeOnClick: true,
-                // pauseOnHover: true,
-                theme: 'light',
-                transition: Bounce,
-            });
-            // isEdit? redirectToCurrentDraft(planId) : redirectToLatestDraft() 
-            redirectToLatest(activeKey);
-
-        } else if (data.result === 'error') {
-            toast.error(data.error ?? 'data.error', {
-                position: 'top-right',
-                hideProgressBar: false,
-                autoClose: 2000,
-                closeOnClick: true,
-                // pauseOnHover: true,
-                theme: 'light',
-                transition: Bounce,
-            });
-            setLoading(false);
-        }
-        // setLoading(false);
-    });
-  }
-  
-  useEffect(()=>{
-    if(JSON.stringify(redirectionInfo) !== '{}'){
-      getPlanDetailsMapping(dispatch, patientID, rebootID||0);
-    }
-  },[redirectionInfo])
 
   if(planType === 'noPlan' && !isEdit){
     let btnDetails = {};
@@ -317,7 +342,7 @@ const TreatmentPlanContainer = () => {
             tooltip={'Edit Treatment Plan'}
           />
         )} */}
-      <TreatmentPlanModal {...modalDetails} closeHanlder={closeHanlder} saveHandler={saveHandler}/>
+      <TreatmentPlanModal {...modalDetails} closeHanlder={closeModalHandler}/>
     </div>
   );
 };

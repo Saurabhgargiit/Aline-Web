@@ -44,4 +44,6 @@ export class ApiRelativePaths {
     static UPDATE_TREATMENT_PLAN= '/api/v1/aline/treatmentPlan/updateDraft'; //PULL
     static GET_TREATMENT_PLAN_DETAILS = '/api/v1/aline/treatmentPlan/getPlan';
     static SHARE_PLAN_WITH_DOCTOR= '/api/v1/aline/treatmentPlan/sendPlanModification';
+    static REQUEST_FOR_MODIFICATION = '/api/v1/aline/treatmentPlan/planRequestModification';
+    static APPROVE_PLAN ='/api/v1/aline/treatmentPlan/approvePlan';
 }

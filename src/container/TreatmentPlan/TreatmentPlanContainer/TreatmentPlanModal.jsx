@@ -10,17 +10,20 @@ import TextArea from '../../../components/TextArea/TextArea';
 function TreatmentPlanModal({
   isOpen,
   title,
+  msg,
   closeHanlder,
+  type,
   initialData,
   setUserAdded,
-  saveHandler
+  saveHandler =() =>{}
 }) {
   const formRef = useRef(null);
   const handleSubmit = () => {
     if (formRef.current) {
       formRef.current.submitForm(); // Invoke the child component's method directly
     }
-    saveHandler('sharePlan');
+    saveHandler(type);
+    // saveHandler();
   };
 
   return (
@@ -36,7 +39,8 @@ function TreatmentPlanModal({
           //   value={}
           onChangeCallBack={e => {}}
         /> */}
-        <div>Do you really want share this Plan?</div>
+        {/* <div>Do you really want share this Plan?</div> */}
+        <div>{msg}</div>
       </ModalContent>
       <ModalFooter
         onClose={closeHanlder}

@@ -76,8 +76,7 @@ const TreatmentPlanViewTabs = ({
       >
         {
           tabs.length > 0 && tabs.map((tab, i)=>{
-            const {id, status } = tab;
-            console.log(activeKey, id);
+            const {id, status, label } = tab;
             let statusLabel;
             if(status){
                statusLabel = planStatus.find(el => el.value === status)?.label;
@@ -85,7 +84,7 @@ const TreatmentPlanViewTabs = ({
             return (
             <Tab 
               eventKey={id} 
-              title={`Option-${i+1} (${statusLabel || ''})`} 
+              title={`${label || 'Option-'+(i+1)} (${statusLabel || ''})`} 
               key={'tabs'+id} 
               tabClassName={activeKey ==id ? 'tab-active' : 'tab-inactive'}
             >
