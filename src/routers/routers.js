@@ -22,7 +22,7 @@ const routeConfig = [
   { path: '/users', element: <AdminLayout /> },
   { path: '/login', element: <Navigate to="/home" /> },
   {
-    path: '/patientDetails/:patientID/:rebootID',
+    path: '/patientDetails/:patientID',
     element: <PatientDetailsLayout />,
     children: [
       { path: 'details', element: <PatientDetailsContainer /> },

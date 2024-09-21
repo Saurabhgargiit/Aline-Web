@@ -23,7 +23,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const isSideNavigatorVisible = useSelector((state) =>state.sidenNavigatorReducer?.isSideNavigatorVisible);
   const rebootID = useSelector(state => state.rebootReducer.selectedRebootID);
   const pathname = window.location.pathname;
-  const pathNamePrefix = '/patientDetails/' + patientID + '/' + rebootID;
+  const pathNamePrefix = '/patientDetails/' + patientID;
   
   const isLaptopScreen = CommonUtils.isLaptopScreen();
 
