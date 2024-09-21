@@ -1,3 +1,36 @@
+export const planStatus = [
+  {
+    id: 'draft',
+    value: 'draft',
+    label: 'Draft',
+  },
+  {
+    id: 'shared',
+    value: 'shared',
+    label: 'Plan Shared',
+  },
+  {
+    id: 'confirmed',
+    value: 'confirmed',
+    label: 'Approved',
+  },
+  {
+    id: 'rejected',
+    value: 'rejected',
+    label: 'Rejected',
+  },
+  {
+    id: 'modificationRequested',
+    value: 'modificationRequested',
+    label: 'Modification Requested',
+  },
+  {
+    id: 'archived',
+    value: 'archived',
+    label: 'Archived',
+  },
+];
+
 export const plans = [
   {
     id: 'featherPlan',

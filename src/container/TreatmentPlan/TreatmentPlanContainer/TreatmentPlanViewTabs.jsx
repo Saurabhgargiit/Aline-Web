@@ -3,11 +3,24 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { planStatus } from '../treatmentPlanConstants';
 
 import TreatmentPlanView from './TreatmentPlanView';
 import Loader from '../../common/Loader/Loader';
 
-const TreatmentPlanViewTabs = ({ approveHandler, reqModFn, tabs, activeKey, setActiveKey, loading, planLoading, planInfo, isLabSideUser, editOptionHandler }) => {
+const TreatmentPlanViewTabs = ({ 
+    approveHandler, 
+    reqModFn, 
+    tabs, 
+    activeKey, 
+    setActiveKey, 
+    loading, 
+    planLoading, 
+    planInfo, 
+    isLabSideUser, 
+    editOptionHandler,
+    sharePlanHandler
+   }) => {
 
   // const [loading, setLoading] = useState(true);
   // const [tabs, setTabs] = useState([]);
@@ -63,8 +76,18 @@ const TreatmentPlanViewTabs = ({ approveHandler, reqModFn, tabs, activeKey, setA
       >
         {
           tabs.length > 0 && tabs.map((tab, i)=>{
-            const {id, status } = tab;
-            return <Tab eventKey={id} title={`Treatment Option-${i+1}`} key={'tabs'+id}>
+            const {id, status, label } = tab;
+            let statusLabel;
+            if(status){
+               statusLabel = planStatus.find(el => el.value === status)?.label;
+            }
+            return (
+            <Tab 
+              eventKey={id} 
+              title={`${label || 'Option-'+(i+1)} (${statusLabel || ''})`} 
+              key={'tabs'+id} 
+              tabClassName={activeKey ==id ? 'tab-active' : 'tab-inactive'}
+            >
               {planLoading ? 
                 <Loader/> 
               :
@@ -76,8 +99,9 @@ const TreatmentPlanViewTabs = ({ approveHandler, reqModFn, tabs, activeKey, setA
                 planInfo = {planInfo}
                 isLabSideUser={isLabSideUser}
                 editOptionHandler={editOptionHandler}
+                sharePlanHandler={sharePlanHandler}
               />}
-            </Tab>
+            </Tab>)
           })
         }
       </Tabs>

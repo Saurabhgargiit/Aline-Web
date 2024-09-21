@@ -12,7 +12,7 @@ const TreatmentPlanLayout = () => {
   return (
     <div>
       <TreatmentPlanContainer />
-      <Comments />
+      {/* <Comments /> */}
     </div>
   );
 };

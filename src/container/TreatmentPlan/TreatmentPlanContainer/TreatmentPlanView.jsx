@@ -8,7 +8,7 @@ import { plans, steps, tags } from '../treatmentPlanConstants';
 import TreatmentPlanModal from './TreatmentPlanModal';
 import { useLocation } from 'react-router-dom';
 
-const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo ,isLabSideUser, editOptionHandler }) => {
+const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo ,isLabSideUser, editOptionHandler, sharePlanHandler }) => {
   const location = useLocation();
   const isDraftPlan = location.pathname.includes('DraftPlan');
 
@@ -186,7 +186,7 @@ const TreatmentPlanView = ({ approveHandler, reqModFn, planInfo ,isLabSideUser, 
           {isLabSideUser && isDraftPlan && <Button
             title="Share Plan with Clinic"
             type="primary"
-            onClickCallBk={approveHandler}
+            onClickCallBk={sharePlanHandler}
           />}
         </div>
       </div>
