@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SVG from 'react-inlinesvg';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
@@ -36,7 +36,7 @@ const TreatmentPlanContainer = () => {
 
   const [modalDetails, setModalDetails] = useState(modalInitialState);
   
-  const { patientID, rebootID, planType } = useParams();
+  const { patientID, planType } = useParams();
   const {pathname, search} = useLocation();
   const navigate = useNavigate();
 
@@ -47,76 +47,10 @@ const TreatmentPlanContainer = () => {
   const dispatch = useDispatch();
   const planDetailsMapping = useSelector((state) =>state.sidenNavigatorReducer?.planDetailsMapping);
   const planDetails = useSelector((state) =>state.treatmentplanAndComments?.planDetails); //source of truth for loaded plan
-
-
-  //Modal Handlers
-  const openModal =(title, msg, type) =>{
-    setModalDetails(prev => ({
-      ...prev,
-      isOpen: true,
-      title: title,
-      msg: msg,
-      type: type,
-      saveHandler: saveHandler,
-    }));
-  }
-
-  const closeModalHandler = () => {
-    setModalDetails(prev => modalInitialState);
-  };
-
-  //Action Handlers
-  const reqModFn = () => {
-    openModal('Request for Modification', 'Are you sure that modification in plan is required?', 'reqMod');
-  };
-
-  const approveHandler = () => {
-    openModal('Approve Plan', 'Do you want to approve the plan?', 'approve');
-  };
-
-  const sharePlanHandler =() =>{
-    openModal('Share Plan with Clinic', 'Do you want to share the plan with clinic?', 'sharePlan');
-  }
-
-  //Add edit handler
-  const addOptionHandler = () => {
-    setIsEdit(true);
-  };
-
-  const editOptionHandler = () => {
-    setIsEdit(true);
-    setPlanEdit(true);
-  };
-
-  const cancelHandler = () => {
-    setIsEdit(false);
-    setPlanEdit(false);
-  };
-
-  const settoLoading = () =>{
-    setIsEdit(false);
-    setPlanEdit(false);
-    setLoading(true);
-  }
-
-  // Redirection Hanlders
-  const redirectToCurrentDraft =(planId) =>{
-    settoLoading();
-    setRedirectionInfo({draft: planId});
-  }
-  
-  const redirectToLatestDraft =() =>{
-    settoLoading();
-    setRedirectionInfo({draft: 'latest'});
-  }
-
-  const redirectToLatest =(planId) =>{
-    setRedirectionInfo({latest: planId});
-  }
-
+  const rebootID = useSelector(state => state.rebootReducer.selectedRebootID);
 
   //api Handler
-  const saveHandler = (key) => {
+  const saveHandler = useCallback((key) => {
     closeModalHandler();
     settoLoading();
     let successMsg, url;
@@ -169,7 +103,89 @@ const TreatmentPlanContainer = () => {
         }
         // setLoading(false);
     });
-  }
+  },[activeKey])
+
+  //Modal Handlers
+  const openModal = useCallback((title, msg, type) =>{
+    setModalDetails(prev => ({
+      ...prev,
+      isOpen: true,
+      title: title,
+      msg: msg,
+      type: type,
+      saveHandler: saveHandler,
+    }));
+  },[saveHandler])
+
+  const closeModalHandler = () => {
+    setModalDetails(prev => modalInitialState);
+  };
+
+  //Action Handlers
+  const actionHandler = useCallback((type) =>{
+    let title, msg;
+    switch(type){
+      case 'sharePlan' : {
+        title = 'Share Plan with Clinic';
+        msg = 'Do you want to share the plan with clinic?';
+        break;
+      }
+      case 'reqMod' : {
+        title = 'Request for Modification';
+        msg = 'Are you sure that modification in plan is required?';
+        break;
+      }
+      case 'approve' : {
+        title = 'Approve Plan';
+        msg = 'Do you want to approve the plan?';
+        break;
+      }
+      default:
+        break;  
+    }
+    openModal(title,msg,type);
+  },[activeKey]);
+
+  //Add edit handler
+  const addOptionHandler = () => {
+    setIsEdit(true);
+  };
+
+  const editOptionHandler = () => {
+    setIsEdit(true);
+    setPlanEdit(true);
+  };
+
+  const cancelHandler = useCallback(() => {
+    setIsEdit(false);
+    setPlanEdit(false);
+  },[]);
+
+  const settoLoading = useCallback(() =>{
+    setIsEdit(false);
+    setPlanEdit(false);
+    setLoading(true);
+  },[]);
+
+  // Redirection Hanlders
+  const redirectToCurrentDraft =useCallback((planId) =>{
+    settoLoading();
+    setRedirectionInfo({draft: planId});
+  },[])
+  
+  const redirectToLatestDraft = useCallback(() => {
+    settoLoading();
+    setRedirectionInfo({draft: 'latest'});
+  },[])
+
+  const redirectToLatest = useCallback((planId) =>{
+    setRedirectionInfo({latest: planId});
+  },[])
+
+  console.log(activeKey);
+
+
+
 
   const getPlanDetails =(activeKeyId) =>{
     const queryParams ={};
@@ -299,13 +315,14 @@ const TreatmentPlanContainer = () => {
                       dispatch={dispatch} 
                       redirectToCurrentDraft ={redirectToCurrentDraft} 
                       redirectToLatestDraft ={redirectToLatestDraft}
-                      existingData={planEdit ? {...planDetails?.data} :{} }
+                      existingData={planEdit ? planDetails?.data :{} }
                       isEdit={planEdit}
                       planId={activeKey}
+                      patientID = {patientID}
+                      rebootID ={rebootID}
                     />
                   : <TreatmentPlanViewTabs
-                      approveHandler={approveHandler}
-                      reqModFn={reqModFn}
+                      actionHandler={actionHandler}
                       tabs={tabs}
                       activeKey={activeKey}
                       setActiveKey={setActiveKey}
@@ -314,7 +331,6 @@ const TreatmentPlanContainer = () => {
                       planInfo ={planInfo}
                       isLabSideUser = {showAddEditPlanButton}
                       editOptionHandler={editOptionHandler}
-                      sharePlanHandler={sharePlanHandler}
                     />
         } 
       </div>

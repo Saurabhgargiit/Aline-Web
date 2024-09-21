@@ -14,14 +14,17 @@ import './SideNavigator.scss';
 const SideNavigator = ({ sideSectionShowHandler }) => {
   const { removeWhitespace } = CommonUtils;
 
-  const { patientID, rebootID } = useParams();
-  const pathname = window.location.pathname;
-  const pathNamePrefix = '/patientDetails/' + patientID + '/' + rebootID;
-
+  const { patientID } = useParams();
+  
   const dispatch = useDispatch()
-  const userRole = useSelector((state)=>state.userInfoReducer?.userInfo?.data?.role[0]);
+
+  const userRole = useSelector((state)=>state.userInfoReducer?.userInfo?.data?.role);
   const planDetailsMapping = useSelector((state) =>state.sidenNavigatorReducer?.planDetailsMapping);
   const isSideNavigatorVisible = useSelector((state) =>state.sidenNavigatorReducer?.isSideNavigatorVisible);
+  const rebootID = useSelector(state => state.rebootReducer.selectedRebootID);
+  const pathname = window.location.pathname;
+  const pathNamePrefix = '/patientDetails/' + patientID + '/' + rebootID;
+  
   const isLaptopScreen = CommonUtils.isLaptopScreen();
 
   // State to manage the visibility of subplans
@@ -55,7 +58,9 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   // };
 
   useEffect(() => {
-    getPlanDetailsMapping(dispatch, patientID, rebootID||0);
+    if(rebootID > -1 && patientID){
+      getPlanDetailsMapping(dispatch, patientID, rebootID||0);
+    }
   }, [patientID, rebootID]);
 
   useEffect(() => {
@@ -79,7 +84,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
         temp.sort((a,b) => b.index - a.index);
         childPlans = [...childPlans, ...temp];
       }
-      if((CommonUtils.isAdmin(userRole) || CommonUtils.isLab(userRole)) && treatmentPlanDraft && typeof treatmentPlanDraft ==='object' && Object.keys(treatmentPlanDraft).length >0){
+      if((CommonUtils.isAdmin(userRole[0]) || CommonUtils.isLab(userRole[0])) && treatmentPlanDraft && typeof treatmentPlanDraft ==='object' && Object.keys(treatmentPlanDraft).length >0){
         const {id, treatmentPlanStatus} = treatmentPlanDraft;
         childPlans.push({name: 'Draft Plans', index: id, value: `draft=${id}`});
       }

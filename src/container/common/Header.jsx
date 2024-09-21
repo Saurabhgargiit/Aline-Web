@@ -27,14 +27,15 @@ const Header = ({ title, leftBtnHanlder }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { rebootIDsObject, selectedRebootID } = useSelector(state => ({
-        rebootIDsObject: state.rebootReducer.rebootIDs,
-        selectedRebootID: state.rebootReducer.selectedRebootID,
-      }));
+    const rebootIDsObject  = useSelector(state => state.rebootReducer.rebootIDs);
+      
+    const selectedRebootID = useSelector(state => state.rebootReducer.selectedRebootID);
       
 
     const getRebootOptions = (len) =>{
-        return rebootIDs.map(el =>{return {value: el, key: el, id:el, label: String(el+1)}})
+        return rebootIDs.map(el =>{
+            return {value: el, key: el, id:el, label: String(el+1)}}
+        )
     }
 
     const menuToggler = () =>{
