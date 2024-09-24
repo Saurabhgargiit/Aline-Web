@@ -28,6 +28,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     const [pageNumber, setPageNumber] = useState(0); // Current page number
     const [hasMore, setHasMore] = useState(true); // If more data is available
     const [isFetching, setIsFetching] = useState(false); // To prevent multiple fetches
+    const [pageNoforwhichDataAppended, setPageNoforwhichDataAppended] = useState(-1);
   
     const [isError, setIsError] = useState(false);
     const [errMsg, setErrMsg] = useState('');
@@ -71,7 +72,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                     transition: Bounce,
                 });
                 setLoading(true);
-                getAllPatients();
+                resetForGetPatient();
             } else if (data.result === 'error') {
                 toast.error(data.error ?? 'data.error', {
                     position: 'top-right',
@@ -100,7 +101,8 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                     transition: Bounce,
                 });
                 setLoading(true);
-                getAllPatients();
+                // getAllPatients();
+                resetForGetPatient();
             } else if (data.result === 'error') {
                 toast.error(data.error ?? 'data.error', {
                     position: 'top-right',
@@ -128,16 +130,23 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@
     //First time call
     useEffect(() => {
-        getAllPatients(pageNumber);
+        if(pageNumber>pageNoforwhichDataAppended){
+            getAllPatients(pageNumber);
+        }
     }, [pageNumber]);
 
     useEffect(() => {
         if (fetchedAllPatients.result === 'success' && fetchedAllPatients.data !== undefined) {
             const patientList = fetchedAllPatients.data?.content || [];
             const {last} = fetchedAllPatients.data;
-            // const { patientBasicInfoFromResponse, patientDetailInfoFromResponse } =
-            //     separateDetails(userList);
-            setPatientBasicInfo((prevPatients) => [...prevPatients, ...patientList]);
+
+            if(pageNoforwhichDataAppended < pageNumber){
+                setPatientBasicInfo((prevPatients) => [...prevPatients, ...patientList]);
+            }
+            setPageNoforwhichDataAppended(page => {
+                if(pageNumber>page) return pageNumber;
+                else return page;   
+            })
             setHasMore(!last); 
             setLoading(false);
             setIsFetching(false);
@@ -149,10 +158,22 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         }
     }, [fetchedAllPatients]);
 
+    const resetForGetPatient = () =>{
+        setPageNoforwhichDataAppended(-1);
+        setPageNumber(0);
+        setPatientBasicInfo([]);
+        setLoading(true);
+        setIsFetching(true);
+        setHasMore(true);
+        setErrMsg('');
+        setIsError(false);
+        setTimeout(()=>getAllPatients(0));
+    }
+
     //force relaod after adding/editing patient
     useEffect(() => {
         if (userAdded) {
-            getAllPatients();
+            resetForGetPatient();
             setUserAdded(() => false);
         }
     }, [userAdded]);
@@ -171,7 +192,6 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         if (loading) return;
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            console.log(entries);
           if (entries[0].isIntersecting && hasMore && !isFetching) {
             setPageNumber(page => page+1);
           }
@@ -272,7 +292,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
             <DeleteConfirmationModal
                 modalOpen={deleteModalOpen}
                 setDeleteModalOpen={setDeleteModalOpen}
-                refetchDataFn={getAllPatients}
+                refetchDataFn={resetForGetPatient}
                 deleteUserHandlerFn={deletePatient}
                 dataToDelete={deleteUserData}
                 setDataToDelete={setDeleteUserData}
