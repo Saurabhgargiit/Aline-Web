@@ -1,11 +1,11 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import withRouter from '../../hoc/withRouter';
 import { withReducer } from '../../hoc/withReducer';
-
 import SVG from 'react-inlinesvg';
 import { toast, Bounce } from 'react-toastify';
+
 import Button from '../../components/Button/Button';
 import { InformativeErrorModal } from '../../components/Modal/Modal';
 import Loader from '../common/Loader/Loader';
@@ -24,7 +24,12 @@ import './PatientList.scss';
 
 const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     const [loading, setLoading] = useState(true);
-    const [patientBasicInfo, setPatientBasicInfo] = useState({});
+    const [patientBasicInfo, setPatientBasicInfo] = useState([]);
+    const [pageNumber, setPageNumber] = useState(0); // Current page number
+    const [hasMore, setHasMore] = useState(true); // If more data is available
+    const [isFetching, setIsFetching] = useState(false); // To prevent multiple fetches
+    const [pageNoforwhichDataAppended, setPageNoforwhichDataAppended] = useState(-1);
+  
     const [isError, setIsError] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
@@ -37,29 +42,18 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     const dispatch = useDispatch();
 
     //api function for getting the patients
-    const getAllPatients = () => {
-        // const role = CommonUtils.getPayloadRole();
-        const queryBody = {
-            fromDateOfScan: '2024-05-25T16:55:39.219Z',
-            toDateOfScan: '2024-05-25T16:55:39.219Z',
-            patientID: ['string'],
-            name: 'string',
-            gender: 'string',
-            clinicID: ['string'],
-            doctorID: ['string'],
-            status: 'scanned',
-            fromAge: 0,
-            toAge: 0,
-            nationality: 'string',
-        };
+    const getAllPatients = (page = 0) => {
+        if (isFetching) return; // Prevent multiple requests
+        setIsFetching(true);
+    
         const query = {
-            // role: role,
-            pageNumber: 0,
-            pageSize: MAXIMUM_RESULTS_ON_ONE_PAGE_ON_HOME_PAGE,
-            sortBy: 'id',
-            sortDir: 'des',
+        pageNumber: page,
+        pageSize: MAXIMUM_RESULTS_ON_ONE_PAGE_ON_HOME_PAGE,
+        sortBy: 'id',
+        sortDir: 'des',
         };
-        dispatch(getAllPatientsAction('GET_ALL_PATIENTS', [], query));
+    
+        dispatch(getAllPatientsAction('GET_ALL_PATIENTS', [], query))
     };
 
     //api function for changing the status
@@ -78,7 +72,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                     transition: Bounce,
                 });
                 setLoading(true);
-                getAllPatients();
+                resetForGetPatient();
             } else if (data.result === 'error') {
                 toast.error(data.error ?? 'data.error', {
                     position: 'top-right',
@@ -107,7 +101,8 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                     transition: Bounce,
                 });
                 setLoading(true);
-                getAllPatients();
+                // getAllPatients();
+                resetForGetPatient();
             } else if (data.result === 'error') {
                 toast.error(data.error ?? 'data.error', {
                     position: 'top-right',
@@ -135,40 +130,79 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@
     //First time call
     useEffect(() => {
-        getAllPatients();
-    }, []);
+        if(pageNumber>pageNoforwhichDataAppended){
+            getAllPatients(pageNumber);
+        }
+    }, [pageNumber]);
 
     useEffect(() => {
         if (fetchedAllPatients.result === 'success' && fetchedAllPatients.data !== undefined) {
-            const patientList = fetchedAllPatients.data?.content;
-            // const { patientBasicInfoFromResponse, patientDetailInfoFromResponse } =
-            //     separateDetails(userList);
-            setPatientBasicInfo(() => patientList || {});
-            // setUserDetailInfo(() => userDetailInfoFromResponse);
+            const patientList = fetchedAllPatients.data?.content || [];
+            const {last} = fetchedAllPatients.data;
+
+            if(pageNoforwhichDataAppended < pageNumber){
+                setPatientBasicInfo((prevPatients) => [...prevPatients, ...patientList]);
+            }
+            setPageNoforwhichDataAppended(page => {
+                if(pageNumber>page) return pageNumber;
+                else return page;   
+            })
+            setHasMore(!last); 
             setLoading(false);
+            setIsFetching(false);
         } else if (fetchedAllPatients.result === 'error') {
             setErrMsg(somethingWentWrong);
             setLoading(false);
             setIsError(true);
+            setIsFetching(false);
         }
     }, [fetchedAllPatients]);
 
+    const resetForGetPatient = () =>{
+        setPageNoforwhichDataAppended(-1);
+        setPageNumber(0);
+        setPatientBasicInfo([]);
+        setLoading(true);
+        setIsFetching(true);
+        setHasMore(true);
+        setErrMsg('');
+        setIsError(false);
+        setTimeout(()=>getAllPatients(0));
+    }
+
     //force relaod after adding/editing patient
     useEffect(() => {
-        console.log(userAdded);
         if (userAdded) {
-            getAllPatients();
+            resetForGetPatient();
             setUserAdded(() => false);
         }
     }, [userAdded]);
 
-    const patientList = () =>
-        Object.values(patientBasicInfo).map((el, i) => (
-            <div
-                className='displayFlex home-row-container row-border pointer'
-                key={'patient-container' + i}
-                onClick={(e) => navgationHandler(el)}
-            >
+    const closeHandler = () => {
+        // setLoading(true);
+        setIsError(false);
+        setErrMsg('');
+        // navigate('/users');
+    };
+
+    const observer = useRef();
+
+    const lastPatientElementRef = useCallback(
+      (node) => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting && hasMore && !isFetching) {
+            setPageNumber(page => page+1);
+          }
+        });
+        if (node) observer.current.observe(node);
+      },
+      [loading, hasMore, pageNumber, isFetching]
+    );
+
+    const contentRender =(el,i) =>{
+        return <>
                 <div className='img-container'>
                     <img
                         src={
@@ -181,7 +215,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                 <div className='home-page-name-date mt-2'>
                     <div className='home-page-name font700'>{el.name}</div>
                     <div className='home-page-date font14'>
-                        {new Date(el.dateOfScan).toLocaleDateString()}
+                        {'Scan Date:' + new Date(el.dateOfScan).toLocaleDateString()}
                     </div>
                 </div>
                 <Status
@@ -205,34 +239,39 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
                             svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
                             ariaLabel='Delete Patient'
                         />{' '}
-                        {/* <Button
-                        onClickCallBk={() => {}}
-                        tooltip='Delete Patient'
-                        svg={<SVG src={require('../../assets/icons/deleteBin.svg').default} />}
-                        ariaLabel='Delete Patient'
-                    />
-                    <SVG src={require('../../assets/icons/file.svg').default} /> */}
-                        {/* <SVG
-                        className='home-page-play'
-                        src={require('../../assets/icons/play.svg').default}
-                    /> */}
                     </div>
                 </div>
-            </div>
-        ));
+            </>
+    }
 
-    const closeHandler = () => {
-        // setLoading(true);
-        setIsError(false);
-        setErrMsg('');
-        // navigate('/users');
-    };
+    const patientList = () => {
+        return patientBasicInfo.map((el, i) => {            
+            if(i === patientBasicInfo.length-4){
+                return <div
+                    ref={lastPatientElementRef}
+                    className='displayFlex home-row-container row-border pointer'
+                    key={'patient-container' + i}
+                    onClick={(e) => navgationHandler(el)}
+                >
+                    {contentRender(el,i)}
+                </div>
+            }else{
+                return <div
+                    className='displayFlex home-row-container row-border pointer'
+                    key={'patient-container' + i}
+                    onClick={(e) => navgationHandler(el)}
+                >
+                    {contentRender(el,i)}
+                </div>
+            }
+        })
+    }
 
     return (
         <>
             {!loading ? (
                 !isError ? (
-                    Object.keys(patientBasicInfo).length === 0 ? (
+                    patientBasicInfo.length === 0 ? (
                         <div className='top-bottom-position-container top56 center-position'>
                             No patient
                         </div>
@@ -253,7 +292,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
             <DeleteConfirmationModal
                 modalOpen={deleteModalOpen}
                 setDeleteModalOpen={setDeleteModalOpen}
-                refetchDataFn={getAllPatients}
+                refetchDataFn={resetForGetPatient}
                 deleteUserHandlerFn={deletePatient}
                 dataToDelete={deleteUserData}
                 setDataToDelete={setDeleteUserData}
