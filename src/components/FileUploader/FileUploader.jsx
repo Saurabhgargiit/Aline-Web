@@ -17,10 +17,9 @@ const fileTypeRestrictions = {
     zip: 'application/zip,application/x-zip-compressed,multipart/x-zip,application/7z,.zip,.7z',
 };
 
-const FileUploader = ({ label, fileType, onUploadComplete, patientID, styleClassName }) => {
+const FileUploader = ({ label, fileType, onUploadComplete, patientID, styleClassName, rebootID }) => {
     const [fileData, setFileData] = useState({ res: '', file: null });
     const [uploadedFile, setUploadedFile] = useState({ url: '', key: '' });
-    console.log(patientID)
     const className = 'fileUploader ' + styleClassName;
 
     const handleFileChange = (event) => {
@@ -37,7 +36,7 @@ const FileUploader = ({ label, fileType, onUploadComplete, patientID, styleClass
     const uploadFile = async () => {
         if (!fileData.file) return;
 
-        const fileKey = `${patientID}/${label}-${Date.now()}-${fileData.file.name}`;
+        const fileKey = `${patientID}/reboot${rebootID}/${label}-${Date.now()}-${fileData.file.name}`;
 
         try {
             const { Location, key } = await uploadToS3(fileKey, fileData.file);

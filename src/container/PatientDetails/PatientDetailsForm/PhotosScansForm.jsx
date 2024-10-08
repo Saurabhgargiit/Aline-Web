@@ -26,13 +26,15 @@ function PhotosScansForm() {
   const fetchedPhotosScans = useSelector(
     state => state.getPhotosScans.photosScans
   );
+  const rebootID = useSelector(state => state.rebootReducer.selectedRebootID);
+
   const dispatch = useDispatch();
 
   const { patientID } = useParams();
 
   //api function for getting the patient Details
   const getPhotosScans = patientID => {
-    dispatch(getPhotosScansAction('GET_PHOTOS_SCANS_URLS', [patientID]));
+    dispatch(getPhotosScansAction('GET_PHOTOS_SCANS_URLS', [patientID, rebootID]));
   };
 
   const editHandler = () => {
@@ -60,7 +62,7 @@ function PhotosScansForm() {
   //@@@@@@@@@@@@@@useEffect@@@@@@@@@@@@@
   useEffect(() => {
     getPhotosScans(patientID);
-  }, []);
+  }, [rebootID]);
 
   useEffect(() => {
     if (
@@ -95,6 +97,7 @@ function PhotosScansForm() {
                 setIsLoading={setIsLoading}
                 cancelHandler={cancelHandler}
                 cancelFlag={cancelFlag}
+                rebootID={rebootID}
               />
             </div>
             <Button

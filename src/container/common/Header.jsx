@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast, Bounce } from 'react-toastify';
 
 import { ReactComponent as MenuListIcon } from '../../assets/icons/menuList.svg'; // Using SVGR
 import { ReactComponent as BackIcon } from '../../assets/icons/back.svg'; // Using SVGR
@@ -12,6 +13,7 @@ import { toggleSideNavigator } from '../../store/actions/sidenNavigatorAction';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import './Header.scss';
 import { rebootAction, setSelectedRebootAction } from '../../store/actions/rebootAction';
+import { postCall } from '../../utils/commonfunctions/apicallactions';
 
 const Header = ({ title, leftBtnHanlder }) => {
     const [headerDetails, setHeaderDetails] = useState({
@@ -99,6 +101,35 @@ const Header = ({ title, leftBtnHanlder }) => {
         }
     };
 
+    const createReboot =() =>{
+        postCall({}, 'CREATE_REBOOT', [patientID]).then((data) => {
+            if (data.result === 'success') {
+                toast.success(`Reboot added successully`, {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                // setUserAdded(() => true);
+                // closeModal();
+            } else if (data.result === 'error') {
+                toast.error(data.error ?? 'data.error', {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+            }
+            // setLoading(false);
+        })
+    }
+
     const getRebootIDs = () => {
         dispatch(rebootAction('GET_REBOOT_IDS', [patientID]));
     };
@@ -136,7 +167,7 @@ const Header = ({ title, leftBtnHanlder }) => {
         ) {
             const rebootIdsArr = rebootIDsObject?.data;
             // setRebootIDs(rebootIdsArr);
-            setRebootIDs([...rebootIdsArr, 1]); //for testing only
+            setRebootIDs([...rebootIdsArr]); //for testing only
             setSelectedReboot(rebootIdsArr[rebootIdsArr.length-1]);
         }
 
@@ -172,11 +203,16 @@ const Header = ({ title, leftBtnHanlder }) => {
                 </button> */}
                 {/* {location.pathname.includes('patientDetails') && <Dropdown/>} */}
                 {location.pathname.includes('patientDetails') && rebootIDs.length>0 &&
-                    <Dropdown 
-                        selectedValue={selectedRebootID} 
-                        options={getRebootOptions()}
-                        onChangeCallBk={changeRebootHandler}
-                    />
+                    <div className='reboot-container'>
+                        <label className="">Plan Selected</label>
+                        <Dropdown 
+                            selectedValue={selectedRebootID} 
+                            options={getRebootOptions()}
+                            onChangeCallBk={changeRebootHandler}
+                            className='dropdown'
+                        />
+                        <Button title='Add Reboot' onClickCallBk={()=>{createReboot()}} className='rebootbtn' type='primary'/>
+                    </div>
                 }
             </div>
             {!CommonUtils.isLaptopScreen() && <div className='app-header-menu-button-container right-icon'>

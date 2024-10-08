@@ -39,7 +39,7 @@ export class ApiRelativePaths {
 
     //Reboots
     static GET_REBOOT_IDS = '/api/v1/aline/dentalDetailsMapping/getAllRebootIds';
-
+    static CREATE_REBOOT = '/api/v1/aline/dentalDetailsMapping/createReboot'
 
     //Treatment Plans
     static GET_TREATMENTPLAN_MAPPING = '/api/v1/aline/dentalDetailsMapping/getPlanMapping';

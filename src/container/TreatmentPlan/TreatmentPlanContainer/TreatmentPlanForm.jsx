@@ -281,6 +281,7 @@ const TreatmentPlanForm = (props) => {
               fileType='pdf' 
               onUploadComplete={(fileData) => handleFileUpload('iprAndAttachmentReports', fileData)} 
               patientID={patientID}
+              rebootID={rebootID}
             />
           </div>
         </div>
@@ -308,6 +309,7 @@ const TreatmentPlanForm = (props) => {
               onUploadComplete={(fileData) => handleFileUpload('treatmentSimulationsAttachments', fileData)} 
               patientID={patientID} 
               styleClassName={'pdf-container'}
+              rebootID={rebootID}
             />
 
             {/* <Button

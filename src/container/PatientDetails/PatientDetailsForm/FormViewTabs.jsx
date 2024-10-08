@@ -32,6 +32,8 @@ function FormViewTabs() {
     const { patientID } = useParams();
 
     const fetchedPatientDetails = useSelector((state) => state.getPatientDetails.patientDetails);
+    const rebootID = useSelector(state => state.rebootReducer.selectedRebootID);
+
     const dispatch = useDispatch();
 
     const editHandler = () => {
@@ -79,7 +81,7 @@ function FormViewTabs() {
 
     //api function for getting the patient Details
     const getPatientDetails = () => {
-        dispatch(getPatientDetailsAction('GET_PATIENT_DETAILS', [patientID]));
+        dispatch(getPatientDetailsAction('GET_PATIENT_DETAILS', [patientID, rebootID]));
     };
 
     //api function for updating the patient details
@@ -92,7 +94,7 @@ function FormViewTabs() {
 
         let params = {};
 
-        putCall(payload, 'UPDATE_PATIENT_DETAILS', [], params).then((data) => {
+        putCall(payload, 'UPDATE_PATIENT_DETAILS', [rebootID], params).then((data) => {
             if (data.result === 'success') {
                 toast.success(`Patient details modified successully.`, {
                     position: 'top-right',
@@ -124,7 +126,7 @@ function FormViewTabs() {
     //@@@@@@@@@@@@@@useEffect@@@@@@@@@@@@@
     useEffect(() => {
         getPatientDetails();
-    }, []);
+    }, [rebootID]);
 
     useEffect(() => {
         if (
