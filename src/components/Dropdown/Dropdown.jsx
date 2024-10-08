@@ -3,6 +3,7 @@ import './Dropdown.scss';
 const Dropdown = ({
     propsClassName = '',
     errClassName = '',
+    className ='',
     options,
     onChangeCallBk = () => {},
     selectedValue,
@@ -32,7 +33,7 @@ const Dropdown = ({
         <div className={propsClassName}>
             <select
                 id={id}
-                className={'selectBox ' + errClassName}
+                className={'selectBox' + ' ' + className + ' ' + errClassName}
                 onClick={(e) => e.stopPropagation()}
                 onChange={(e) => changeHandler(e)}
                 value={selectedValue}

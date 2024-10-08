@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast, Bounce } from 'react-toastify';
 
 import { ReactComponent as MenuListIcon } from '../../assets/icons/menuList.svg'; // Using SVGR
 import { ReactComponent as BackIcon } from '../../assets/icons/back.svg'; // Using SVGR
@@ -11,6 +12,8 @@ import Dropdown from '../../components/Dropdown/Dropdown';
 import { toggleSideNavigator } from '../../store/actions/sidenNavigatorAction';
 import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import './Header.scss';
+import { rebootAction, setSelectedRebootAction } from '../../store/actions/rebootAction';
+import { postCall } from '../../utils/commonfunctions/apicallactions';
 
 const Header = ({ title, leftBtnHanlder }) => {
     const [headerDetails, setHeaderDetails] = useState({
@@ -18,20 +21,24 @@ const Header = ({ title, leftBtnHanlder }) => {
         title: null,
         rightButton: null,
     });
+    const [patientID, setPatientID] = useState('');
+    const [rebootIDs, setRebootIDs] = useState([]);
+    const [selectedReboot, setSelectedReboot] = useState(0);
+
+
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const rebootIDsObject  = useSelector(state => state.rebootReducer.rebootIDs);
+      
+    const selectedRebootID = useSelector(state => state.rebootReducer.selectedRebootID);
+      
 
     const getRebootOptions = (len) =>{
-        const rebootOptions =[];
-        for(let i=0; i<len; i++){
-            rebootOptions.push({value: i, key: i, label: Number.toString(i)})
-        }
+        return rebootIDs.map(el =>{
+            return {value: el, key: el, id:el, label: String(el+1)}}
+        )
     }
-    const [selectedReboot, setSelectedReboot] = useState(0);
-    const [patientID, setPatientID] = useState('');
-
-    const [rebootNumbers, setRebootNumbers] = useState(0); //0 means rebootnumbers value is unavailable. even for plan 1, reboot ID will be there.
 
     const menuToggler = () =>{
         dispatch(toggleSideNavigator())
@@ -94,16 +101,83 @@ const Header = ({ title, leftBtnHanlder }) => {
         }
     };
 
+    const createReboot =() =>{
+        postCall({}, 'CREATE_REBOOT', [patientID]).then((data) => {
+            if (data.result === 'success') {
+                toast.success(`Reboot added successully`, {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                // setUserAdded(() => true);
+                // closeModal();
+            } else if (data.result === 'error') {
+                toast.error(data.error ?? 'data.error', {
+                    position: 'top-right',
+                    hideProgressBar: false,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    // pauseOnHover: true,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+            }
+            // setLoading(false);
+        })
+    }
+
+    const getRebootIDs = () => {
+        dispatch(rebootAction('GET_REBOOT_IDS', [patientID]));
+    };
+
+    const changeRebootHandler =(selectedValue) =>{
+        dispatch(setSelectedRebootAction(selectedValue));
+    }
+    
+    useEffect(()=>{
+        if(patientID && location.pathname.includes('patientDetails')){
+            getRebootIDs();
+        }
+    },[patientID])
+
     useEffect(() => {
         headerDetailsFn();
         if(location.pathname.includes('patientDetails')){
             const pathNameArr = location.pathname.split('/');
             const patientIDURL = pathNameArr[2];
-            const rebootID = +pathNameArr[3];
-            if(rebootID !== selectedReboot) setSelectedReboot(rebootID);
-            if(patientIDURL !== patientID )setPatientID(patientIDURL);
+            setPatientID(patientIDURL);
+        //     const rebootID = +pathNameArr[3];
+        //     if(rebootID !== selectedReboot) setSelectedReboot(rebootID);
+        //     if(patientIDURL !== patientID )setPatientID(patientIDURL);
+        } else{
+            setPatientID('');
+            setRebootIDs([]);
+            setSelectedReboot(0);
         }
     }, [location.pathname]);
+
+    useEffect(()=>{
+        if (
+            rebootIDsObject?.result === 'success' &&
+            rebootIDsObject?.data !== undefined && rebootIDsObject?.data.length !==0
+        ) {
+            const rebootIdsArr = rebootIDsObject?.data;
+            // setRebootIDs(rebootIdsArr);
+            setRebootIDs([...rebootIdsArr]); //for testing only
+            setSelectedReboot(rebootIdsArr[rebootIdsArr.length-1]);
+        }
+
+    },[rebootIDsObject])
+
+    useEffect(()=>{
+        if(selectedRebootID !== null && selectedRebootID !== undefined){
+            setSelectedReboot(selectedRebootID);
+        }
+    },[selectedRebootID])
 
     return (
         <header className='app-header'>
@@ -128,6 +202,18 @@ const Header = ({ title, leftBtnHanlder }) => {
                     <SVG src={require('../../assets/icons/reload.svg').default} />
                 </button> */}
                 {/* {location.pathname.includes('patientDetails') && <Dropdown/>} */}
+                {location.pathname.includes('patientDetails') && rebootIDs.length>0 &&
+                    <div className='reboot-container'>
+                        <label className="">Plan Selected</label>
+                        <Dropdown 
+                            selectedValue={selectedRebootID} 
+                            options={getRebootOptions()}
+                            onChangeCallBk={changeRebootHandler}
+                            className='dropdown'
+                        />
+                        <Button title='Add Reboot' onClickCallBk={()=>{createReboot()}} className='rebootbtn' type='primary'/>
+                    </div>
+                }
             </div>
             {!CommonUtils.isLaptopScreen() && <div className='app-header-menu-button-container right-icon'>
                 {headerDetails.rightButton}

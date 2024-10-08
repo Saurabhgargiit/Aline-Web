@@ -38,6 +38,7 @@ function PhotosScans({
     setIsEdit,
     setIsLoading,
     cancelHandler,
+    rebootID
 }) {
     const [formValues, setFormValues] = useState({});
     const [selectedFiles, setSelectedFiles] = useState(initState(labels, [{ url: '', key: '' }]));
@@ -68,7 +69,7 @@ function PhotosScans({
         const files = formValues[label];
         if (!files.file) return;
 
-        const photoKey = `${patientID}/${label}-${Date.now()}-${files.file.name}`;
+        const photoKey = `${patientID}/reboot${rebootID}/${label}-${Date.now()}-${files.file.name}`;
 
         try {
             const { Location, key } = await uploadToS3(photoKey, files.file);

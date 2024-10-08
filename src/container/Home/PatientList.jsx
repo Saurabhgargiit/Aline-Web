@@ -124,7 +124,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     };
 
     const navgationHandler = (patientInfo) => {
-        !!patientInfo.id && navigate('/patientDetails/' + patientInfo.id + '/0' +'/details');
+        !!patientInfo.id && navigate('/patientDetails/' + patientInfo.id +'/details');
     };
 
     //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, memo } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast, Bounce } from 'react-toastify';
 
@@ -15,7 +15,19 @@ import FileUploader from '../../../components/FileUploader/FileUploader';
 
 import './TreatmentPlanForm.scss';
 
-const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, planId, redirectToCurrentDraft, redirectToLatestDraft }) => {
+const TreatmentPlanForm = (props) => {
+  const { 
+    existingData, 
+    cancelHandler,
+    cancelFlag, 
+    isEdit, 
+    planId, 
+    redirectToCurrentDraft, 
+    redirectToLatestDraft,
+    patientID,
+    rebootID
+  } = props;
+
   const [errors, setErrors] = useState({});
   const [selectedTags, setSelectedTags] = useState(existingData?.malocclusionTag || []);
 
@@ -33,8 +45,6 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
     treatmentSimulationsURL: existingData?.treatmentSimulationsURL || [],
     treatmentSimulationsAttachments: existingData?.treatmentSimulationsAttachments || [],
   });
-
-  const { patientID, rebootID } = useParams();  
 
   const saveHandler = () => {
       //post selectedFiles to backend
@@ -271,6 +281,7 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
               fileType='pdf' 
               onUploadComplete={(fileData) => handleFileUpload('iprAndAttachmentReports', fileData)} 
               patientID={patientID}
+              rebootID={rebootID}
             />
           </div>
         </div>
@@ -298,6 +309,7 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
               onUploadComplete={(fileData) => handleFileUpload('treatmentSimulationsAttachments', fileData)} 
               patientID={patientID} 
               styleClassName={'pdf-container'}
+              rebootID={rebootID}
             />
 
             {/* <Button
@@ -320,4 +332,4 @@ const TreatmentPlanForm = ({ existingData, cancelHandler,cancelFlag, isEdit, pla
   );
 };
 
-export default TreatmentPlanForm;
+export default memo(TreatmentPlanForm);

@@ -4,12 +4,14 @@ import { thunk } from 'redux-thunk';
 import loginReducer from './reducers/loginReducer';
 import userInfoReducer from './reducers/userreducer/userInforReducer';
 import sidenNavigatorReducer from './reducers/sidenNavigatorReducer';
+import rebootReducer from './reducers/rebootReducer';
 
 const createReducer = (asyncReducers) =>
     combineReducers({
         login: loginReducer,
         userInfoReducer: userInfoReducer,
-        sidenNavigatorReducer: sidenNavigatorReducer,        
+        sidenNavigatorReducer: sidenNavigatorReducer,    
+        rebootReducer: rebootReducer,     
         ...asyncReducers,
     });
 
