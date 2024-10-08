@@ -2,9 +2,7 @@ import { useState } from 'react';
 import PatientList from './PatientList';
 import Button from '../../components/Button/Button';
 import SVG from 'react-inlinesvg';
-import './HomeLayout.scss';
 import AddPatientModal from './AddPatient/AddPatientModal';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const HomeLayout = ({}) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +21,6 @@ const HomeLayout = ({}) => {
 
     const editPatientHandler = (e, patientInfo) => {
         e.stopPropagation();
-        console.log(patientInfo);
         modalOpenHandler();
         setIsEdit(() => true);
         setEditData(() => patientInfo);
