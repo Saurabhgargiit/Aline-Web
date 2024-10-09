@@ -25,6 +25,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const pathname = window.location.pathname;
   const pathNamePrefix = '/patientDetails/' + patientID;
   
+  const sidenNavigatorSuffix = rebootID >0 ? ' (reboot ' + rebootID + ')' :'';
   const isLaptopScreen = CommonUtils.isLaptopScreen();
 
   // State to manage the visibility of subplans
@@ -134,7 +135,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                           } else if(!isLaptopScreen)dispatch(toggleSideNavigator());
                         }}
                       >
-                        {item.name}{' '}
+                        {item.name + sidenNavigatorSuffix}{' '}
                         {item.name === 'Treatment Plan' && item.plans.length >0 && (
                           <span>
                             {isTreatmentPlanExpanded ? (

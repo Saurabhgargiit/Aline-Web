@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, Bounce } from 'react-toastify';
@@ -14,6 +14,12 @@ import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 import './Header.scss';
 import { rebootAction, setSelectedRebootAction } from '../../store/actions/rebootAction';
 import { postCall } from '../../utils/commonfunctions/apicallactions';
+import GeneralModal from '../../components/Modal/GeneralModal';
+
+const modalInitialState = {
+    isOpen: false,
+    title: '',
+  };  
 
 const Header = ({ title, leftBtnHanlder }) => {
     const [headerDetails, setHeaderDetails] = useState({
@@ -24,6 +30,7 @@ const Header = ({ title, leftBtnHanlder }) => {
     const [patientID, setPatientID] = useState('');
     const [rebootIDs, setRebootIDs] = useState([]);
     const [selectedReboot, setSelectedReboot] = useState(0);
+    const [modalDetails, setModalDetails] = useState(modalInitialState);
 
 
     const location = useLocation();
@@ -36,7 +43,7 @@ const Header = ({ title, leftBtnHanlder }) => {
 
     const getRebootOptions = (len) =>{
         return rebootIDs.map(el =>{
-            return {value: el, key: el, id:el, label: String(el+1)}}
+            return {value: el, key: el, id:el, label: el===0 ? 'Treatment Plan' : 'Reboot '+el}}
         )
     }
 
@@ -101,20 +108,12 @@ const Header = ({ title, leftBtnHanlder }) => {
         }
     };
 
-    const createReboot =() =>{
+    const createReboot = () =>{
+        actionHandler('underCreation');
         postCall({}, 'CREATE_REBOOT', [patientID]).then((data) => {
             if (data.result === 'success') {
-                toast.success(`Reboot added successully`, {
-                    position: 'top-right',
-                    hideProgressBar: false,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                    // pauseOnHover: true,
-                    theme: 'light',
-                    transition: Bounce,
-                });
-                // setUserAdded(() => true);
-                // closeModal();
+                actionHandler('successfullyCreated');
+                getRebootIDs();
             } else if (data.result === 'error') {
                 toast.error(data.error ?? 'data.error', {
                     position: 'top-right',
@@ -130,13 +129,55 @@ const Header = ({ title, leftBtnHanlder }) => {
         })
     }
 
-    const getRebootIDs = () => {
+    const getRebootIDs = async () => {
         dispatch(rebootAction('GET_REBOOT_IDS', [patientID]));
     };
 
     const changeRebootHandler =(selectedValue) =>{
         dispatch(setSelectedRebootAction(selectedValue));
     }
+
+    //Modal Handlers
+    const openModal = (title, msg, type) =>{
+        setModalDetails(prev => ({
+        ...prev,
+        isOpen: true,
+        title: title,
+        content: <div>{msg}</div>,
+        type: type,
+        saveHandler: createReboot,
+        }));
+    }
+
+    const closeModalHandler = () => {
+        setModalDetails(prev => modalInitialState);
+    };
+
+        //Action Handlers
+    const actionHandler = useCallback((type) =>{
+        let title, msg;
+        switch(type){
+        case 'createRebootConfirmation' : {
+            title = 'Create Reboot';
+            msg = 'Are you sure you want to add new Reboot? This will trigger the change in treatment path.';
+            break;
+        }
+        case 'underCreation' : {
+            title = 'Create Reboot';
+            msg = 'Please wait. Reboot framework is under progress';
+            break;
+        }
+        case 'successfullyCreated' : {
+            title = 'Create Reboot';
+            msg = 'Reboot Successfully created. Please wait while necessary details are fetched.';
+            break;
+        }
+        default:
+            break;  
+        }
+        openModal(title,msg,type);
+    },[openModal]);
+    
     
     useEffect(()=>{
         if(patientID && location.pathname.includes('patientDetails')){
@@ -167,8 +208,12 @@ const Header = ({ title, leftBtnHanlder }) => {
         ) {
             const rebootIdsArr = rebootIDsObject?.data;
             // setRebootIDs(rebootIdsArr);
-            setRebootIDs([...rebootIdsArr]); //for testing only
+            setRebootIDs([...rebootIdsArr]);
             setSelectedReboot(rebootIdsArr[rebootIdsArr.length-1]);
+            if(modalDetails.isOpen){
+                changeRebootHandler(rebootIdsArr[rebootIdsArr.length-1]);
+                setTimeout(()=>{closeModalHandler()},500)
+            }
         }
 
     },[rebootIDsObject])
@@ -211,13 +256,16 @@ const Header = ({ title, leftBtnHanlder }) => {
                             onChangeCallBk={changeRebootHandler}
                             className='dropdown'
                         />
-                        <Button title='Add Reboot' onClickCallBk={()=>{createReboot()}} className='rebootbtn' type='primary'/>
+                        <Button title='Add Reboot' onClickCallBk={()=>{actionHandler('createRebootConfirmation')}} className='rebootbtn' type='primary'/>
                     </div>
                 }
             </div>
             {!CommonUtils.isLaptopScreen() && <div className='app-header-menu-button-container right-icon'>
                 {headerDetails.rightButton}
             </div>}
+            <GeneralModal
+                {...modalDetails} closeHanlder={closeModalHandler}
+            />
         </header>
     );
 };
