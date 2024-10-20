@@ -18,7 +18,7 @@ export default function SearchBar({ searchHandler }) {
 
   const submitHandler = () => {
     searchHandler(searchData);
-    setSearchData(searchInitialState.searchData);
+    // setSearchData(searchInitialState.searchData);
   };
 
   const handleSubmit = (e) => {
