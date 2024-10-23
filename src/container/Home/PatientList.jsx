@@ -62,14 +62,14 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
       sortDir: 'des',
     };
     const reqBody = {
-      fromDateOfScan: '2020-10-18T15:19:37.719Z',
-      toDateOfScan: '2024-10-18T15:19:37.719Z',
+      fromDateOfScan: '',
+      toDateOfScan: '',
       patientID: [],
-      name: 'h',
+      name: '',
       gender: '',
       clinicID: [],
       doctorID: [],
-      status: 'scanned', // allow empty
+      status: '', // allow empty
       nationality: '',
     };
     const payloadBody = { ...reqBody, name: searchData.searchTerm };
@@ -188,7 +188,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
 
   useEffect(() => {
     if (JSON.stringify(searchData) !== JSON.stringify(searchInitialState)) {
-      getAllPatients();
+      resetForGetPatient();
     }
   }, [searchData]);
 
