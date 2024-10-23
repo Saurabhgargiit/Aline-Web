@@ -262,3 +262,32 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
     display: block;
   }
 }
+
+.home-page-button-pos {
+  position: fixed;
+  bottom: 70px;
+  z-index: 99;
+}
+.home-page-add-button {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $backgroundheaderfooterColor;
+
+  svg {
+    fill: white;
+    width: 26px;
+    height: 26px;
+
+    path {
+      stroke-width: 1.5;
+    }
+  }
+}
+.rightPos {
+  right: 20px;
+}

@@ -11,7 +11,7 @@ const FillerPage =({message, btnDetails}) =>{
                     <div className="patientAddEditTopContainer  mb-4">
                         <div className="patientAddEditContainer no-plan">
                             <h1>{message}</h1>
-                            {Object.keys(btnDetails).length >0 && <Button {...btnDetails}/>}
+                            {btnDetails && Object.keys(btnDetails).length >0 && <Button {...btnDetails}/>}
                         </div>
                     </div>
                 </div>

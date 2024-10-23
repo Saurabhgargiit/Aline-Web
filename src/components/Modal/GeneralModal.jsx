@@ -4,17 +4,17 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
-} from '../../../components/Modal/Modal';
+} from '../../components/Modal/Modal';
 
-function TreatmentPlanModal({
+function GeneralModal({
   isOpen,
   title,
-  msg,
   closeHanlder,
   type,
   initialData,
   setUserAdded,
-  saveHandler =() =>{}
+  saveHandler =() =>{},
+  content
 }) {
   const formRef = useRef(null);
   const handleSubmit = () => {
@@ -29,17 +29,7 @@ function TreatmentPlanModal({
     <Modal className="add-parent-box" open={isOpen}>
       <ModalHeader title={title} />
       <ModalContent className={'mb-5'}>
-        {/* <TextArea
-          posClassName={`patient-detials-input-fields`}
-          key={'treatmentPlan'}
-          label={'Comments'}
-          id={'treatmentPlan'}
-          placeholder={'Add comments here'}
-          //   value={}
-          onChangeCallBack={e => {}}
-        /> */}
-        {/* <div>Do you really want share this Plan?</div> */}
-        <div>{msg}</div>
+        {content}
       </ModalContent>
       <ModalFooter
         onClose={closeHanlder}
@@ -52,4 +42,4 @@ function TreatmentPlanModal({
   );
 }
 
-export default TreatmentPlanModal;
+export default GeneralModal;
