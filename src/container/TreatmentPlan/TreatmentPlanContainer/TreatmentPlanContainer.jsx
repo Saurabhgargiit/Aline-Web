@@ -182,9 +182,6 @@ const TreatmentPlanContainer = () => {
     setRedirectionInfo({latest: planId});
   },[])
 
-  console.log(activeKey);
-
-
 
 
   const getPlanDetails =(activeKeyId) =>{
@@ -249,7 +246,7 @@ const TreatmentPlanContainer = () => {
         }
         case searchParams.has('draft'):{
           if(JSON.stringify(redirectionInfo) !== '{}' && redirectionInfo['latest'] !== undefined){
-            navigate(`/patientDetails/${patientID}/${rebootID}/treatmentPlan/LatestPlan?latest=0`);
+            navigate(`/patientDetails/${patientID}/treatmentPlan/LatestPlan?latest=0`);
           }
           if(checkSanityFailed(treatmentPlanDraft)) break;
           const {id,treatmentPlanStatus, treatmentPlans} = treatmentPlanDraft;
@@ -264,7 +261,7 @@ const TreatmentPlanContainer = () => {
           break;
         }
         case (pathname.includes('noPlan') && JSON.stringify(redirectionInfo) !== '{}' && redirectionInfo['draft'] !== undefined):{
-          navigate(`/patientDetails/${patientID}/${rebootID}/treatmentPlan/DraftPlans?draft=0`);
+          navigate(`/patientDetails/${patientID}/treatmentPlan/DraftPlans?draft=0`);
           break;
         } 
         default:
