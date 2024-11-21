@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast, Bounce } from 'react-toastify';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import Button from '../../../components/Button/Button';
 
 import { uploadToS3 } from '../../../utils/aws';
 import { putCall } from '../../../utils/commonfunctions/apicallactions';
+
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import Download from 'yet-another-react-lightbox/plugins/download';
+
+import { ReactComponent as DownloadIcon } from '../../../assets/icons/download.svg';
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload.svg';
+import { ReactComponent as CloudUploadIcon } from '../../../assets/icons/cloud-upload.svg';
+import { ReactComponent as CrossIcon } from '../../../assets/icons/cross.svg';
+import './PhotosScans.scss';
 
 const labels = {
   profilePhoto: 'Profile Photo',
@@ -44,6 +56,9 @@ function PhotosScans({
   const [selectedFiles, setSelectedFiles] = useState(
     initState(labels, [{ url: '', key: '' }])
   );
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxSlides, setLightboxSlides] = useState([]);
 
   const { patientID } = useParams();
 
@@ -58,8 +73,6 @@ function PhotosScans({
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        console.log(e);
-        console.log(e.target.result);
         setFormValues((prev) => ({
           ...prev,
           [key]: { res: e.target.result, file },
@@ -108,7 +121,6 @@ function PhotosScans({
           hideProgressBar: false,
           autoClose: 2000,
           closeOnClick: true,
-          // pauseOnHover: true,
           theme: 'light',
           transition: Bounce,
         });
@@ -121,7 +133,6 @@ function PhotosScans({
           hideProgressBar: false,
           autoClose: 2000,
           closeOnClick: true,
-          // pauseOnHover: true,
           theme: 'light',
           transition: Bounce,
         });
@@ -146,7 +157,6 @@ function PhotosScans({
       });
     }
 
-    // Update selectedFiles if there's a URL to remove
     if (uploadedFile[0]?.url) {
       setSelectedFiles((prev) => {
         return { ...prev, [key]: [{ url: '', key: '' }] };
@@ -162,10 +172,38 @@ function PhotosScans({
     }
   }, [formData, cancelFlag]);
 
+  // Prepare images for the lightbox
+  useEffect(() => {
+    const slides = Object.entries(selectedFiles)
+      .filter(([key, value]) => key !== 'scans' && value[0]?.url)
+      .map(([key, value]) => ({
+        src: value[0].url,
+        title: labels[key],
+      }));
+    setLightboxSlides(slides);
+  }, [selectedFiles]);
+
+  const openLightbox = (index) => {
+    console.log(index);
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
+  // Handle image download
+  const handleDownload = (url, filename) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename || 'image.jpg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="patientAddEditTopContainer">
       <div className="patientAddEditContainer">
-        {Object.entries(labels).map(([key, label]) => {
+        {Object.entries(labels).map(([key, label], idx) => {
+          console.log(idx);
           const fileInputType =
             key === 'scans'
               ? fileTypeRestrictions['scans']
@@ -183,55 +221,113 @@ function PhotosScans({
           const uploadNotDone = uploadedFile?.res;
 
           return (
-            <div className="patient-detials-input-fields">
+            <div className="patient-detials-input-fields photo-scans">
               <label htmlFor={key}>{label}</label>
               {isEdit ? (
                 <>
                   {!dataExists && (
-                    <input
-                      id={key}
-                      type="file"
-                      accept={fileInputType}
-                      onChange={(e) => handleFileChange(key, e)}
-                    />
+                    // <input
+                    //   id={key}
+                    //   type="file"
+                    //   accept={fileInputType}
+                    //   onChange={(e) => handleFileChange(key, e)}
+                    // />
+
+                    <>
+                      <input
+                        id={`file-input-${key}`}
+                        type="file"
+                        accept={fileInputType}
+                        onChange={(e) => handleFileChange(key, e)}
+                      />
+                      <label
+                        htmlFor={`file-input-${key}`}
+                        className="upload-label"
+                      >
+                        <OverlayTrigger
+                          key={`file-input-${key}-tooltip`}
+                          placement={'top'}
+                          overlay={
+                            <Tooltip id={`file-input-${key}-tooltip`}>
+                              {`Upload Photo`}
+                            </Tooltip>
+                          }
+                        >
+                          <UploadIcon />
+                        </OverlayTrigger>
+                      </label>
+                    </>
                   )}
                   {dataExists && (
                     <>
                       {key !== 'scans' ? (
-                        <img
-                          src={uploadedFile?.res || selectedFile[0]?.url}
-                          alt={label}
-                          style={{ height: '100px' }}
-                        />
+                        <div>
+                          <img
+                            src={uploadedFile?.res || selectedFile[0]?.url}
+                            alt={label}
+                            style={{ height: '100px' }}
+                            // onClick={() =>
+                            // openLightbox(
+                            //   uploadedFile?.res || selectedFile[0]?.url
+                            // )
+                            // }
+                            onClick={() => openLightbox(idx)}
+                          />
+                          <Button
+                            onClickCallBk={() => clearFile(key)}
+                            svg={<CrossIcon />}
+                            tooltip={`Remove ${label}`}
+                            ariaLabel={`Remove ${label}`}
+                            postionClass="fit-content"
+                          ></Button>
+                        </div>
                       ) : (
-                        <a
-                          href={uploadedFile?.res || selectedFile[0]?.url}
-                          download
-                        >
-                          Download Scan
-                        </a>
+                        <div>
+                          <a
+                            href={uploadedFile?.res || selectedFile[0]?.url}
+                            download
+                          >
+                            Download Scan
+                          </a>
+                          <button onClick={() => clearFile(key)}>Remove</button>
+                        </div>
                       )}
-                      <button onClick={() => clearFile(key)}>Remove</button>
                     </>
                   )}
                   {uploadNotDone && (
-                    <button
-                      onClick={() => uploadFile(key)}
-                      // disabled={!selectedFiles}
-                    >
-                      Upload
-                    </button>
+                    <Button
+                      onClickCallBk={() => uploadFile(key)}
+                      svg={<CloudUploadIcon />}
+                      tooltip={`Upload ${label}`}
+                      ariaLabel={`Upload ${label}`}
+                      postionClass="fit-content"
+                    ></Button>
                   )}
                 </>
               ) : (
                 <>
                   {key !== 'scans' &&
                     (selectedFile[0]?.url ? (
-                      <img
-                        src={selectedFile[0]?.url}
-                        alt={label}
-                        style={{ height: '100px' }}
-                      />
+                      <div>
+                        <img
+                          src={selectedFile[0]?.url}
+                          alt={label}
+                          style={{ height: '100px', cursor: 'pointer' }}
+                          onClick={() => openLightbox(idx)}
+                        />
+                        <Button
+                          onClickCallBk={() =>
+                            handleDownload(
+                              uploadedFile?.res || selectedFile[0]?.url,
+                              `${label}.jpg`
+                            )
+                          }
+                          svg={<DownloadIcon />}
+                          tooltip={`Download ${label}`}
+                          ariaLabel={`Download ${label}`}
+                          postionClass="fit-content"
+                        ></Button>
+                      </div>
                     ) : (
                       <div>No Photo available</div>
                     ))}
@@ -261,6 +357,15 @@ function PhotosScans({
           />
         </div>
       </div>
+      {lightboxOpen && (
+        <Lightbox
+          open={lightboxOpen}
+          close={() => setLightboxOpen(false)}
+          slides={lightboxSlides}
+          index={lightboxIndex}
+          plugins={[Zoom, Download]}
+        />
+      )}
     </div>
   );
 }
