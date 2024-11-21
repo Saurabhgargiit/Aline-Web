@@ -1,18 +1,13 @@
 import AWS from 'aws-sdk';
+import {
+  encodeRFC5987ValueChars,
+  sanitizeFileName,
+} from './commonfunctions/commonfunctions';
 
 AWS.config.region = process.env.REACT_APP_S3_REGION;
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
   IdentityPoolId: process.env.REACT_APP_S3_IDENTITY_POOL_ID,
 });
-
-const encodeRFC5987ValueChars = (str) => {
-  return encodeURIComponent(str)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')
-    .replace(/\*/g, '%2A')
-    .replace(/%(?:7C|60|5E)/g, unescape);
-};
 
 const s3 = new AWS.S3({
   apiVersion: process.env.REACT_APP_API_VERSION,
@@ -28,7 +23,7 @@ export const uploadToS3 = async (key, file) => {
         return reject(err);
       }
       const fileName = file.name;
-      const encodedFileName = encodeRFC5987ValueChars(fileName);
+      const sanitizedFileName = sanitizeFileName(fileName);
 
       // Credentials are ready, proceed with upload
       const upload = new AWS.S3.ManagedUpload({
@@ -36,8 +31,8 @@ export const uploadToS3 = async (key, file) => {
           Bucket: s3.config.params.Bucket,
           Key: key,
           Body: file,
-          ContentDisposition: `attachment; filename="${fileName}"; filename*=UTF-8''${encodedFileName}`,
-          ContentType: file.type,
+          ContentDisposition: `attachment; filename="${sanitizedFileName}"`,
+          ContentType: file.type || 'application/octet-stream',
         },
       });
 

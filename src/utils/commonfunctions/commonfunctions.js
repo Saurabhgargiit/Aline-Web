@@ -142,7 +142,7 @@ export const CommonUtils = {
   capitalizeFirstLetter: function (sentence) {
     return sentence
       .split(' ') // Split the sentence into an array of words
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
       .join(' '); // Join the words back into a sentence
   },
 
@@ -159,14 +159,21 @@ export const CommonUtils = {
     return [year, month, day].join('-');
   },
 
-  removeWhitespace: str => {
+  removeWhitespace: (str) => {
     return str.replace(/\s+/g, '');
   },
 
-  checkSanityFailed: item =>{
+  checkSanityFailed: (item) => {
     return item === null || item === undefined;
   },
   isLaptopScreen: () => {
     return window.innerWidth > 1200;
-  }
+  },
+};
+
+export const sanitizeFileName = (fileName) => {
+  return fileName
+    .normalize('NFKD') // Normalize Unicode characters
+    .replace(/[^\x00-\x7F]/g, '') // Remove non-ASCII characters
+    .replace(/\s+/g, '_'); // Replace spaces with underscores
 };

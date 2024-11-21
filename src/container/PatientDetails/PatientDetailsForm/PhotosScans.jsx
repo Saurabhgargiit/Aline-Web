@@ -4,9 +4,11 @@ import { toast, Bounce } from 'react-toastify';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import Button from '../../../components/Button/Button';
+import ImgViewer from '../../../components/ImgViewer/ImgViewer';
 
 import { uploadToS3 } from '../../../utils/aws';
 import { putCall } from '../../../utils/commonfunctions/apicallactions';
+import { sanitizeFileName } from '../../../utils/commonfunctions/commonfunctions';
 
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
@@ -56,6 +58,7 @@ function PhotosScans({
   const [selectedFiles, setSelectedFiles] = useState(
     initState(labels, [{ url: '', key: '' }])
   );
+  const [loadingStatus, setLoadingStatus] = useState(initState(labels, false));
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [lightboxSlides, setLightboxSlides] = useState([]);
@@ -66,6 +69,8 @@ function PhotosScans({
     scans: '.zip,.7z',
     default: 'image/jpeg,image/png,image/gif,image/jpg',
   };
+
+  console.log(loadingStatus);
 
   //file upload to browser input element
   const handleFileChange = (key, event) => {
@@ -87,15 +92,20 @@ function PhotosScans({
     const files = formValues[label];
     if (!files.file) return;
 
-    const photoKey = `${patientID}/reboot${rebootID}/${label}-${Date.now()}-${
-      files.file.name
-    }`;
+    const sanitizedFileName = sanitizeFileName(files.file.name);
+
+    const photoKey = `${patientID}/reboot${rebootID}/${label}-${Date.now()}-${sanitizedFileName}`;
 
     try {
-      const { Location, key } = await uploadToS3(photoKey, files.file);
+      //maintain the variable caps letter
+      setLoadingStatus((prev) => ({
+        ...prev,
+        [label]: true,
+      }));
+      const { Location, Key } = await uploadToS3(photoKey, files.file);
       setSelectedFiles((prev) => ({
         ...prev,
-        [label]: [{ url: Location, key: key }],
+        [label]: [{ url: Location, key: Key }],
       }));
       setFormValues((prev) => {
         const tempFormValues = { ...prev };
@@ -106,6 +116,12 @@ function PhotosScans({
     } catch (err) {
       console.error('There was an error uploading your file: ', err.message);
       alert('There was an error uploading your file: ', err.message);
+    } finally {
+      // Set loading status to false
+      setLoadingStatus((prev) => ({
+        ...prev,
+        [label]: false,
+      }));
     }
   };
 
@@ -203,7 +219,6 @@ function PhotosScans({
     <div className="patientAddEditTopContainer">
       <div className="patientAddEditContainer">
         {Object.entries(labels).map(([key, label], idx) => {
-          console.log(idx);
           const fileInputType =
             key === 'scans'
               ? fileTypeRestrictions['scans']
@@ -221,18 +236,14 @@ function PhotosScans({
           const uploadNotDone = uploadedFile?.res;
 
           return (
-            <div className="patient-detials-input-fields photo-scans">
+            <div
+              className="patient-detials-input-fields photo-scans"
+              key={`div-${idx}`}
+            >
               <label htmlFor={key}>{label}</label>
               {isEdit ? (
                 <>
                   {!dataExists && (
-                    // <input
-                    //   id={key}
-                    //   type="file"
-                    //   accept={fileInputType}
-                    //   onChange={(e) => handleFileChange(key, e)}
-                    // />
-
                     <>
                       <input
                         id={`file-input-${key}`}
@@ -262,15 +273,10 @@ function PhotosScans({
                     <>
                       {key !== 'scans' ? (
                         <div>
-                          <img
+                          <ImgViewer
                             src={uploadedFile?.res || selectedFile[0]?.url}
                             alt={label}
-                            style={{ height: '100px' }}
-                            // onClick={() =>
-                            // openLightbox(
-                            //   uploadedFile?.res || selectedFile[0]?.url
-                            // )
-                            // }
+                            loading={loadingStatus[key]}
                             onClick={() => openLightbox(idx)}
                           />
                           <Button
@@ -309,10 +315,10 @@ function PhotosScans({
                   {key !== 'scans' &&
                     (selectedFile[0]?.url ? (
                       <div>
-                        <img
+                        <ImgViewer
                           src={selectedFile[0]?.url}
                           alt={label}
-                          style={{ height: '100px', cursor: 'pointer' }}
+                          loading={loadingStatus[key]}
                           onClick={() => openLightbox(idx)}
                         />
                         <Button
