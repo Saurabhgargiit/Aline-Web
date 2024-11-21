@@ -100,6 +100,11 @@ $paginationBorderColor: $backgroundheaderfooterColor;
   border-bottom: $rowBorder;
 }
 
+.fit-content {
+  width: fit-content;
+  height: fit-content;
+}
+
 .error-Msg {
   color: $erroMsgColor;
   font-size: 0.75rem;
@@ -134,7 +139,7 @@ $paginationBorderColor: $backgroundheaderfooterColor;
   align-items: center;
 }
 
-.marginBottom56{
+.marginBottom56 {
   margin-bottom: 56px;
 }
 
