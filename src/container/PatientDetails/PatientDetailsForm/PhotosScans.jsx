@@ -70,8 +70,6 @@ function PhotosScans({
     default: 'image/jpeg,image/png,image/gif,image/jpg',
   };
 
-  console.log(loadingStatus);
-
   //file upload to browser input element
   const handleFileChange = (key, event) => {
     const file = event.target.files[0];
@@ -112,7 +110,6 @@ function PhotosScans({
         delete tempFormValues[label];
         return tempFormValues;
       });
-      console.log('Successfully uploaded file:', Location);
     } catch (err) {
       console.error('There was an error uploading your file: ', err.message);
       alert('There was an error uploading your file: ', err.message);
@@ -200,7 +197,6 @@ function PhotosScans({
   }, [selectedFiles]);
 
   const openLightbox = (index) => {
-    console.log(index);
     setLightboxIndex(index);
     setLightboxOpen(true);
   };

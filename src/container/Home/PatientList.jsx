@@ -45,7 +45,6 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     (state) => state.getAllPatients.allPatients
   );
   const searchData = useSelector((state) => state.searchReducer.searchData);
-  console.log(searchData);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

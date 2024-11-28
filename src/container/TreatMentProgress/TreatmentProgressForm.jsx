@@ -4,21 +4,19 @@ import { toast, Bounce } from 'react-toastify';
 
 import { Badge } from 'react-bootstrap';
 
-import TextArea from '../../../components/TextArea/TextArea';
-import Dropdown from '../../../components/Dropdown/Dropdown';
-import Loader from '../../common/Loader/Loader';
-import MultiSelectDropdown from '../../../components/Dropdown/MultiSelectDropdown';
-import Button from '../../../components/Button/Button';
-import { plans, steps, tags, currencies } from '../treatmentPlanConstants';
-import {
-  postCall,
-  putCall,
-} from '../../../utils/commonfunctions/apicallactions';
-import FileUploader from '../../../components/FileUploader/FileUploader';
+import TextArea from '../../components/TextArea/TextArea';
+import Dropdown from '../../components/Dropdown/Dropdown';
+import Loader from '../common/Loader/Loader';
+import Button from '../../components/Button/Button';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
-import './TreatmentPlanForm.scss';
+import { visitTypes, alignerTracking } from './TreatmentProgressConstants';
+import { postCall, putCall } from '../../utils/commonfunctions/apicallactions';
+import FileUploader from '../../components/FileUploader/FileUploader';
 
-const TreatmentPlanForm = (props) => {
+import './TreatmentProgressForm.scss';
+
+const TreatmentProgressForm = (props) => {
   const {
     existingData,
     cancelHandler,
@@ -39,17 +37,13 @@ const TreatmentPlanForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [formValues, setFormValues] = useState({
-    caseAssessment: existingData?.caseAssessment || '',
-    treatmentPlanSummary: existingData?.treatmentPlanSummary || '',
-    upperSteps: existingData?.upperSteps || 0,
-    lowerSteps: existingData?.lowerSteps || 0,
-    expectedDuration: existingData?.expectedDuration || 0,
-    treatmentPlanCategory: existingData?.treatmentPlanCategory || 'featherPlan',
-    price: existingData?.price || { currency: 'aed', price: 0 },
-    iprAndAttachmentReports: existingData?.iprAndAttachmentReports || [],
-    treatmentSimulationsURL: existingData?.treatmentSimulationsURL || [],
-    treatmentSimulationsAttachments:
-      existingData?.treatmentSimulationsAttachments || [],
+    dateofVisit:
+      existingData?.dateofVisit || CommonUtils.formatDate(new Date()),
+    visitName: existingData?.visitName || '',
+    visitType: existingData?.visitType || 'firstVisit',
+    alignerTracking: existingData?.alignerTracking || 'good',
+    notesForVisit: existingData?.notesForVisit || '',
+    photos: existingData?.photos || [],
   });
 
   const saveHandler = () => {
@@ -110,27 +104,12 @@ const TreatmentPlanForm = (props) => {
     }
   };
 
-  const handlePriceChange = (e, type) => {
-    const { value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      price: {
-        ...prevValues.price,
-        [type]: value,
-      },
-    }));
-  };
-
   const handleFileUpload = (type, fileData) => {
     setFormValues((prevValues) => ({
       ...prevValues,
       [type]: [...prevValues[type], fileData],
     }));
   };
-
-  const handleCheckboxChange = () => {};
-
-  const uploadVideoHandler = () => {};
 
   function renderCheckboxGroup(
     label,
@@ -180,38 +159,32 @@ const TreatmentPlanForm = (props) => {
   ) : (
     <div className="patientAddEditTopContainer mb-4">
       <div className="patientAddEditContainer">
-        <div className={`patient-detials-input-fields gap-8 marginEdit`}>
-          <span className="mb-2 sub-heading">Malocclusion Tags </span>
-          <MultiSelectDropdown
-            label={'Select Tags'}
-            options={tags}
-            handleCheckboxChange={tagChangeHandler}
-            selectedCheckBox={selectedTags}
-            className={'dropdown-width'}
-          />
-          <div className="tags-container">
-            {selectedTags.length > 0 &&
-              selectedTags.map((el, i) => {
-                const tagDetail = tags.find((tag) => tag.value === el);
-                const { label, color } = tagDetail;
-                return (
-                  <Badge pill key={el + i} bg={color} className="tag">
-                    {label}
-                  </Badge>
-                );
-              })}
-          </div>
+        <div className="label-input-container">
+          <label htmlFor="date-scan">Date of Visit*</label>
+          <input
+            id="date-scan"
+            type="date"
+            value={formValues.dateofVisit}
+            // min={formData.dateOfScan}
+            onChange={(e) =>
+              handleInputChange({
+                target: { name: 'dateofVisit', value: e.target.value },
+              })
+            }
+          ></input>
         </div>
         <TextArea
           posClassName={`patient-detials-input-fields gap-8 sub-heading marginEdit`}
-          key={'caseAssessment'}
-          label={'Case Assessment:'}
-          id={'caseAssessment'}
-          placeholder={isEdit ? 'Enter details here...' : 'No details given'}
-          value={formValues.caseAssessment}
+          key={'notes'}
+          label={'Visit Notes:'}
+          id={'notes'}
+          placeholder={
+            isEdit ? 'Enter progress notes here...' : 'No notes available'
+          }
+          value={formValues.notes}
           onChangeCallBack={(e) =>
             handleInputChange({
-              target: { name: 'caseAssessment', value: e.target.value },
+              target: { name: 'notes', value: e.target.value },
             })
           }
         />
@@ -238,14 +211,14 @@ const TreatmentPlanForm = (props) => {
           <p className="error-Msg">{errors.chiefComplaint}</p>
         )}
 
-        {renderCheckboxGroup(
+        {/* {renderCheckboxGroup(
           'No of Steps',
           steps,
           formValues,
           handleInputChange,
           errors,
           isEdit
-        )}
+        )} */}
 
         <div className={`patient-detials-input-fields gap-8 marginEdit`}>
           <span className="mb-2 sub-heading">Treatment Plan Category</span>
@@ -253,30 +226,12 @@ const TreatmentPlanForm = (props) => {
             <div className="step-container">
               <label className="">Plan Type</label>
               <Dropdown
-                options={plans}
+                options={visitTypes}
                 selectedValue={formValues.treatmentPlanCategory}
                 onChangeCallBk={(value) =>
                   handleInputChange({
                     target: { name: 'treatmentPlanCategory', value },
                   })
-                }
-              />
-            </div>
-            <div className="step-container">
-              <label className="">Price Quotation</label>
-              <input
-                className="price-quote"
-                type="number"
-                min={0}
-                placeholder="0"
-                value={formValues.price.price}
-                onChange={(e) => handlePriceChange(e, 'price')}
-              />
-              <Dropdown
-                options={currencies}
-                selectedValue={formValues.price.currency}
-                onChangeCallBk={(value) =>
-                  handlePriceChange({ target: { value } }, 'currency')
                 }
               />
             </div>
@@ -359,4 +314,4 @@ const TreatmentPlanForm = (props) => {
   );
 };
 
-export default memo(TreatmentPlanForm);
+export default memo(TreatmentProgressForm);

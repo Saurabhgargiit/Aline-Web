@@ -72,8 +72,9 @@ const Header = ({ title, leftBtnHanlder }) => {
     />
   );
 
-  const headerDetailsFn = () => {
-    if (location.pathname === '/home' || location.pathname === '/users') {
+  const headerDetailsFn = (_patientID) => {
+    const pathname = location.pathname;
+    if (pathname === '/home' || pathname === '/users') {
       setHeaderDetails((prevState) => {
         return {
           ...prevState,
@@ -84,14 +85,14 @@ const Header = ({ title, leftBtnHanlder }) => {
             '',
             leftBtnHanlder
           ),
-          title: location.pathname === '/home' ? 'Patient List' : 'Users',
+          title: pathname === '/home' ? 'Patient List' : 'Users',
           rightButton: null,
         };
       });
       return;
     }
 
-    const paths = location.pathname.split('/');
+    const paths = pathname.split('/');
     if (paths.includes('patientDetails')) {
       let title = '';
       switch (true) {
@@ -103,8 +104,12 @@ const Header = ({ title, leftBtnHanlder }) => {
           title = 'Photos and Scans';
           break;
         }
-        case location.pathname.includes('treatmentPlan'): {
+        case pathname.includes('treatmentPlan'): {
           title = 'Treatment Plan';
+          break;
+        }
+        case pathname.includes('progress'): {
+          title = 'Treatment Progress';
           break;
         }
         default: {
@@ -112,11 +117,16 @@ const Header = ({ title, leftBtnHanlder }) => {
           break;
         }
       }
+
       setHeaderDetails((prevState) => {
         return {
           ...prevState,
           leftButton: iconVar('back', BackIcon, 'Back', '', () =>
-            navigate('/home')
+            navigate(
+              pathname.includes('progress')
+                ? `/patientDetails/${_patientID}/details`
+                : '/home'
+            )
           ),
           title: title,
           rightButton: iconVar(
@@ -218,19 +228,17 @@ const Header = ({ title, leftBtnHanlder }) => {
   }, [patientID]);
 
   useEffect(() => {
-    headerDetailsFn();
+    let _patientID = '';
     if (location.pathname.includes('patientDetails')) {
       const pathNameArr = location.pathname.split('/');
-      const patientIDURL = pathNameArr[2];
-      setPatientID(patientIDURL);
-      //     const rebootID = +pathNameArr[3];
-      //     if(rebootID !== selectedReboot) setSelectedReboot(rebootID);
-      //     if(patientIDURL !== patientID )setPatientID(patientIDURL);
+      _patientID = pathNameArr[2];
+      setPatientID(_patientID);
     } else {
       setPatientID('');
       setRebootIDs([]);
       setSelectedReboot(0);
     }
+    headerDetailsFn(_patientID);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -286,24 +294,34 @@ const Header = ({ title, leftBtnHanlder }) => {
                 </button> */}
         {/* {location.pathname.includes('patientDetails') && <Dropdown/>} */}
         {location.pathname.includes('patientDetails') &&
-          rebootIDs.length > 0 && (
-            <div className="reboot-container">
-              <label className="">Plan Selected</label>
-              <Dropdown
-                selectedValue={selectedRebootID}
-                options={getRebootOptions()}
-                onChangeCallBk={changeRebootHandler}
-                className="dropdown"
-              />
+          !location.pathname.includes('progress') && (
+            <>
               <Button
-                title="Add Reboot"
-                onClickCallBk={() => {
-                  actionHandler('createRebootConfirmation');
-                }}
-                className="rebootbtn"
-                type="primary"
+                title="View Progress"
+                onClickCallBk={() =>
+                  navigate(`/patientDetails/${patientID}/progress`)
+                }
               />
-            </div>
+              {rebootIDs.length > 0 && (
+                <div className="reboot-container">
+                  <label className="">Plan Selected</label>
+                  <Dropdown
+                    selectedValue={selectedRebootID}
+                    options={getRebootOptions()}
+                    onChangeCallBk={changeRebootHandler}
+                    className="dropdown"
+                  />
+                  <Button
+                    title="Add Reboot"
+                    onClickCallBk={() => {
+                      actionHandler('createRebootConfirmation');
+                    }}
+                    className="rebootbtn"
+                    type="primary"
+                  />
+                </div>
+              )}
+            </>
           )}
       </div>
       {!CommonUtils.isLaptopScreen() && (

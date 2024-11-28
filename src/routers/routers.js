@@ -1,19 +1,33 @@
-import react, {lazy, Suspense} from 'react';
+import react, { lazy, Suspense } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Loader from '../container/common/Loader/Loader';
 
-
 const HomeLayout = lazy(() => import('../container/Home/HomeLayout'));
 const AdminLayout = lazy(() => import('../container/Admin/AdminLayout'));
-const PatientDetailsContainer = lazy(() => import('../container/PatientDetails/PatientDetailsContainer'));
-const PhotosScansForm = lazy(() => import('../container/PatientDetails/PatientDetailsForm/PhotosScansForm'));
-const TreatmentPlanLayout = lazy(() => import('../container/TreatmentPlan/TreatmentPlanLayout'));
-const TreatMentProgress = lazy(() => import('../container/TreatMentProgress/TreatMentProgress'));
-const RebootRequest = lazy(() => import('../container/RebootRequest/RebootRequest'));
-const RebootPlan = lazy(() => import('../container/RebootPlan/RebootPlan'));
-const PatientDetailsLayout = lazy(() => import('../container/PatientDetailsLayout/PatientDetailsLayout'));
-const FillerPage = lazy(() => import('../container/FillerPages/FillerPage'));
+const PatientDetailsContainer = lazy(() =>
+  import('../container/PatientDetails/PatientDetailsContainer')
+);
+const PhotosScansForm = lazy(() =>
+  import('../container/PatientDetails/PatientDetailsForm/PhotosScansForm')
+);
+const TreatmentPlanLayout = lazy(() =>
+  import('../container/TreatmentPlan/TreatmentPlanLayout')
+);
+const TreatmentProgress = lazy(() =>
+  import('../container/TreatMentProgress/TreatmentProgress')
+);
 
+const TreatmentProgressForm = lazy(() =>
+  import('../container/TreatMentProgress/TreatmentProgressForm')
+);
+const RebootRequest = lazy(() =>
+  import('../container/RebootRequest/RebootRequest')
+);
+const RebootPlan = lazy(() => import('../container/RebootPlan/RebootPlan'));
+const PatientDetailsLayout = lazy(() =>
+  import('../container/PatientDetailsLayout/PatientDetailsLayout')
+);
+const FillerPage = lazy(() => import('../container/FillerPages/FillerPage'));
 
 // Define a simple route configuration
 const routeConfig = [
@@ -28,24 +42,32 @@ const routeConfig = [
       { path: 'details', element: <PatientDetailsContainer /> },
       { path: 'photosScans', element: <PhotosScansForm /> },
       { path: 'treatmentPlan/:planType', element: <TreatmentPlanLayout /> },
-      { path: 'progress', element: <TreatMentProgress /> },
+      { path: 'progress', element: <TreatmentProgress /> },
+      { path: 'progress/:visitId', element: <TreatmentProgressForm /> },
       { path: 'rebootRequested', element: <RebootRequest /> },
       { path: 'rebootPlan', element: <RebootPlan /> },
     ],
   },
-  { path:'*', element: <FillerPage message={'Page Not Found. Please check details or contact admin.'}/>}
+  {
+    path: '*',
+    element: (
+      <FillerPage
+        message={'Page Not Found. Please check details or contact admin.'}
+      />
+    ),
+  },
 ];
 
 const Routers = () => {
   return (
-    <Suspense fallback={<Loader/>}>
+    <Suspense fallback={<Loader />}>
       <Routes>
-        {routeConfig.map(route => {
+        {routeConfig.map((route) => {
           if (route.children) {
             return (
               <Route path={route.path} key={route.path} element={route.element}>
                 <Route index element={<Navigate to="details" />} />
-                {route.children.map(child => (
+                {route.children.map((child) => (
                   <Route
                     path={child.path}
                     element={child.element}
