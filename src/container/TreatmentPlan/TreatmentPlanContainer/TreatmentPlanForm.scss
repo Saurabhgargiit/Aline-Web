@@ -5,18 +5,6 @@
   background-color: transparent;
 }
 
-.step-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  .label {
-  }
-  .step-input {
-    max-width: 60px;
-  }
-}
-
 .dropdown-width {
   width: 16rem;
   .dropdown-button {
@@ -37,7 +25,7 @@
   max-width: 100px;
 }
 
-.pdf-container{
+.pdf-container {
   min-height: fit-content;
   height: fit-content;
   width: 100%;

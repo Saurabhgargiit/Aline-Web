@@ -1,5 +1,8 @@
 import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SVG from 'react-inlinesvg';
+
+import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
 import { noDataInfo } from '../../utils/globalConstants';
 
@@ -11,14 +14,14 @@ const data = [
     date: '2024-11-21T00:00:00.000+00:00',
     progress: 'visit-1',
     clickable: true,
-    progressID: '66c089bd5358026ae00f03e9',
+    slug: '66c089bd5358026ae00f03e9',
   },
   {
     id: '66c0ad05f5fe3a1015d32d41',
     date: '2024-08-17T14:00:37.105+00:00',
     progress: 'visit-2',
     clickable: true,
-    progressID: '66c089bd5358026ae00f03e9',
+    slug: '66c089bd5358026ae00f03e9',
   },
 ];
 
@@ -106,6 +109,13 @@ function TreatmentProgress() {
   return (
     <div className="patientAddEditTopContainer">
       <div className="patientAddEditContainer">{renderTable()}</div>
+      <Button
+        postionClass={'home-page-button-pos rightPosEdit'}
+        className={'home-page-add-button'}
+        svg={<SVG src={require(`../../assets/icons/plus.svg`).default} />}
+        onClickCallBk={() => {}}
+        tooltip={'Log Visit'}
+      />
     </div>
   );
 }
