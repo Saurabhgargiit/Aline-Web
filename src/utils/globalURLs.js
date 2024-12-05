@@ -56,4 +56,11 @@ export class ApiRelativePaths {
   static REQUEST_FOR_MODIFICATION =
     '/api/v1/aline/treatmentPlan/planRequestModification';
   static APPROVE_PLAN = '/api/v1/aline/treatmentPlan/approvePlan';
+
+  //Treatment Prgress
+  static CREATE_VISIT = '/api/v1/aline/treatmentProgress/createProgress'; // post
+  static UPDATE_VISIT = '/api/v1/aline/treatmentProgress/updateProgress'; // pUT
+  static GET_TABLE_OF_PROGRESS =
+    '/api/v1/aline/treatmentProgress/getAllProgress';
+  static GET_PROGRESS_DETAIL = '/api/v1/aline/treatmentProgress/getProgress';
 }

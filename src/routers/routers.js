@@ -43,7 +43,7 @@ const routeConfig = [
       { path: 'photosScans', element: <PhotosScansForm /> },
       { path: 'treatmentPlan/:planType', element: <TreatmentPlanLayout /> },
       { path: 'progress', element: <TreatmentProgress /> },
-      { path: 'progress/:visitId', element: <TreatmentProgressForm /> },
+      { path: 'progress/:visitMode', element: <TreatmentProgressForm /> },
       { path: 'rebootRequested', element: <RebootRequest /> },
       { path: 'rebootPlan', element: <RebootPlan /> },
     ],

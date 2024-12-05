@@ -22,7 +22,7 @@ function MultipleImagesUploader({
   labelkey,
   fileTypeRestrictions,
   patientID,
-  rebootID,
+  folder,
   existingFiles,
   onFilesUpload,
   isEdit,
@@ -55,7 +55,7 @@ function MultipleImagesUploader({
 
       for (const { file } of formValues) {
         const sanitizedFileName = sanitizeFileName(file.name);
-        const photoKey = `${patientID}/reboot${rebootID}/${labelkey}-${Date.now()}-${sanitizedFileName}`;
+        const photoKey = `${patientID}/${folder}/${labelkey}-${Date.now()}-${sanitizedFileName}`;
         const { Location, Key } = await uploadToS3(photoKey, file);
         uploadedFiles.push({ url: Location, key: Key });
       }
