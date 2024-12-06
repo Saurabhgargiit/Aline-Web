@@ -123,7 +123,9 @@ const Header = ({ title, leftBtnHanlder }) => {
           ...prevState,
           leftButton: iconVar('back', BackIcon, 'Back', '', () =>
             navigate(
-              pathname.includes('progress')
+              pathname.includes('progress/')
+                ? `/patientDetails/${_patientID}/progress`
+                : pathname.includes('progress')
                 ? `/patientDetails/${_patientID}/details`
                 : '/home'
             )

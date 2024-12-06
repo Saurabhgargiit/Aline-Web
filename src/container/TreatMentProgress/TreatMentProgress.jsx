@@ -8,6 +8,7 @@ import { noDataInfo } from '../../utils/globalConstants';
 import { getCall } from '../../utils/commonfunctions/apicallactions';
 
 import './TreatmentProgressForm.scss';
+import Loader from '../common/Loader/Loader';
 
 const headers = [
   {
@@ -33,7 +34,7 @@ function TreatmentProgress() {
   const { patientID } = useParams();
 
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
   const getData = async () => {
@@ -68,14 +69,18 @@ function TreatmentProgress() {
 
   // Updated to add query params with id=item.id
   const getActionItems = (key, item) => {
-    return (
-      <span
-        onClick={() => navigate(`${location.pathname}/visit?id=${item.id}`)}
-        className="visit-action"
-      >
-        {item[key]}
-      </span>
-    );
+    if (item.clickable) {
+      return (
+        <span
+          onClick={() => navigate(`${location.pathname}/visit?id=${item.id}`)}
+          className="visit-action"
+        >
+          {item[key]}
+        </span>
+      );
+    } else {
+      return <span>{item[key]}</span>;
+    }
   };
 
   const tableData = (data) => {
@@ -126,21 +131,25 @@ function TreatmentProgress() {
   if (isLoading) {
     return (
       <div className="patientAddEditTopContainer">
-        <div className="patientAddEditContainer">Loading...</div>
+        {/* <div className="patientAddEditContainer"> */}
+        <Loader />
+        {/* </div> */}
       </div>
     );
   }
 
   return (
     <div className="patientAddEditTopContainer">
-      <div className="patientAddEditContainer">{renderTable()}</div>
-      <Button
-        postionClass={'home-page-button-pos rightPosEdit'}
-        className={'home-page-add-button'}
-        svg={<SVG src={require(`../../assets/icons/plus.svg`).default} />}
-        onClickCallBk={() => navigate(`${location.pathname}/add`)}
-        tooltip={'Log Visit'}
-      />
+      <div className="patient-details-tabs-container">
+        <div className="patientAddEditContainer">{renderTable()}</div>
+        <Button
+          postionClass={'home-page-button-pos rightPosEdit'}
+          className={'home-page-add-button'}
+          svg={<SVG src={require(`../../assets/icons/plus.svg`).default} />}
+          onClickCallBk={() => navigate(`${location.pathname}/add`)}
+          tooltip={'Log Visit'}
+        />
+      </div>
     </div>
   );
 }

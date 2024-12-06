@@ -143,7 +143,7 @@ const TreatmentPlanForm = (props) => {
   ) {
     return (
       <section
-        className={`patient-detials-input-fields gap-8 ${
+        className={`patient-details-input-fields gap-8 ${
           isEdit ? 'marginEdit' : 'marginView'
         }`}
       >
@@ -180,7 +180,7 @@ const TreatmentPlanForm = (props) => {
   ) : (
     <div className="patientAddEditTopContainer mb-4">
       <div className="patientAddEditContainer">
-        <div className={`patient-detials-input-fields gap-8 marginEdit`}>
+        <div className={`patient-details-input-fields gap-8 marginEdit`}>
           <span className="mb-2 sub-heading">Malocclusion Tags </span>
           <MultiSelectDropdown
             label={'Select Tags'}
@@ -203,7 +203,7 @@ const TreatmentPlanForm = (props) => {
           </div>
         </div>
         <TextArea
-          posClassName={`patient-detials-input-fields gap-8 sub-heading marginEdit`}
+          posClassName={`patient-details-input-fields gap-8 sub-heading marginEdit`}
           key={'caseAssessment'}
           label={'Case Assessment:'}
           id={'caseAssessment'}
@@ -221,7 +221,7 @@ const TreatmentPlanForm = (props) => {
         )}
 
         <TextArea
-          posClassName={`patient-detials-input-fields gap-8 sub-heading marginEdit`}
+          posClassName={`patient-details-input-fields gap-8 sub-heading marginEdit`}
           key={'treatmentPlanSummary'}
           label={'Treatment Plan Summary:'}
           id={'treatmentPlanSummary'}
@@ -247,7 +247,7 @@ const TreatmentPlanForm = (props) => {
           isEdit
         )}
 
-        <div className={`patient-detials-input-fields gap-8 marginEdit`}>
+        <div className={`patient-details-input-fields gap-8 marginEdit`}>
           <span className="mb-2 sub-heading">Treatment Plan Category</span>
           <div className="arches-container">
             <div className="step-container">
@@ -284,7 +284,7 @@ const TreatmentPlanForm = (props) => {
         </div>
 
         <div
-          className={`patient-detials-input-fields gap-8 pdf-container ${
+          className={`patient-details-input-fields gap-8 pdf-container ${
             isEdit ? 'marginEdit' : 'marginView'
           } `}
         >
@@ -303,7 +303,7 @@ const TreatmentPlanForm = (props) => {
         </div>
 
         <div
-          className={`patient-detials-input-fields gap-8 pdf-container ${
+          className={`patient-details-input-fields gap-8 pdf-container ${
             isEdit ? 'marginEdit' : 'marginView'
           }`}
         >

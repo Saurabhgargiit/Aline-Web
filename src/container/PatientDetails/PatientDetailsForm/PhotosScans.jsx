@@ -127,7 +127,7 @@ function PhotosScans({
 
           return (
             <div
-              className="patient-detials-input-fields photo-scans"
+              className="patient-details-input-fields photo-scans"
               key={`div-${idx}`}
             >
               <SingleImageUploader

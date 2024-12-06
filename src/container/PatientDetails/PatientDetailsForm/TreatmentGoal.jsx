@@ -44,7 +44,7 @@ function TreatmentGoal({
 
   // Handles changing of input text fields
   const handleInputChange = (key, value) => {
-    setFormValues(prev => ({
+    setFormValues((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -57,7 +57,7 @@ function TreatmentGoal({
         ([key]) => key === `${mainKey}Options`
       );
       if (Object.keys(obj)[1] !== optionKey) {
-        setFormValues(prev => ({
+        setFormValues((prev) => ({
           ...prev,
           [mainKey]: [optionKey],
           [mainKey + 'Details']: '',
@@ -65,7 +65,7 @@ function TreatmentGoal({
         return;
       }
     }
-    setFormValues(prev => ({
+    setFormValues((prev) => ({
       ...prev,
       [mainKey]: [optionKey],
     }));
@@ -125,13 +125,13 @@ function TreatmentGoal({
   ) {
     return (
       <div
-        className={`patient-detials-input-fields gap-8 ${
+        className={`patient-details-input-fields gap-8 ${
           isEdit ? 'marginEdit' : 'marginView'
         }`}
       >
         <span className="mb-2 sub-heading">{label}*</span>
         <div className="arches-container">
-          {options.map(option => (
+          {options.map((option) => (
             <label
               key={option.key}
               htmlFor={option.key}
@@ -157,7 +157,7 @@ function TreatmentGoal({
               id={`'${mainKey}details`}
               type="text"
               value={formValues[`${mainKey}Details`]}
-              onChange={e =>
+              onChange={(e) =>
                 handleInputChange(`${mainKey}Details`, e.target.value)
               }
               disabled={
@@ -190,7 +190,7 @@ function TreatmentGoal({
     <div className="patientAddEditTopContainer">
       <div className="patientAddEditContainer">
         <div
-          className={`patient-detials-input-fields gap-8 sub-heading ${
+          className={`patient-details-input-fields gap-8 sub-heading ${
             isEdit ? 'marginEdit' : 'marginView'
           }`}
         >
@@ -202,7 +202,7 @@ function TreatmentGoal({
             placeholder="Enter details here..."
             disabled={!isEdit}
             value={formValues.correction}
-            onChange={e => handleInputChange('correction', e.target.value)}
+            onChange={(e) => handleInputChange('correction', e.target.value)}
           ></textarea>
           {errors.correction && (
             <p className="error-Msg">{errors.correction}</p>
@@ -245,7 +245,7 @@ function TreatmentGoal({
           handleInputChange
         )}
 
-        <div className="patient-detials-input-fields gap-8 sub-heading">
+        <div className="patient-details-input-fields gap-8 sub-heading">
           <label htmlFor="treatmentGoalOthers">Others:</label>
           <textarea
             id="treatmentGoalOthers"
@@ -256,7 +256,7 @@ function TreatmentGoal({
             }
             disabled={!isEdit}
             value={formValues.treatmentGoalOthers}
-            onChange={e =>
+            onChange={(e) =>
               setFormValues({
                 ...formValues,
                 treatmentGoalOthers: e.target.value,

@@ -1,13 +1,13 @@
-import React, { useState, useEffect, memo } from "react";
-import Button from "../../../components/Button/Button";
-import TextArea from "../../../components/TextArea/TextArea";
+import React, { useState, useEffect, memo } from 'react';
+import Button from '../../../components/Button/Button';
+import TextArea from '../../../components/TextArea/TextArea';
 
 const labels = {
-  crownsBridges: "Crown/Bridges",
-  implants: "Implants",
-  veneers: "Veneers",
-  previousTreatment: "Previous Orthodontic Treatment",
-  composites: "Composites/Buildup",
+  crownsBridges: 'Crown/Bridges',
+  implants: 'Implants',
+  veneers: 'Veneers',
+  previousTreatment: 'Previous Orthodontic Treatment',
+  composites: 'Composites/Buildup',
 };
 
 function ComplaintNHistoryForm({
@@ -21,12 +21,12 @@ function ComplaintNHistoryForm({
   const initObj = {};
   Object.keys(labels).forEach((el) => {
     initObj[el] = {};
-    initObj[el]["flag"] = false;
-    initObj[el]["details"] = "";
+    initObj[el]['flag'] = false;
+    initObj[el]['details'] = '';
   });
   const [formValues, setFormValues] = useState({
-    chiefComplaint: "",
-    historyOthers: "",
+    chiefComplaint: '',
+    historyOthers: '',
     ...initObj,
   });
 
@@ -38,12 +38,12 @@ function ComplaintNHistoryForm({
     let isValid = true;
 
     if (!formValues.chiefComplaint?.trim()) {
-      tempErrors.chiefComplaint = "Chief complaint is required.";
+      tempErrors.chiefComplaint = 'Chief complaint is required.';
       isValid = false;
     }
 
     Object.keys(labels).forEach((field) => {
-      if (formValues[field]?.flag && !formValues[field]["details"]?.trim()) {
+      if (formValues[field]?.flag && !formValues[field]['details']?.trim()) {
         tempErrors[`${field}Details`] =
           "Details are required when selected 'Yes'.";
         isValid = false;
@@ -58,7 +58,7 @@ function ComplaintNHistoryForm({
   const handleNext = () => {
     if (!isEdit || validateForm()) {
       isEdit && setFormData(formValues);
-      clickHandler("profile");
+      clickHandler('profile');
     } else {
       window.scrollTo(0, 0);
     }
@@ -71,7 +71,7 @@ function ComplaintNHistoryForm({
         [key]: {
           ...prevState[key],
           flag: e.target.checked,
-          details: !e.target.checked ? "" : prevState[key].details,
+          details: !e.target.checked ? '' : prevState[key].details,
         },
       };
     });
@@ -94,8 +94,8 @@ function ComplaintNHistoryForm({
     <div className="patientAddEditTopContainer">
       <div className="patientAddEditContainer">
         <div
-          className={`patient-detials-input-fields gap-8 sub-heading ${
-            isEdit ? "marginEdit" : "marginView"
+          className={`patient-details-input-fields gap-8 sub-heading ${
+            isEdit ? 'marginEdit' : 'marginView'
           }`}
         >
           <label htmlFor="chief-complaint">Chief Complaint:*</label>
@@ -121,13 +121,13 @@ function ComplaintNHistoryForm({
         </div>
         {Object.entries(labels).map(([key, label]) => (
           <div
-            className={`patient-detials-input-fields gap-8 ${
-              isEdit ? "marginEdit" : "marginView"
+            className={`patient-details-input-fields gap-8 ${
+              isEdit ? 'marginEdit' : 'marginView'
             }`}
             key={key}
           >
             <label htmlFor={key} className="checkbox-container sub-heading">
-              {label + ":"}
+              {label + ':'}
               {isEdit && (
                 <>
                   <input
@@ -143,9 +143,9 @@ function ComplaintNHistoryForm({
               )}
               {!isEdit && (
                 <span
-                  className={`info ${formValues[key]?.flag ? "yes" : "no"}`}
+                  className={`info ${formValues[key]?.flag ? 'yes' : 'no'}`}
                 >
-                  {formValues[key]?.flag ? "Yes" : "No"}
+                  {formValues[key]?.flag ? 'Yes' : 'No'}
                 </span>
               )}
             </label>
@@ -154,7 +154,7 @@ function ComplaintNHistoryForm({
               <>
                 {isEdit && (
                   <label htmlFor={formValues[`${key}Details`]}>
-                    If Yes, Details:{" "}
+                    If Yes, Details:{' '}
                   </label>
                 )}
                 <input
@@ -182,12 +182,12 @@ function ComplaintNHistoryForm({
           </div>
         ))}
         <TextArea
-          posClassName={"patient-detials-input-fields gap-8 sub-heading"}
-          key={"historyOthers"}
-          label={"Others:"}
-          id={"historyOthers"}
+          posClassName={'patient-details-input-fields gap-8 sub-heading'}
+          key={'historyOthers'}
+          label={'Others:'}
+          id={'historyOthers'}
           placeholder={
-            isEdit ? "Enter details here..." : "No other details given"
+            isEdit ? 'Enter details here...' : 'No other details given'
           }
           disabled={!isEdit}
           value={formValues.historyOthers}
@@ -195,7 +195,7 @@ function ComplaintNHistoryForm({
             setFormValues({ ...formValues, historyOthers: e.target.value })
           }
         />
-        {/* <div className="patient-detials-input-fields gap-8 sub-heading">
+        {/* <div className="patient-details-input-fields gap-8 sub-heading">
           <label htmlFor="historyOthers">Others:</label>
           <textarea
             id="historyOthers"
@@ -214,7 +214,7 @@ function ComplaintNHistoryForm({
         <div className="buttons pt-4">
           <Button
             postionClass="mx-5"
-            className={!isEdit ? "noVisible" : ""}
+            className={!isEdit ? 'noVisible' : ''}
             title="Cancel"
             onClickCallBk={cancelHandler}
           />

@@ -2,6 +2,10 @@ import React, { useState, useEffect, memo } from 'react';
 import { toast, Bounce } from 'react-toastify';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import SVG from 'react-inlinesvg';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import Download from 'yet-another-react-lightbox/plugins/download';
 
 import Dropdown from '../../components/Dropdown/Dropdown';
 import Loader from '../common/Loader/Loader';
@@ -63,6 +67,11 @@ const TreatmentProgressForm = () => {
 
   const [formValues, setFormValues] = useState(initialFormValues);
 
+  // State for Lightbox
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxSlides, setLightboxSlides] = useState([]);
+
   const getVisitDetails = async () => {
     if (!visitID && (isEdit || isView)) {
       setFetchError('No visit ID provided for edit/view mode.');
@@ -91,8 +100,6 @@ const TreatmentProgressForm = () => {
   };
 
   useEffect(() => {
-    // If in edit or view mode and we have a visitID
-    // Only fetch data if we don't already have the correct existingData for this visitID
     if ((isEdit || isView) && visitID) {
       if (!existingData.id || existingData.id !== visitID) {
         getVisitDetails();
@@ -106,8 +113,17 @@ const TreatmentProgressForm = () => {
     }
   }, [visitID, patientID, isEdit, isView]);
 
+  const normalizedFiles = (photos) =>
+    photos.map((file) => {
+      if (typeof file === 'string') {
+        return { url: file, key: '' };
+      }
+      return file; // Already in correct format { url:..., key:... }
+    });
+
   useEffect(() => {
     if (existingData && (isEdit || isView)) {
+      // If photos are strings from GET call, just keep them as is (no normalization)
       setFormValues({
         createdOn: existingData.createdOn
           ? CommonUtils.formatDate(existingData.createdOn)
@@ -116,7 +132,10 @@ const TreatmentProgressForm = () => {
         visitType: existingData.visitType || 'firstVisit',
         alignerTracking: existingData.alignerTracking || 'good',
         notes: existingData.notes || '',
-        photos: existingData.photos || [],
+        photos:
+          existingData.photos?.length > 0
+            ? normalizedFiles(existingData.photos)
+            : [],
       });
     }
   }, [existingData, isEdit, isView]);
@@ -194,6 +213,7 @@ const TreatmentProgressForm = () => {
             navigate(
               `/patientDetails/${patientID}/progress/view?id=${visitID}`
             );
+            getVisitDetails();
           } else {
             // On add save: navigate back to table page
             navigate(`/patientDetails/${patientID}/progress`);
@@ -210,7 +230,6 @@ const TreatmentProgressForm = () => {
         }
       })
       .catch((error) => {
-        console.error('Error saving treatment progress:', error);
         toast.error('An error occurred while saving the treatment progress.', {
           position: 'top-right',
           hideProgressBar: false,
@@ -224,11 +243,6 @@ const TreatmentProgressForm = () => {
   };
 
   const cancelHandler = () => {
-    // On cancel:
-    // if in edit mode -> just switch to view mode (no extra API call needed)
-    // if in add mode -> go back to the listing table
-    // if in view mode -> go back to listing table
-
     if (isEdit && visitID) {
       navigate(`/patientDetails/${patientID}/progress/view?id=${visitID}`);
     } else if (isAdd) {
@@ -270,9 +284,30 @@ const TreatmentProgressForm = () => {
       photos: fileObj.photos,
     }));
   };
+  console.log(formValues);
 
+  useEffect(() => {
+    if (Array.isArray(formValues.photos) && formValues.photos.length) {
+      const slides = formValues.photos.map(({ key, url }, i) => ({
+        src: url,
+        title: 'Photo ' + i,
+      }));
+      setLightboxSlides(slides);
+    }
+  }, [formValues.photos]);
+
+  // Lightbox logic
   const openLightbox = (index) => {
-    // Implement lightbox functionality if needed
+    if (isView) {
+      setLightboxIndex(index);
+      setLightboxOpen(true);
+    }
+  };
+
+  const closeLightbox = (e) => {
+    // Close lightbox on overlay click
+    setLightboxOpen(false);
+    setLightboxIndex(0);
   };
 
   if (isLoading) {
@@ -293,146 +328,167 @@ const TreatmentProgressForm = () => {
   }
 
   return (
-    <div className="patientAddEditTopContainer mb-4">
-      <div className="patientAddEditContainer">
-        <div className="patient-details-input-fields gap-8 marginEdit">
-          <span className="mb-2 sub-heading">Visit Details</span>
+    <>
+      <div className="patientAddEditTopContainer mb-4">
+        <div className="patient-details-tabs-container">
+          <div className="patientAddEditContainer">
+            <div className="patient-details-input-fields gap-8 marginEdit">
+              <span className="mb-2 sub-heading">Visit Details</span>
 
-          <div className="label-input-container mb-2">
-            <label htmlFor="createdOn">
-              Date of Visit<span className="required">*</span>
-            </label>
-            <input
-              id="createdOn"
-              name="createdOn"
-              type="date"
-              value={formValues.createdOn}
-              onChange={handleInputChange}
+              <div className="label-input-container mb-2">
+                <label htmlFor="createdOn">
+                  Date of Visit<span className="required">*</span>
+                </label>
+                <input
+                  id="createdOn"
+                  name="createdOn"
+                  type="date"
+                  value={formValues.createdOn}
+                  onChange={handleInputChange}
+                  disabled={isView}
+                  className={errors.createdOn ? 'input-error' : ''}
+                />
+                {errors.createdOn && (
+                  <span className="error-text">{errors.createdOn}</span>
+                )}
+              </div>
+
+              <div className="mb-2 arches-container">
+                <div className="step-container">
+                  <label htmlFor="progress">
+                    Visit Name<span className="required">*</span>
+                  </label>
+                  <input
+                    id="progress"
+                    name="progress"
+                    type="text"
+                    value={formValues.progress}
+                    onChange={handleInputChange}
+                    disabled={isView}
+                    className={errors.progress ? 'input-error' : ''}
+                  />
+                  {errors.progress && (
+                    <span className="error-text">{errors.progress}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="mb-2 arches-container">
+                <div className="step-container">
+                  <label htmlFor="visitType">
+                    Visit Type<span className="required">*</span>
+                  </label>
+                  <Dropdown
+                    id="visitType"
+                    options={visitTypes}
+                    selectedValue={formValues.visitType}
+                    onChangeCallBk={(value) =>
+                      handleDropdownChange('visitType', value)
+                    }
+                    disabled={isView}
+                  />
+                  {errors.visitType && (
+                    <span className="error-text">{errors.visitType}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="arches-container">
+                <div className="step-container">
+                  <label htmlFor="alignerTracking">
+                    Aligner Tracking<span className="required">*</span>
+                  </label>
+                  <Dropdown
+                    id="alignerTracking"
+                    options={alignerTracking}
+                    selectedValue={formValues.alignerTracking}
+                    onChangeCallBk={(value) =>
+                      handleDropdownChange('alignerTracking', value)
+                    }
+                    disabled={isView}
+                  />
+                  {errors.alignerTracking && (
+                    <span className="error-text">{errors.alignerTracking}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <TextArea
+              posClassName={`patient-details-input-fields gap-8 sub-heading marginEdit`}
+              key={'notes'}
+              label={'Visit Notes*:'}
+              id={'notes'}
+              name="notes"
+              placeholder={
+                isEdit || isAdd
+                  ? 'Enter progress notes here...'
+                  : 'No notes available'
+              }
+              value={formValues.notes}
+              onChangeCallBack={handleInputChange}
               disabled={isView}
-              className={errors.createdOn ? 'input-error' : ''}
+              error={errors.notes}
             />
-            {errors.createdOn && (
-              <span className="error-text">{errors.createdOn}</span>
-            )}
-          </div>
 
-          <div className="mb-2 arches-container">
-            <div className="step-container">
-              <label htmlFor="progress">
-                Visit Name<span className="required">*</span>
-              </label>
-              <input
-                id="progress"
-                name="progress"
-                type="text"
-                value={formValues.progress}
-                onChange={handleInputChange}
-                disabled={isView}
-                className={errors.progress ? 'input-error' : ''}
+            <div
+              className={`patient-details-input-fields gap-8 pdf-container photo-scans ${
+                isEdit || isAdd ? 'marginEdit' : 'marginView'
+              }`}
+            >
+              <MultipleImagesUploader
+                label="Photos"
+                labelkey="photos"
+                fileTypeRestrictions="image/jpeg,image/png,image/gif,image/jpg"
+                patientID={patientID}
+                existingFiles={formValues.photos || []}
+                onFilesUpload={handleFilesUpload}
+                isEdit={isEdit || isAdd}
+                imgClickHandler={openLightbox}
+                folder={'progress'}
               />
-              {errors.progress && (
-                <span className="error-text">{errors.progress}</span>
+            </div>
+
+            <div className="arches-container button-group">
+              {(isAdd || isEdit) && (
+                <Button title="Cancel" onClickCallBk={cancelHandler} />
+              )}
+              {(isAdd || isEdit) && (
+                <Button
+                  title="Save"
+                  type="primary"
+                  onClickCallBk={saveHandler}
+                />
               )}
             </div>
           </div>
-
-          <div className="mb-2 arches-container">
-            <div className="step-container">
-              <label htmlFor="visitType">
-                Visit Type<span className="required">*</span>
-              </label>
-              <Dropdown
-                id="visitType"
-                options={visitTypes}
-                selectedValue={formValues.visitType}
-                onChangeCallBk={(value) =>
-                  handleDropdownChange('visitType', value)
-                }
-                disabled={isView}
-              />
-              {errors.visitType && (
-                <span className="error-text">{errors.visitType}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="arches-container">
-            <div className="step-container">
-              <label htmlFor="alignerTracking">
-                Aligner Tracking<span className="required">*</span>
-              </label>
-              <Dropdown
-                id="alignerTracking"
-                options={alignerTracking}
-                selectedValue={formValues.alignerTracking}
-                onChangeCallBk={(value) =>
-                  handleDropdownChange('alignerTracking', value)
-                }
-                disabled={isView}
-              />
-              {errors.alignerTracking && (
-                <span className="error-text">{errors.alignerTracking}</span>
-              )}
-            </div>
-          </div>
+          {isView && visitID && (
+            <Button
+              postionClass={'home-page-button-pos rightPosEdit'}
+              className={'home-page-add-button'}
+              svg={
+                <SVG src={require(`../../assets/icons/edit-2.svg`).default} />
+              }
+              onClickCallBk={() =>
+                navigate(
+                  `/patientDetails/${patientID}/progress/edit?id=${visitID}`
+                )
+              }
+              tooltip={'Edit Details'}
+            />
+          )}
         </div>
-
-        <TextArea
-          posClassName={`patient-details-input-fields gap-8 sub-heading marginEdit`}
-          key={'notes'}
-          label={'Visit Notes*:'}
-          id={'notes'}
-          name="notes"
-          placeholder={
-            isEdit || isAdd
-              ? 'Enter progress notes here...'
-              : 'No notes available'
-          }
-          value={formValues.notes}
-          onChangeCallBack={handleInputChange}
-          disabled={isView}
-          error={errors.notes}
-        />
-
-        <div
-          className={`patient-details-input-fields gap-8 pdf-container photo-scans ${
-            isEdit || isAdd ? 'marginEdit' : 'marginView'
-          }`}
-        >
-          <MultipleImagesUploader
-            label="Photos"
-            labelkey="photos"
-            fileTypeRestrictions="image/jpeg,image/png,image/gif,image/jpg"
-            patientID={patientID}
-            existingFiles={formValues.photos || []}
-            onFilesUpload={handleFilesUpload}
-            isEdit={isEdit || isAdd}
-            imgClickHandler={openLightbox}
-            folder={'progress'}
+        {lightboxOpen && (
+          <Lightbox
+            open={lightboxOpen}
+            close={closeLightbox}
+            slides={lightboxSlides}
+            index={lightboxIndex}
+            plugins={[Zoom, Download]}
           />
-        </div>
-
-        <div className="arches-container button-group">
-          {(isAdd || isEdit) && (
-            <Button title="Cancel" onClickCallBk={cancelHandler} />
-          )}
-          {(isAdd || isEdit) && (
-            <Button title="Save" type="primary" onClickCallBk={saveHandler} />
-          )}
-        </div>
+        )}
       </div>
-      {isView && visitID && (
-        <Button
-          postionClass={'home-page-button-pos rightPosEdit'}
-          className={'home-page-add-button'}
-          svg={<SVG src={require(`../../assets/icons/edit-2.svg`).default} />}
-          onClickCallBk={() =>
-            navigate(`/patientDetails/${patientID}/progress/edit?id=${visitID}`)
-          }
-          tooltip={'Edit Details'}
-        />
-      )}
-    </div>
+    </>
   );
 };
 
