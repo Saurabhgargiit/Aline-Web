@@ -298,12 +298,15 @@ const Header = ({ title, leftBtnHanlder }) => {
         {location.pathname.includes('patientDetails') &&
           !location.pathname.includes('progress') && (
             <>
-              <Button
-                title="View Progress"
-                onClickCallBk={() =>
-                  navigate(`/patientDetails/${patientID}/progress`)
-                }
-              />
+              <div className="progressBtn-container">
+                <Button
+                  title="View Progress"
+                  onClickCallBk={() =>
+                    navigate(`/patientDetails/${patientID}/progress`)
+                  }
+                  className="rebootbtn"
+                />
+              </div>
               {rebootIDs.length > 0 && (
                 <div className="reboot-container">
                   <label className="">Plan Selected</label>

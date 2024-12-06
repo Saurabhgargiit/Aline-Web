@@ -29,8 +29,10 @@
   .logo-title-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     gap: 0.5rem;
+    width: 15rem;
+    max-width: 15rem;
   }
 
   .app-header-img-container {
@@ -84,11 +86,11 @@
       background-color: $backgroundheaderfooterColor;
       color: #fff;
     }
-    .rebootbtn {
-      height: 1.8rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-    }
+  }
+  .rebootbtn {
+    height: 1.8rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
   }
 
   .app-header-title {
@@ -112,4 +114,12 @@
       }
     }
   }
+}
+
+.progressBtn-container {
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 7rem;
 }
