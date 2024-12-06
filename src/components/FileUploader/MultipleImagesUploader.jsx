@@ -1,5 +1,3 @@
-// MultipleImagesUploader.js
-
 import React, { useState, useEffect } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -29,12 +27,19 @@ function MultipleImagesUploader({
   imgClickHandler,
 }) {
   const [formValues, setFormValues] = useState([]); // Array of { file: File }
-  const [selectedFiles, setSelectedFiles] = useState(existingFiles || []); // Array of { url: '', key: '' }
+  const [selectedFiles, setSelectedFiles] = useState([]); // Array of { url: string, key?: string }
   const [loadingStatus, setLoadingStatus] = useState(false);
 
   useEffect(() => {
     if (existingFiles) {
-      setSelectedFiles(existingFiles);
+      // Normalize existingFiles to always have objects with a url property
+      const normalizedFiles = existingFiles.map((file) => {
+        if (typeof file === 'string') {
+          return { url: file, key: '' };
+        }
+        return file; // Already in correct format { url:..., key:... }
+      });
+      setSelectedFiles(normalizedFiles);
     }
   }, [existingFiles]);
 
@@ -60,9 +65,10 @@ function MultipleImagesUploader({
         uploadedFiles.push({ url: Location, key: Key });
       }
 
-      setSelectedFiles((prev) => [...prev, ...uploadedFiles]);
+      const updatedFiles = [...selectedFiles, ...uploadedFiles];
+      setSelectedFiles(updatedFiles);
       setFormValues([]);
-      onFilesUpload({ [labelkey]: [...selectedFiles, ...uploadedFiles] });
+      onFilesUpload({ [labelkey]: updatedFiles });
     } catch (err) {
       console.error('There was an error uploading your files: ', err.message);
       toast.error(`There was an error uploading your files: ${err.message}`, {
@@ -101,7 +107,6 @@ function MultipleImagesUploader({
     document.body.removeChild(link);
   };
 
-  const dataExists = formValues.length > 0 || selectedFiles.length > 0;
   const uploadNotDone = formValues.length > 0;
 
   return (
@@ -138,9 +143,7 @@ function MultipleImagesUploader({
                       src={file.url}
                       alt={`${label} ${index + 1}`}
                       loading={loadingStatus}
-                      onClick={() => {
-                        imgClickHandler(index);
-                      }}
+                      onClick={() => imgClickHandler(index)}
                     />
                     <Button
                       onClickCallBk={() => clearFile(index, true)}
@@ -235,9 +238,7 @@ function MultipleImagesUploader({
                         src={file.url}
                         alt={`${label} ${index + 1}`}
                         loading={loadingStatus}
-                        onClick={() => {
-                          imgClickHandler(index);
-                        }}
+                        onClick={() => imgClickHandler(index)}
                       />
                       <Button
                         onClickCallBk={() =>
