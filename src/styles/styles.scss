@@ -149,6 +149,36 @@ $paginationBorderColor: $backgroundheaderfooterColor;
   background-color: #fff;
 }
 
+.step-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  .label {
+  }
+  .step-input {
+    max-width: 60px;
+  }
+}
+
+.photo-scans {
+  button {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  svg {
+    width: 20px;
+    height: auto;
+    margin: 0.6rem;
+
+    path {
+      fill: $icon-color;
+    }
+  }
+}
+
 //@@@@@@@@@@@Fonts@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .font400 {

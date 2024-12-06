@@ -14,7 +14,7 @@ function TreatmentPlanModal({
   type,
   initialData,
   setUserAdded,
-  saveHandler =() =>{}
+  saveHandler = () => {},
 }) {
   const formRef = useRef(null);
   const handleSubmit = () => {
@@ -30,7 +30,7 @@ function TreatmentPlanModal({
       <ModalHeader title={title} />
       <ModalContent className={'mb-5'}>
         {/* <TextArea
-          posClassName={`patient-detials-input-fields`}
+          posClassName={`patient-details-input-fields`}
           key={'treatmentPlan'}
           label={'Comments'}
           id={'treatmentPlan'}

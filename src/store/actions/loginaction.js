@@ -40,7 +40,6 @@ export const getLoginData = (url_path, data) => {
         },
       })
       .then((res) => {
-        console.log(res);
         const finalRes = {
           result: 'success',
           data: { ...res.data },

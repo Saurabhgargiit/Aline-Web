@@ -63,7 +63,7 @@
   }
 }
 
-.patient-detials-input-fields {
+.patient-details-input-fields {
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -110,16 +110,15 @@
     }
   }
 }
-.tab-active{
+.tab-active {
   background-color: $formBackgroundColor !important;
   color: $backgroundheaderfooterColor !important;
   border: $sideRowBorder !important;
   border-bottom: none !important;
 }
-.tab-inactive{
+.tab-inactive {
   color: $primaryText;
 }
-
 
 .rightPosEdit {
   right: 19.5rem;
@@ -130,16 +129,15 @@
   }
 }
 
-@media (max-width:768px) {
-  .patient-details-tabs-container{
+@media (max-width: 768px) {
+  .patient-details-tabs-container {
     width: 100%;
     max-width: 100%;
   }
 }
 
-@media (min-width:768px) {
+@media (min-width: 768px) {
   .patientDetailsLayout {
-
     display: flex;
     justify-content: center;
   }

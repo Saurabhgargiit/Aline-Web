@@ -48,10 +48,10 @@ function ChatComponent() {
         </div>
         <div className="input-container">
           <TextArea
-            posClassName={'patient-detials-input-fields gap-8 sub-heading'}
+            posClassName={'patient-details-input-fields gap-8 sub-heading'}
             placeholder="Your comment"
             value={comment}
-            onChangeCallBack={e => setComment(e.target.value)}
+            onChangeCallBack={(e) => setComment(e.target.value)}
             // textAreaClass="input-field"
           />
           <Button

@@ -24,17 +24,19 @@ function PhotosScansForm() {
   const [photosScans, setPhotosScans] = useState({});
 
   const fetchedPhotosScans = useSelector(
-    state => state.getPhotosScans.photosScans
+    (state) => state.getPhotosScans.photosScans
   );
-  const rebootID = useSelector(state => state.rebootReducer.selectedRebootID);
+  const rebootID = useSelector((state) => state.rebootReducer.selectedRebootID);
 
   const dispatch = useDispatch();
 
   const { patientID } = useParams();
 
   //api function for getting the patient Details
-  const getPhotosScans = patientID => {
-    dispatch(getPhotosScansAction('GET_PHOTOS_SCANS_URLS', [patientID, rebootID]));
+  const getPhotosScans = (patientID) => {
+    dispatch(
+      getPhotosScansAction('GET_PHOTOS_SCANS_URLS', [patientID, rebootID])
+    );
   };
 
   const editHandler = () => {
@@ -46,12 +48,12 @@ function PhotosScansForm() {
   const cancelHandler = useCallback(() => {
     setIsEdit(false);
     setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {}); //set to redux state value
-    setCancelFlag(state => !state);
+    setCancelFlag((state) => !state);
   }, [fetchedPhotosScans]);
 
   const convertFormat = (obj, filterVal) => {
     const formattedObj = {};
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       if (key !== filterVal) {
         formattedObj[key] = [{ url: obj[key][0], key: '' }];
       }
@@ -69,7 +71,6 @@ function PhotosScansForm() {
       fetchedPhotosScans.result === 'success' &&
       fetchedPhotosScans.data !== undefined
     ) {
-      console.log(fetchedPhotosScans);
       setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {});
       setIsLoading(false);
       setErrMsg('');

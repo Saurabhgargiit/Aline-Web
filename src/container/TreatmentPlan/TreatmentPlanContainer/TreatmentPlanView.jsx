@@ -8,13 +8,18 @@ import { plans, steps, tags } from '../treatmentPlanConstants';
 import TreatmentPlanModal from './TreatmentPlanModal';
 import { useLocation } from 'react-router-dom';
 
-const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionHandler }) => {
+const TreatmentPlanView = ({
+  planInfo,
+  isLabSideUser,
+  editOptionHandler,
+  actionHandler,
+}) => {
   const location = useLocation();
   const isDraftPlan = location.pathname.includes('DraftPlan');
 
   function renderCheckboxGroup(label, options, formValues) {
     return (
-      <section className={`patient-detials-input-fields gap-8 marginView`}>
+      <section className={`patient-details-input-fields gap-8 marginView`}>
         <span className="mb-2 sub-heading" key={label}>
           {label}
         </span>
@@ -51,11 +56,11 @@ const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionH
     treatmentSimulationsURL,
     treatmentSimulationsAttachments,
   } = planInfo;
-  
+
   return (
     <div className="patientAddEditTopContainer  mb-4">
       <div className="patientAddEditContainer">
-        <div className={`patient-detials-input-fields gap-8 marginEdit`}>
+        <div className={`patient-details-input-fields gap-8 marginEdit`}>
           <span className="mb-2 sub-heading">Malocclusion Tags </span>
           <div className="tags-container">
             {/* <Badge pill bg={'primary'} className="tag">
@@ -76,29 +81,25 @@ const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionH
         </div>
         <label
           className={
-            'patient-detials-input-fields gap-8 sub-heading marginView'
+            'patient-details-input-fields gap-8 sub-heading marginView'
           }
         >
           Case Assessment:
-          <p>
-            {caseAssessment || 'No assessment provided'}
-          </p>
+          <p>{caseAssessment || 'No assessment provided'}</p>
         </label>
 
         <label
           className={
-            'patient-detials-input-fields gap-8 sub-heading marginView'
+            'patient-details-input-fields gap-8 sub-heading marginView'
           }
         >
           Treatment Plan Summary:
-          <p>
-          {treatmentPlanSummary || 'No summary provided'}
-          </p>
+          <p>{treatmentPlanSummary || 'No summary provided'}</p>
         </label>
 
         {renderCheckboxGroup('No. of Steps:', steps, 'formValues')}
 
-        <div className={`patient-detials-input-fields gap-8 marginView`}>
+        <div className={`patient-details-input-fields gap-8 marginView`}>
           <span className="mb-2 sub-heading">Treatment Plan Category:</span>
           <div className="arches-container">
             <div className="step-container">
@@ -108,19 +109,26 @@ const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionH
             </div>
             <div className="step-container">
               <label className="">
-                Price Quotation: &nbsp; <span>{price?.price} {price?.currency?.toUpperCase()}</span>
+                Price Quotation: &nbsp;{' '}
+                <span>
+                  {price?.price} {price?.currency?.toUpperCase()}
+                </span>
               </label>
             </div>
           </div>
         </div>
 
-        <div className={`patient-detials-input-fields gap-8 marginView`}>
+        <div className={`patient-details-input-fields gap-8 marginView`}>
           <span className="mb-2 sub-heading">IPR and Attachment Report</span>
           <div className="arches-container">
-          {iprAndAttachmentReports && iprAndAttachmentReports.length > 0 ? (
+            {iprAndAttachmentReports && iprAndAttachmentReports.length > 0 ? (
               iprAndAttachmentReports.map((report, index) => (
                 <div key={index}>
-                  <a href={report.url} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={report.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View Attachment {index + 1}
                   </a>
                 </div>
@@ -131,7 +139,7 @@ const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionH
           </div>
         </div>
 
-        <div className={`patient-detials-input-fields gap-8 marginView`}>
+        <div className={`patient-details-input-fields gap-8 marginView`}>
           <span className="mb-2 sub-heading">Treatment Simulation</span>
           <div className="arches-container">
             <label className="">
@@ -152,7 +160,8 @@ const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionH
           <div className="arches-container">
             <label className="">
               Upload Video: &nbsp;
-              {treatmentSimulationsAttachments && treatmentSimulationsAttachments.length > 0 ? (
+              {treatmentSimulationsAttachments &&
+              treatmentSimulationsAttachments.length > 0 ? (
                 <a
                   href={treatmentSimulationsAttachments[0]?.url}
                   target="_blank"
@@ -166,28 +175,36 @@ const TreatmentPlanView = ({ planInfo ,isLabSideUser, editOptionHandler, actionH
             </label>
           </div>
         </div>
-        
+
         <div className="arches-container">
-          {!isLabSideUser && !isDraftPlan && <Button
-            title="Approve Plan"
-            type="primary"
-            onClickCallBk={() => actionHandler('approve')}
-          />}
-          {!isLabSideUser && !isDraftPlan && <Button
-            title="Request for modification"
-            type="primary"
-            onClickCallBk={()=> actionHandler('reqMod')}
-          />}
-          {isLabSideUser && isDraftPlan && <Button
-            title="Edit Treatment Plan"
-            type="primary"
-            onClickCallBk={editOptionHandler}
-          />}
-          {isLabSideUser && isDraftPlan && <Button
-            title="Share Plan with Clinic"
-            type="primary"
-            onClickCallBk={() => actionHandler('sharePlan')}
-          />}
+          {!isLabSideUser && !isDraftPlan && (
+            <Button
+              title="Approve Plan"
+              type="primary"
+              onClickCallBk={() => actionHandler('approve')}
+            />
+          )}
+          {!isLabSideUser && !isDraftPlan && (
+            <Button
+              title="Request for modification"
+              type="primary"
+              onClickCallBk={() => actionHandler('reqMod')}
+            />
+          )}
+          {isLabSideUser && isDraftPlan && (
+            <Button
+              title="Edit Treatment Plan"
+              type="primary"
+              onClickCallBk={editOptionHandler}
+            />
+          )}
+          {isLabSideUser && isDraftPlan && (
+            <Button
+              title="Share Plan with Clinic"
+              type="primary"
+              onClickCallBk={() => actionHandler('sharePlan')}
+            />
+          )}
         </div>
       </div>
     </div>

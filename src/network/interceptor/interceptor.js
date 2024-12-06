@@ -23,7 +23,6 @@ axiosInstance.interceptors.request.use(
     ) {
       CommonUtils.logout();
     } else {
-      // console.log(config);
       return config;
     }
   },
