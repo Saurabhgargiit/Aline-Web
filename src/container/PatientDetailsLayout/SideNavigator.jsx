@@ -33,8 +33,10 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const rebootID = useSelector((state) => state.rebootReducer.selectedRebootID);
   const pathname = window.location.pathname;
   const pathNamePrefix = '/patientDetails/' + patientID;
+  const isProgressPage = pathname.includes('/progress');
 
-  const sidenNavigatorSuffix = rebootID > 0 ? ' (reboot ' + rebootID + ')' : '';
+  const sidenNavigatorSuffix =
+    rebootID > 0 && !isProgressPage ? ' (reboot ' + rebootID + ')' : '';
   const isLaptopScreen = CommonUtils.isLaptopScreen();
 
   // State to manage the visibility of subplans
@@ -53,7 +55,6 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const navItemsInitialRebootIndependent = [
     { name: 'Treatment Progress Update', path: '/progress' },
   ];
-  const isProgressPage = pathname.includes('/progress');
 
   const navItemsInitial = isProgressPage
     ? navItemsInitialRebootIndependent
