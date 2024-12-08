@@ -20,8 +20,8 @@ const headers = [
     order: 'asc',
   },
   {
-    key: 'progress',
-    id: 'progress',
+    key: 'visitType',
+    id: 'visitType',
     label: 'Treatment Progress',
     sortable: false,
     hidden: false,
@@ -75,7 +75,7 @@ function TreatmentProgress() {
           onClick={() => navigate(`${location.pathname}/visit?id=${item.id}`)}
           className="visit-action"
         >
-          {item[key]}
+          {item[key] || 'Click for visit update'}
         </span>
       );
     } else {
@@ -99,7 +99,7 @@ function TreatmentProgress() {
                 </span>
               ),
             };
-          case 'progress':
+          case 'visitType':
             return {
               label: '',
               id: `${key}-${j}-${i}`,

@@ -10,6 +10,11 @@ export const visitTypes = [
     label: 'Bonding',
   },
   {
+    id: 'scanning',
+    value: 'scanning',
+    label: 'Scanning',
+  },
+  {
     id: 'progressVisit',
     value: 'progressVisit',
     label: 'Progress visit',
@@ -29,9 +34,20 @@ export const visitTypes = [
     value: 'debonding',
     label: 'Debonding',
   },
+  {
+    id: 'other',
+    value: 'other',
+    label: 'Other',
+  },
 ];
 
 export const alignerTracking = [
+  {
+    id: 'na',
+    key: 'na',
+    value: 'na',
+    label: 'N/A',
+  },
   {
     id: 'good',
     key: 'good',

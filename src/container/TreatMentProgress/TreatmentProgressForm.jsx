@@ -58,9 +58,9 @@ const TreatmentProgressForm = () => {
     createdOn: existingData?.createdOn
       ? CommonUtils.formatDate(existingData.createdOn)
       : CommonUtils.formatDate(new Date()),
-    progress: existingData?.progress || '',
+    // progress: existingData?.progress || '',
     visitType: existingData?.visitType || 'firstVisit',
-    alignerTracking: existingData?.alignerTracking || 'good',
+    alignerTracking: existingData?.alignerTracking || 'na',
     notes: existingData?.notes || '',
     photos: existingData?.photos || [],
   };
@@ -128,9 +128,9 @@ const TreatmentProgressForm = () => {
         createdOn: existingData.createdOn
           ? CommonUtils.formatDate(existingData.createdOn)
           : CommonUtils.formatDate(new Date()),
-        progress: existingData.progress || '',
+        // progress: existingData.progress || '',
         visitType: existingData.visitType || 'firstVisit',
-        alignerTracking: existingData.alignerTracking || 'good',
+        alignerTracking: existingData.alignerTracking || 'na',
         notes: existingData.notes || '',
         photos:
           existingData.photos?.length > 0
@@ -147,9 +147,9 @@ const TreatmentProgressForm = () => {
       newErrors.createdOn = 'Date of Visit is required.';
     }
 
-    if (!formValues.progress.trim()) {
-      newErrors.progress = 'Visit Name is required.';
-    }
+    // if (!formValues.progress.trim()) {
+    //   newErrors.progress = 'Visit Name is required.';
+    // }
 
     if (!formValues.visitType) {
       newErrors.visitType = 'Visit Type is required.';
@@ -353,7 +353,7 @@ const TreatmentProgressForm = () => {
                 )}
               </div>
 
-              <div className="mb-2 arches-container">
+              {/* <div className="mb-2 arches-container">
                 <div className="step-container">
                   <label htmlFor="progress">
                     Visit Name<span className="required">*</span>
@@ -371,7 +371,7 @@ const TreatmentProgressForm = () => {
                     <span className="error-text">{errors.progress}</span>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               <div className="mb-2 arches-container">
                 <div className="step-container">

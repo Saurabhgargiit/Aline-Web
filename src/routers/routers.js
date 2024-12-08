@@ -19,6 +19,7 @@ const TreatmentProgress = lazy(() =>
 const TreatmentProgressForm = lazy(() =>
   import('../container/TreatmentProgress/TreatmentProgressForm')
 );
+
 const RebootRequest = lazy(() =>
   import('../container/RebootRequest/RebootRequest')
 );
