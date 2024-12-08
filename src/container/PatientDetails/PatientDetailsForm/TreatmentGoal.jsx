@@ -141,7 +141,7 @@ function TreatmentGoal({
               <input
                 type="checkbox"
                 id={option.key}
-                checked={formValues[mainKey]?.includes(option.key)}
+                checked={!!formValues[mainKey]?.includes(option.key)}
                 onChange={() => handleChange(option.key, mainKey)}
                 disabled={!isEdit}
               />

@@ -55,8 +55,8 @@ const TreatmentProgressForm = () => {
   const [existingData, setExistingData] = useState({});
 
   const initialFormValues = {
-    createdOn: existingData?.createdOn
-      ? CommonUtils.formatDate(existingData.createdOn)
+    date: existingData?.date
+      ? CommonUtils.formatDate(existingData.date)
       : CommonUtils.formatDate(new Date()),
     // progress: existingData?.progress || '',
     visitType: existingData?.visitType || 'firstVisit',
@@ -125,8 +125,8 @@ const TreatmentProgressForm = () => {
     if (existingData && (isEdit || isView)) {
       // If photos are strings from GET call, just keep them as is (no normalization)
       setFormValues({
-        createdOn: existingData.createdOn
-          ? CommonUtils.formatDate(existingData.createdOn)
+        date: existingData.date
+          ? CommonUtils.formatDate(existingData.date)
           : CommonUtils.formatDate(new Date()),
         // progress: existingData.progress || '',
         visitType: existingData.visitType || 'firstVisit',
@@ -137,14 +137,15 @@ const TreatmentProgressForm = () => {
             ? normalizedFiles(existingData.photos)
             : [],
       });
+      setIsLoading(false);
     }
   }, [existingData, isEdit, isView]);
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formValues.createdOn) {
-      newErrors.createdOn = 'Date of Visit is required.';
+    if (!formValues.date) {
+      newErrors.date = 'Date of Visit is required.';
     }
 
     // if (!formValues.progress.trim()) {
@@ -213,6 +214,8 @@ const TreatmentProgressForm = () => {
             navigate(
               `/patientDetails/${patientID}/progress/view?id=${visitID}`
             );
+            setFetchingData(true);
+            setIsLoading(true);
             getVisitDetails();
           } else {
             // On add save: navigate back to table page
@@ -336,20 +339,20 @@ const TreatmentProgressForm = () => {
               <span className="mb-2 sub-heading">Visit Details</span>
 
               <div className="label-input-container mb-2">
-                <label htmlFor="createdOn">
+                <label htmlFor="date">
                   Date of Visit<span className="required">*</span>
                 </label>
                 <input
-                  id="createdOn"
-                  name="createdOn"
+                  id="date"
+                  name="date"
                   type="date"
-                  value={formValues.createdOn}
+                  value={formValues.date}
                   onChange={handleInputChange}
                   disabled={isView}
-                  className={errors.createdOn ? 'input-error' : ''}
+                  className={errors.date ? 'input-error' : ''}
                 />
-                {errors.createdOn && (
-                  <span className="error-text">{errors.createdOn}</span>
+                {errors.date && (
+                  <span className="error-text">{errors.date}</span>
                 )}
               </div>
 

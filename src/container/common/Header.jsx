@@ -121,15 +121,19 @@ const Header = ({ title, leftBtnHanlder }) => {
       setHeaderDetails((prevState) => {
         return {
           ...prevState,
-          leftButton: iconVar('back', BackIcon, 'Back', '', () =>
+          leftButton: iconVar('back', BackIcon, 'Back', '', () => {
+            if (!pathname.includes('progress')) {
+              changeRebootHandler(0);
+            }
+
             navigate(
               pathname.includes('progress/')
                 ? `/patientDetails/${_patientID}/progress`
                 : pathname.includes('progress')
                 ? `/patientDetails/${_patientID}/details`
                 : '/home'
-            )
-          ),
+            );
+          }),
           title: title,
           rightButton: iconVar(
             'menuList',
@@ -178,7 +182,7 @@ const Header = ({ title, leftBtnHanlder }) => {
   };
 
   //Modal Handlers
-  const openModal = (title, msg, type) => {
+  const openModal = (title, msg, type, disabled, showFooter = true) => {
     setModalDetails((prev) => ({
       ...prev,
       isOpen: true,
@@ -186,6 +190,8 @@ const Header = ({ title, leftBtnHanlder }) => {
       content: <div>{msg}</div>,
       type: type,
       saveHandler: createReboot,
+      disabled: disabled,
+      showFooter: showFooter,
     }));
   };
 
@@ -197,28 +203,33 @@ const Header = ({ title, leftBtnHanlder }) => {
   const actionHandler = useCallback(
     (type) => {
       let title, msg;
+      let disabled = true;
+      let showFooter = true;
       switch (type) {
         case 'createRebootConfirmation': {
           title = 'Create Reboot';
           msg =
             'Are you sure you want to add new Reboot? This will trigger the change in treatment path.';
+          disabled = false;
           break;
         }
         case 'underCreation': {
           title = 'Create Reboot';
           msg = 'Please wait. Reboot framework is under progress';
+          showFooter = false;
           break;
         }
         case 'successfullyCreated': {
           title = 'Create Reboot';
           msg =
             'Reboot Successfully created. Please wait while necessary details are fetched.';
+          showFooter = false;
           break;
         }
         default:
           break;
       }
-      openModal(title, msg, type);
+      openModal(title, msg, type, disabled, showFooter);
     },
     [openModal]
   );
@@ -238,7 +249,7 @@ const Header = ({ title, leftBtnHanlder }) => {
     } else {
       setPatientID('');
       setRebootIDs([]);
-      setSelectedReboot(0);
+      changeRebootHandler(0);
     }
     headerDetailsFn(_patientID);
   }, [location.pathname]);
@@ -252,7 +263,7 @@ const Header = ({ title, leftBtnHanlder }) => {
       const rebootIdsArr = rebootIDsObject?.data;
       // setRebootIDs(rebootIdsArr);
       setRebootIDs([...rebootIdsArr]);
-      setSelectedReboot(rebootIdsArr[rebootIdsArr.length - 1]);
+      changeRebootHandler(rebootIdsArr[rebootIdsArr.length - 1]);
       if (modalDetails.isOpen) {
         changeRebootHandler(rebootIdsArr[rebootIdsArr.length - 1]);
         setTimeout(() => {

@@ -12,8 +12,8 @@ import Loader from '../common/Loader/Loader';
 
 const headers = [
   {
-    key: 'createdOn',
-    id: 'createdOn',
+    key: 'date',
+    id: 'date',
     label: 'Date',
     sortable: true,
     hidden: false,
@@ -88,14 +88,16 @@ function TreatmentProgress() {
       const row = headers.map((header, i) => {
         const { key } = header;
         switch (key) {
-          case 'createdOn':
+          case 'date':
             return {
               label: '',
               id: `${key}-${j}-${i}`,
               children: (
                 <span>
-                  {item.createdOn &&
-                    new Date(item.createdOn).toLocaleDateString()}
+                  {(item.date && new Date(item.date).toLocaleDateString()) ||
+                    (item.createdOn &&
+                      new Date(item.createdOn).toLocaleDateString()) ||
+                    'No date given'}
                 </span>
               ),
             };

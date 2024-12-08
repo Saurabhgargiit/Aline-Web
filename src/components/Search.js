@@ -30,7 +30,7 @@ export default function SearchBar({ searchHandler }) {
     <Container>
       <Row>
         <Col>
-          <Form className="d-flex" onSubmit={handleSubmit}>
+          <Form className="d-flex" onSubmit={handleSubmit} id="search-form">
             <Form.Control
               type="search"
               placeholder="Search Patient"
