@@ -57,8 +57,20 @@ function PhotosScans({
     }));
   };
 
+  const initState = (obj, value, filterFiles) => {
+    const initialState = {};
+    Object.keys(obj).forEach((label) => {
+      if (!filterFiles.hasOwnProperty(label)) {
+        initialState[label] = value;
+      }
+    });
+    return { ...filterFiles, ...initialState };
+  };
+
   const submitHandler = () => {
-    const payload = { ...selectedFiles };
+    let payload = { ...selectedFiles };
+    payload = initState(labels, [{ url: '', key: '' }], selectedFiles);
+
     payload['patientID'] = patientID;
 
     putCall(payload, 'ADD_URLS_TO_DATABASE', [rebootID]).then((data) => {

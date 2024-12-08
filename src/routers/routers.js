@@ -14,11 +14,10 @@ const TreatmentPlanLayout = lazy(() =>
   import('../container/TreatmentPlan/TreatmentPlanLayout')
 );
 const TreatmentProgress = lazy(() =>
-  import('../container/TreatMentProgress/TreatmentProgress')
+  import('../container/TreatmentProgress/TreatmentProgress')
 );
-
 const TreatmentProgressForm = lazy(() =>
-  import('../container/TreatMentProgress/TreatmentProgressForm')
+  import('../container/TreatmentProgress/TreatmentProgressForm')
 );
 const RebootRequest = lazy(() =>
   import('../container/RebootRequest/RebootRequest')
