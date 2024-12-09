@@ -48,6 +48,7 @@ function PhotosScans({
     scans: '.zip,.7z,application/zip,application/x-7z-compressed',
     default: 'image/jpeg,image/png,image/gif,image/jpg',
   };
+  console.log(formData);
 
   // Update selectedFiles when a file is uploaded
   const handleFileUpload = (fileObj) => {

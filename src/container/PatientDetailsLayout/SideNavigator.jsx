@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import {
+  CommonUtils,
+  ScreenUtils,
+} from '../../utils/commonfunctions/commonfunctions';
 import { getCall } from '../../utils/commonfunctions/apicallactions';
 import {
   getPlanDetailsMapping,
@@ -35,7 +38,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const pathNamePrefix = '/patientDetails/' + patientID;
 
   const sidenNavigatorSuffix = rebootID > 0 ? ' (reboot ' + rebootID + ')' : '';
-  const isLaptopScreen = CommonUtils.isLaptopScreen();
+  const isLaptopScreen = ScreenUtils.isLaptopScreen();
 
   // State to manage the visibility of subplans
   const [isTreatmentPlanExpanded, setTreatmentPlanExpanded] = useState(false);

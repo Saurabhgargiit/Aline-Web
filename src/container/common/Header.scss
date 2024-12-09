@@ -66,13 +66,13 @@
     }
   }
   .reboot-container {
-    margin-left: 20rem;
+    margin-left: 10rem;
     max-width: 30rem;
     display: flex;
     align-items: center;
     gap: 2rem;
     justify-content: space-around;
-    padding: 2px;
+    padding: 2px 0.5rem;
     border: dashed 1.5px black;
     border-radius: 2rem;
     background-color: $formBackgroundColor;
@@ -91,6 +91,9 @@
     height: 1.8rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+    border: dashed 1.5px black;
+    border-radius: 2rem;
+    font-weight: 600;
   }
 
   .app-header-title {
@@ -114,8 +117,62 @@
       }
     }
   }
-}
+  @media (max-width: 1200px) {
+    .logo-title-container {
+      width: fit-content;
+      max-width: fit-content;
+    }
+    .growing-container {
+      display: flex;
+      margin-left: 1rem;
+      // flex-grow: 0;
+      justify-content: space-around;
+    }
+    .progressBtn-container {
+      margin-left: 0rem;
+      width: fit-content;
+    }
+    .rebootbtn {
+      // padding-left: 0.5rem;
+      // padding-right: 0.5rem;
+      padding: 0 0.3rem;
+    }
+    .progressBtn {
+      min-width: 6rem;
+    }
+    .reboot-container {
+      margin-left: 0rem;
+      gap: 1rem;
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+    // .buttonLayout {
+    //   min-width: fit-content;
+    // }
+    .selectBox {
+      min-width: fit-content;
+      width: 100%;
+    }
+    // button {
+    //   border: none;
+    //   background-color: transparent;
+    //   padding: 0;
+    // }
+    svg {
+      width: 20px;
+      height: auto;
+      margin: 0.2rem;
 
+      path {
+        fill: $icon-color;
+      }
+    }
+    .admin-plus {
+      stroke: transparent;
+      fill: $icon-color;
+    }
+  }
+}
 .progressBtn-container {
   width: 10rem;
   display: flex;
