@@ -48,7 +48,6 @@ function PhotosScans({
     scans: '.zip,.7z,application/zip,application/x-7z-compressed',
     default: 'image/jpeg,image/png,image/gif,image/jpg',
   };
-  console.log(formData);
 
   // Update selectedFiles when a file is uploaded
   const handleFileUpload = (fileObj) => {
@@ -100,9 +99,9 @@ function PhotosScans({
 
   // Effect hook to update state when the formData prop changes
   useEffect(() => {
-    if (Object.keys(formData).length !== 0) {
-      setSelectedFiles(formData);
-    }
+    // if (Object.keys(formData).length !== 0) {
+    setSelectedFiles(formData);
+    // }
   }, [formData]);
 
   // Prepare images for the lightbox
