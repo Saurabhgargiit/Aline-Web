@@ -35,6 +35,16 @@ export const visitTypes = [
     label: 'Debonding',
   },
   {
+    id: 'debonding',
+    value: 'debonding',
+    label: 'Debonding',
+  },
+  {
+    id: 'superImposition',
+    value: 'superImposition',
+    label: 'Treatment Progress SuperImposition',
+  },
+  {
     id: 'other',
     value: 'other',
     label: 'Other',
