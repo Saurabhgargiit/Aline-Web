@@ -5,12 +5,16 @@ import { toast, Bounce } from 'react-toastify';
 
 import { ReactComponent as MenuListIcon } from '../../assets/icons/menuList.svg'; // Using SVGR
 import { ReactComponent as BackIcon } from '../../assets/icons/back.svg'; // Using SVGR
+import { ReactComponent as PlusIcon } from '../../assets/icons/admin-plus.svg'; // Using SVGR
 import Button from '../../components/Button/Button';
 import SearchBar from '../../components/Search';
 import Dropdown from '../../components/Dropdown/Dropdown';
 
 import { toggleSideNavigator } from '../../store/actions/sidenNavigatorAction';
-import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
+import {
+  CommonUtils,
+  ScreenUtils,
+} from '../../utils/commonfunctions/commonfunctions';
 import {
   rebootAction,
   setSelectedRebootAction,
@@ -42,9 +46,17 @@ const Header = ({ title, leftBtnHanlder }) => {
   const dispatch = useDispatch();
   const rebootIDsObject = useSelector((state) => state.rebootReducer.rebootIDs);
 
+  const isLaptopScreen = ScreenUtils.isLaptopScreen();
+
   const selectedRebootID = useSelector(
     (state) => state.rebootReducer.selectedRebootID
   );
+
+  const getLabel = (el) => {
+    if (isLaptopScreen) {
+      return el === 0 ? 'Treatment Plan' : 'Reboot ' + el;
+    } else return el;
+  };
 
   const getRebootOptions = (len) => {
     return rebootIDs.map((el) => {
@@ -52,7 +64,7 @@ const Header = ({ title, leftBtnHanlder }) => {
         value: el,
         key: el,
         id: el,
-        label: el === 0 ? 'Treatment Plan' : 'Reboot ' + el,
+        label: getLabel(el),
       };
     });
   };
@@ -288,9 +300,11 @@ const Header = ({ title, leftBtnHanlder }) => {
         <div className="app-header-img-container">
           <img src="/aline-images/logo.png"></img>
         </div>
-        <span className="app-header-title font18 font600">
-          {headerDetails.title}
-        </span>
+        {isLaptopScreen && (
+          <span className="app-header-title font18 font600">
+            {headerDetails.title}
+          </span>
+        )}
       </div>
       <div className="growing-container">
         {location.pathname === '/home' && (
@@ -311,16 +325,16 @@ const Header = ({ title, leftBtnHanlder }) => {
             <>
               <div className="progressBtn-container">
                 <Button
-                  title="View Progress"
+                  title={isLaptopScreen ? 'View Progress' : 'Progress'}
                   onClickCallBk={() =>
                     navigate(`/patientDetails/${patientID}/progress`)
                   }
-                  className="rebootbtn"
+                  className="rebootbtn progressBtn"
                 />
               </div>
               {rebootIDs.length > 0 && (
                 <div className="reboot-container">
-                  <label className="">Plan Selected</label>
+                  {isLaptopScreen && <label className="">Plan Selected</label>}
                   <Dropdown
                     selectedValue={selectedRebootID}
                     options={getRebootOptions()}
@@ -328,7 +342,8 @@ const Header = ({ title, leftBtnHanlder }) => {
                     className="dropdown"
                   />
                   <Button
-                    title="Add Reboot"
+                    title={isLaptopScreen ? 'Add Reboot' : ''}
+                    svg={isLaptopScreen ? '' : <PlusIcon />}
                     onClickCallBk={() => {
                       actionHandler('createRebootConfirmation');
                     }}
@@ -340,7 +355,7 @@ const Header = ({ title, leftBtnHanlder }) => {
             </>
           )}
       </div>
-      {!CommonUtils.isLaptopScreen() && (
+      {!isLaptopScreen && (
         <div className="app-header-menu-button-container right-icon">
           {headerDetails.rightButton}
         </div>

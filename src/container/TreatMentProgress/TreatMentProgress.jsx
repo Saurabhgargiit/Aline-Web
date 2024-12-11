@@ -6,6 +6,7 @@ import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
 import { noDataInfo } from '../../utils/globalConstants';
 import { getCall } from '../../utils/commonfunctions/apicallactions';
+import { visitTypes } from './TreatmentProgressConstants';
 
 import './TreatmentProgressForm.scss';
 import Loader from '../common/Loader/Loader';
@@ -75,7 +76,9 @@ function TreatmentProgress() {
           onClick={() => navigate(`${location.pathname}/visit?id=${item.id}`)}
           className="visit-action"
         >
-          {item[key] || 'Click for visit update'}
+          {(item[key] &&
+            visitTypes.find((el) => el.id === item[key])?.['label']) ||
+            'Click for visit update'}
         </span>
       );
     } else {

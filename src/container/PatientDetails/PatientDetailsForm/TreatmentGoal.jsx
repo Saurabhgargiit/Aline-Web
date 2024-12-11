@@ -29,8 +29,7 @@ function TreatmentGoal({
   cancelFlag,
   setSubmitFlag,
 }) {
-  // State to hold form data, initialized from props
-  const [formValues, setFormValues] = useState({
+  const initialState = {
     correction: '',
     arches: [], //should be one of the defaultArchValues (mandatory)
     ipr: [], //should be one of the defaultIPRValues (mandatory)
@@ -38,7 +37,9 @@ function TreatmentGoal({
     attachments: [], //should be one of the defaultArchValues (mandatory)
     attachmentsDetails: '', //mandatory if "selectiveAttachments"  selected
     treatmentGoalOthers: '', //No mandatory
-  });
+  };
+  // State to hold form data, initialized from props
+  const [formValues, setFormValues] = useState(initialState);
 
   const [errors, setErrors] = useState({});
 
@@ -177,6 +178,8 @@ function TreatmentGoal({
   useEffect(() => {
     if (Object.keys(formData).length !== 0) {
       setFormValues(formData);
+    } else {
+      setFormValues({ ...initialState });
     }
   }, [formData, cancelFlag]);
 

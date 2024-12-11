@@ -166,8 +166,38 @@ export const CommonUtils = {
   checkSanityFailed: (item) => {
     return item === null || item === undefined;
   },
+};
+
+export const ScreenUtils = {
+  // Mobile phones (commonly up to 767px)
+  isMobileScreen: () => {
+    return window.innerWidth <= 767;
+  },
+
+  // A "small mobile" might be extra-small devices (e.g., up to 480px)
+  isSmallMobileScreen: () => {
+    return window.innerWidth <= 480;
+  },
+
+  // Tablets often range from 768px to 1024px width
+  isTabletScreen: () => {
+    return window.innerWidth >= 768 && window.innerWidth <= 1200;
+  },
+
+  // Laptops or desktops could start above 1024px
+  // Adjust as needed to 1200px or another breakpoint
   isLaptopScreen: () => {
     return window.innerWidth > 1200;
+  },
+
+  // Orientation: Portrait mode if height is greater than width
+  isPortraitOrientation: () => {
+    return window.innerHeight > window.innerWidth;
+  },
+
+  // Orientation: Landscape mode if width is greater than height
+  isLandscapeOrientation: () => {
+    return window.innerWidth > window.innerHeight;
   },
 };
 

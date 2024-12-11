@@ -33,9 +33,9 @@ function SingleImageUploader({
   const [loadingStatus, setLoadingStatus] = useState(false);
 
   useEffect(() => {
-    if (existingFile) {
-      setSelectedFile(existingFile);
-    }
+    // if (existingFile) {
+    setSelectedFile(existingFile || { url: '', key: '' });
+    // }
   }, [existingFile]);
 
   // Handle file selection
