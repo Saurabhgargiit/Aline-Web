@@ -24,11 +24,12 @@ function ComplaintNHistoryForm({
     initObj[el]['flag'] = false;
     initObj[el]['details'] = '';
   });
-  const [formValues, setFormValues] = useState({
+  const initialState = {
     chiefComplaint: '',
     historyOthers: '',
     ...initObj,
-  });
+  };
+  const [formValues, setFormValues] = useState(initialState);
 
   const [errors, setErrors] = useState({});
 
@@ -81,6 +82,8 @@ function ComplaintNHistoryForm({
   useEffect(() => {
     if (Object.keys(formData).length !== 0) {
       setFormValues(formData);
+    } else {
+      setFormData(initialState);
     }
   }, [formData, cancelFlag]);
 

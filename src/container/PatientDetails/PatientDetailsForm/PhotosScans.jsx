@@ -99,9 +99,9 @@ function PhotosScans({
 
   // Effect hook to update state when the formData prop changes
   useEffect(() => {
-    if (Object.keys(formData).length !== 0) {
-      setSelectedFiles(formData);
-    }
+    // if (Object.keys(formData).length !== 0) {
+    setSelectedFiles(formData);
+    // }
   }, [formData]);
 
   // Prepare images for the lightbox
