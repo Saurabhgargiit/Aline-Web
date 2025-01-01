@@ -117,9 +117,11 @@ function ComplaintNHistoryForm({
             <p className="error-Msg">{errors.chiefComplaint}</p>
           )}
         </div>
-        <div className="font500 center-position heading">
+        <div className="font500 heading mb-2">
           <span>
-            ~~~~~~~~~~~~~~~~~~~~Previous Dental History~~~~~~~~~~~~~~~~~~~~
+            <strong>
+              <u>Previous Dental History</u>
+            </strong>
           </span>
         </div>
         {Object.entries(labels).map(([key, label]) => (

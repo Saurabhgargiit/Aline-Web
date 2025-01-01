@@ -25,6 +25,7 @@ import {
 
 import './PatientList.scss';
 import { searchInitialState } from '../../store/reducers/searchReducer';
+import { setSearchDataAction } from '../../store/actions/searchAction';
 
 const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,8 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
 
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState('');
+  const firstLoad = useRef(true);
+  const appendDataRef = useRef(false);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteUserData, setDeleteUserData] = useState({});
@@ -154,6 +157,9 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
     if (pageNumber > pageNoforwhichDataAppended) {
       getAllPatients(pageNumber);
     }
+    return () => {
+      dispatch(setSearchDataAction(''));
+    };
   }, [pageNumber]);
 
   useEffect(() => {
@@ -164,9 +170,15 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
       const patientList = fetchedAllPatients.data?.content || [];
       const { last } = fetchedAllPatients.data;
 
-      if (pageNoforwhichDataAppended < pageNumber) {
+      if (pageNoforwhichDataAppended < pageNumber && appendDataRef.current) {
         setPatientBasicInfo((prevPatients) => [
           ...prevPatients,
+          ...patientList,
+        ]);
+        appendDataRef.current = false;
+      } else {
+        setPatientBasicInfo((prevPatients) => [
+          // ...prevPatients,
           ...patientList,
         ]);
       }
@@ -186,8 +198,10 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
   }, [fetchedAllPatients]);
 
   useEffect(() => {
-    if (JSON.stringify(searchData) !== JSON.stringify(searchInitialState)) {
+    if (!firstLoad.current) {
       resetForGetPatient();
+    } else {
+      firstLoad.current = false;
     }
   }, [searchData]);
 
@@ -227,6 +241,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore && !isFetching) {
           setPageNumber((page) => page + 1);
+          appendDataRef.current = true;
         }
       });
       if (node) observer.current.observe(node);

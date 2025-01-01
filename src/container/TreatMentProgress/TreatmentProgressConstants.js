@@ -51,6 +51,19 @@ export const visitTypes = [
   },
 ];
 
+export const defaultVisitTypes = [
+  {
+    id: 'caseStarted',
+    value: 'caseStarted',
+    label: 'Case Started',
+  },
+  {
+    id: 'caseRebooted',
+    value: 'caseRebooted',
+    label: 'Case Rebooted',
+  },
+];
+
 export const alignerTracking = [
   {
     id: 'na',

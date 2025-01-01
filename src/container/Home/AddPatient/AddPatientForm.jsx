@@ -57,12 +57,12 @@ const AddPatientForm = forwardRef(
           // Ensure the age is a valid number between 1 and 120
           const ageNum = parseInt(value, 10);
           return !isNaN(ageNum) && ageNum > 0 && ageNum <= 120;
-        case 'dateOfScan':
-          if (isEdit) return !!value;
-          // Ensure the date is not in the past while creating new patient
-          const today = new Date();
-          const selectedDate = new Date(value);
-          return selectedDate >= today;
+        // case 'dateOfScan':
+        //   if (isEdit) return !!value;
+        //   // Ensure the date is not in the past while creating new patient
+        //   const today = new Date();
+        //   const selectedDate = new Date(value);
+        //   return selectedDate >= today;
         default:
           return true;
       }

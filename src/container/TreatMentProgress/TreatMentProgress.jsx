@@ -6,10 +6,11 @@ import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
 import { noDataInfo } from '../../utils/globalConstants';
 import { getCall } from '../../utils/commonfunctions/apicallactions';
-import { visitTypes } from './TreatmentProgressConstants';
+import { visitTypes, defaultVisitTypes } from './TreatmentProgressConstants';
 
 import './TreatmentProgressForm.scss';
 import Loader from '../common/Loader/Loader';
+import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 const headers = [
   {
@@ -82,7 +83,12 @@ function TreatmentProgress() {
         </span>
       );
     } else {
-      return <span>{item[key]}</span>;
+      return (
+        <span>
+          {defaultVisitTypes.find((el) => el.id === item[key])?.['label'] ||
+            item[key]}
+        </span>
+      );
     }
   };
 
@@ -97,9 +103,18 @@ function TreatmentProgress() {
               id: `${key}-${j}-${i}`,
               children: (
                 <span>
-                  {(item.date && new Date(item.date).toLocaleDateString()) ||
+                  {(item.date &&
+                    CommonUtils.formatDate(
+                      new Date(item.date),
+                      true,
+                      'short'
+                    )) ||
                     (item.createdOn &&
-                      new Date(item.createdOn).toLocaleDateString()) ||
+                      CommonUtils.formatDate(
+                        new Date(item.date),
+                        true,
+                        'short'
+                      )) ||
                     'No date given'}
                 </span>
               ),

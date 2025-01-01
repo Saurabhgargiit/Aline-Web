@@ -147,16 +147,28 @@ export const CommonUtils = {
   },
 
   // Function to format today's date as YYYY-MM-DD
-  formatDate: function (date) {
+  formatDate: function (date, startWithDate = false, monthFormat = 'numeric') {
     let d = new Date(date),
       month = '' + (d.getMonth() + 1),
       day = '' + d.getDate(),
       year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
+    if (monthFormat === 'short') {
+      // Get month name in short format (e.g., Jan, Feb, etc.)
+      month = d.toLocaleString('default', { month: 'short' });
+    } else {
+      // Pad month with zero if needed
+      if (month.length < 2) month = '0' + month;
+    }
+
     if (day.length < 2) day = '0' + day;
 
-    return [year, month, day].join('-');
+    if (startWithDate) {
+      return monthFormat === 'short'
+        ? [day, month, year].join('-') // DD-MMM-YYYY
+        : [day, month, year].join('-'); // DD-MM-YYYY
+    }
+    return [year, month, day].join('-'); // YYYY-MM-DD
   },
 
   removeWhitespace: (str) => {

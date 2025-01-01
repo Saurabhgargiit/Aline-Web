@@ -1,74 +1,96 @@
 @import '../../styles/styles.scss';
 
 .right-section-layout {
-    background-color: #fff;
+  background-color: #fff;
+  height: 100%;
+  max-width: 260px;
+  width: 55%;
+  position: fixed;
+  top: 56px;
+  right: 0;
+  color: $primaryText;
+  border-left: $sideRowBorder;
+  .right-section-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    max-width: 260px;
-    width: 55%;
-    position: fixed;
-    top: 56px;
-    right: 0;
-    color: $primaryText;
-    border-left: $sideRowBorder;
-    .right-section-container {
-        width: 100%;
+    min-height: 100%;
+    justify-content: space-between;
+    .right-profile-photo {
+      height: rem-calc(200);
+      font-weight: 700;
+      font-size: rem-calc(20);
+      padding-top: 1rem;
+      padding-left: 1rem;
+      border-bottom: $sideRowBorder;
+      .img-container {
         display: flex;
-        flex-direction: column;
-        height: 100%;
-        min-height: 100%;
-        justify-content: space-between;
-        .right-profile-photo {
-            height: rem-calc(200);
-            font-weight: 700;
-            font-size: rem-calc(20);
-            padding-top: 1rem;
-            padding-left: 1rem;
-            border-bottom: $sideRowBorder;
-            .img-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                img {
-                    width: 10rem;
-                    height: 10rem;
-                    // border: 1px solid black;
-                    // border-radius: 2px;
-                }
-            }
-        }
-        .details-container {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            border-bottom: $sideRowBorder;
-            font-weight: 500;
-            gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        width: 10rem;
+        height: 10rem;
+        margin: 0 auto;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        background-color: #f0f0f0;
 
-            .info-div {
-                // display: ;
-            }
-            span {
-                display: block;
-                margin: 0;
-                // padding: 0;
-                color: $primaryText;
-            }
-            .info-heading {
-                padding: 0 1rem; // Add some padding for visual appearance and touch targets
-                font-weight: 600;
-                // font-size: 0.8rem;
-            }
-            .info-detail {
-                padding: 0 1rem; // Add some padding for visual appearance and touch targets
-                font-weight: 400;
-            }
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          backdrop-filter: blur(10px);
+          z-index: 1;
         }
+
+        img {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+          height: 100%;
+          min-width: 100%;
+          min-height: 100%;
+          object-fit: contain;
+        }
+      }
     }
+    .details-container {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      border-bottom: $sideRowBorder;
+      font-weight: 500;
+      gap: 1rem;
+
+      .info-div {
+        // display: ;
+      }
+      span {
+        display: block;
+        margin: 0;
+        // padding: 0;
+        color: $primaryText;
+      }
+      .info-heading {
+        padding: 0 1rem; // Add some padding for visual appearance and touch targets
+        font-weight: 600;
+        // font-size: 0.8rem;
+      }
+      .info-detail {
+        padding: 0 1rem; // Add some padding for visual appearance and touch targets
+        font-weight: 400;
+      }
+    }
+  }
 }
 
 /* Hide the PatientInfoCenter on screens smaller than 768px */
 @media (max-width: 1250px) {
-    .right-section-layout {
-      display: none; /* Hides PatientInfoCenter */
-    }
+  .right-section-layout {
+    display: none; /* Hides PatientInfoCenter */
   }
+}
