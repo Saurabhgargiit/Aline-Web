@@ -14,6 +14,8 @@ import SingleImageUploader from '../../../components/FileUploader/SingleImageUpl
 import './PhotosScans.scss';
 
 const labels = {
+  scans: 'Scans',
+  scanURL: 'Scan URL',
   profilePhoto: 'Profile Photo',
   extFront: 'Face Front',
   extSide: 'Face Side',
@@ -25,7 +27,14 @@ const labels = {
   intMandible: 'Mandible',
   opg: 'OPG',
   cep: 'Cephalogram',
-  scans: 'Scans',
+};
+
+const ensureAbsoluteUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `http://${url}`;
 };
 
 function PhotosScans({
@@ -38,6 +47,7 @@ function PhotosScans({
   rebootID,
 }) {
   const [selectedFiles, setSelectedFiles] = useState({});
+  const [scanURL, setScanURL] = useState('');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [lightboxSlides, setLightboxSlides] = useState([]);
@@ -67,10 +77,23 @@ function PhotosScans({
     return { ...filterFiles, ...initialState };
   };
 
+  // Effect hook to update scanURL when formData changes
+  useEffect(() => {
+    if (formData.scanURL) {
+      setScanURL(formData.scanURL);
+    }
+  }, [formData]);
+
+  const handleScanURLChange = (e) => {
+    setScanURL(e.target.value.trim());
+  };
+
   const submitHandler = () => {
     let payload = { ...selectedFiles };
     payload = initState(labels, [{ url: '', key: '' }], selectedFiles);
 
+    // Add scanURL to payload as string, ensuring it's absolute
+    payload.scanURL = scanURL ? ensureAbsoluteUrl(scanURL) : '';
     payload['patientID'] = patientID;
 
     putCall(payload, 'ADD_URLS_TO_DATABASE', [rebootID]).then((data) => {
@@ -127,14 +150,51 @@ function PhotosScans({
     <div className="patientAddEditTopContainer">
       <div className="patientAddEditContainer">
         {Object.entries(labels).map(([key, label], idx) => {
+          // Special handling for scanURL
+          if (key === 'scanURL') {
+            const absoluteUrl = ensureAbsoluteUrl(scanURL);
+            return (
+              <div
+                className="patient-details-input-fields photo-scans"
+                key={`div-${idx}`}
+              >
+                <label>{label}</label>
+                {isEdit ? (
+                  <input
+                    type="text"
+                    value={scanURL}
+                    onChange={handleScanURLChange}
+                    className="form-control"
+                    placeholder="Enter scan URL"
+                  />
+                ) : (
+                  <div className="scan-url-display">
+                    {scanURL ? (
+                      <a
+                        href={absoluteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="scan-url-link"
+                      >
+                        {scanURL}
+                      </a>
+                    ) : (
+                      <span className="no-url">No Scan URL provided</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          }
+
           const fileInputType =
             key === 'scans'
               ? fileTypeRestrictions['scans']
               : fileTypeRestrictions['default'];
 
-          // Determine the index for the lightbox (excluding scans)
+          // Determine the index for the lightbox (excluding scans and scanURL)
           const lightboxImageIndex = Object.keys(labels)
-            .filter((k) => k !== 'scans')
+            .filter((k) => k !== 'scans' && k !== 'scanURL')
             .indexOf(key);
 
           return (

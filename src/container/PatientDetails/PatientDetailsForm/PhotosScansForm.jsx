@@ -55,7 +55,11 @@ function PhotosScansForm() {
     const formattedObj = {};
     Object.keys(obj).forEach((key) => {
       if (key !== filterVal) {
-        formattedObj[key] = [{ url: obj[key][0], key: '' }];
+        if (key === 'scanURL') {
+          formattedObj[key] = obj[key] || '';
+        } else {
+          formattedObj[key] = [{ url: obj[key][0], key: '' }];
+        }
       }
     });
     return formattedObj;
@@ -71,7 +75,6 @@ function PhotosScansForm() {
       fetchedPhotosScans.result === 'success' &&
       fetchedPhotosScans.data !== undefined
     ) {
-      console.log(fetchedPhotosScans);
       setPhotosScans(convertFormat(fetchedPhotosScans.data, 'patientID') || {});
       setIsLoading(false);
       setErrMsg('');

@@ -1,29 +1,114 @@
+/* FileUploader.scss */
 @import '.././../styles/styles.scss';
 
-.fileUploader{
-    display: flex;
-    flex-direction: column;
-    // width: 100%;
-    flex-basis: 100%;
-    .fileUploadButton {
-        border: none;
-        background-color: transparent;
-        padding: 0;
-        svg {
-            width: 20px;
-            height: auto;
-            margin: 0.6rem;
-    
-            path {
-                fill: $icon-color;
-            }
+.fileUploader {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  position: relative;
+
+  .preview-container {
+    position: relative;
+    margin-top: 1rem; /* optional */
+
+    /* Generic container for PDFs, videos, images, etc. */
+    .file-viewer {
+      position: relative; /* So absolute elements (.file-viewer__loading, ::after) stay inside */
+      width: 100%;
+      max-width: 600px; /* Limit how wide the preview can get (optional) */
+      margin: 0 auto; /* Center it if there's extra space */
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      overflow: hidden;
+
+      /* Actual content (video, PDF, etc.) */
+      &__content {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain; /* For images/video to maintain aspect ratio */
+        z-index: 1;
+      }
+
+      /* "Uploading..." overlay text */
+      &__loading {
+        position: absolute;
+        z-index: 3;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+
+      /* When .loading class is added, blur content & show semi-transparent overlay */
+      &.loading {
+        &__content {
+          filter: blur(5px); /* *** This is the key for the blur effect *** */
         }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(255, 255, 255, 0.5);
+          z-index: 2;
+        }
+      }
     }
 
-    
+    /* Optional: If you have a separate "loading-overlay" for PDFViewer’s internal loading */
+    .loading-overlay {
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+  }
+
+  /* Buttons, etc. */
+  .fileUploadButton {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    svg {
+      width: 20px;
+      height: auto;
+      margin: 0.6rem;
+      path {
+        fill: $icon-color;
+      }
+    }
+  }
 }
 
-.video-container{
-    width: 100%;
-    height: 20rem;
+/* Hide default file input */
+input[type='file'] {
+  display: none;
+}
+
+/* Label styling for upload icon */
+label.upload-label {
+  cursor: pointer;
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  svg {
+    width: 30px;
+    height: auto;
+  }
 }

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Badge } from 'react-bootstrap';
 
-import TextArea from '../../../components/TextArea/TextArea';
 import Button from '../../../components/Button/Button';
 
-import { plans, steps, tags } from '../treatmentPlanConstants';
-import TreatmentPlanModal from './TreatmentPlanModal';
+import { steps } from '../treatmentPlanConstants';
 import { useLocation } from 'react-router-dom';
+import FileUploader from '../../../components/FileUploader/FileUploader';
+
+import './TreatmentPlanForm.scss';
 
 const TreatmentPlanView = ({
   planInfo,
@@ -120,61 +121,89 @@ const TreatmentPlanView = ({
 
         <div className={`patient-details-input-fields gap-8 marginView`}>
           <span className="mb-2 sub-heading">IPR and Attachment Report</span>
-          <div className="arches-container">
+          <div className="arches-container pdf-container">
             {iprAndAttachmentReports && iprAndAttachmentReports.length > 0 ? (
               iprAndAttachmentReports.map((report, index) => (
-                <div key={index}>
-                  <a
-                    href={report.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View Attachment {index + 1}
-                  </a>
-                </div>
+                <FileUploader
+                  key={'pdf-view-IPR ' + index}
+                  id={'pdf-view-IPR ' + index}
+                  label="IPR_Report"
+                  fileType="pdf"
+                  onUploadComplete={(fileData) => () => {}}
+                  styleClassName={'pdf-container'}
+                  uploadedFileFromProps={report?.url}
+                  isEdit={false}
+                />
               ))
             ) : (
-              <p>No IPR and attachment reports</p>
+              <p className="no-url">No IPR and attachment reports</p>
             )}
           </div>
         </div>
 
-        <div className={`patient-details-input-fields gap-8 marginView`}>
+        <div
+          className={`patient-details-input-fields gap-8 pdf-container marginView`}
+        >
           <span className="mb-2 sub-heading">Treatment Simulation</span>
-          <div className="arches-container">
+          <div className="arches-container planURL">
             <label className="">
               Plan URL: &nbsp;
               {treatmentSimulationsURL && treatmentSimulationsURL.length > 0 ? (
                 <a
-                  href={treatmentSimulationsURL[0]?.url}
+                  href={
+                    treatmentSimulationsURL[0].startsWith('http')
+                      ? treatmentSimulationsURL[0]
+                      : `http://${treatmentSimulationsURL[0]}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View Simulation
+                  {treatmentSimulationsURL[0]}
                 </a>
               ) : (
-                'No URL provided'
+                <span className="no-url">No URL available</span>
               )}
             </label>
           </div>
+          <div className="pdf-container mt-3">
+            <label className=""> Treatment Simulation Video: &nbsp;</label>
+            {treatmentSimulationsAttachments &&
+            treatmentSimulationsAttachments.length > 0 ? (
+              <FileUploader
+                key={'video-upload'}
+                id={'video-upload'}
+                label="Treatment_Video"
+                fileType="video"
+                onUploadComplete={(fileData) => {}}
+                uploadedFileFromProps={treatmentSimulationsAttachments[0]?.url}
+                isEdit={false}
+              />
+            ) : (
+              <span className="no-url">No Video available</span>
+            )}
+          </div>
+        </div>
+
+        {/* <div className={`patient-details-input-fields gap-8 marginView`}>
+          <span className="mb-2 sub-heading">Treatment Simulation</span>
           <div className="arches-container">
             <label className="">
-              Upload Video: &nbsp;
+              Treatment Simulation Video: &nbsp;
               {treatmentSimulationsAttachments &&
               treatmentSimulationsAttachments.length > 0 ? (
                 <a
                   href={treatmentSimulationsAttachments[0]?.url}
                   target="_blank"
-                  // rel="noopener noreferrer"
+                  rel="noopener noreferrer"
                 >
                   View Video
                 </a>
               ) : (
-                'No video uploaded'
+                <span className="no-url">No Video available</span>
               )}
             </label>
           </div>
-        </div>
+        </div> */}
 
         <div className="arches-container">
           {!isLabSideUser && !isDraftPlan && (

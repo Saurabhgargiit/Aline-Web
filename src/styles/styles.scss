@@ -96,6 +96,10 @@ $paginationBorderColor: $backgroundheaderfooterColor;
   justify-content: center;
 }
 
+.width100 {
+  width: 100%;
+}
+
 .row-border {
   border-bottom: $rowBorder;
 }
@@ -325,4 +329,29 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
 }
 .rightPos {
   right: 20px;
+}
+
+.tab-active {
+  background-color: $formBackgroundColor !important;
+  color: $backgroundheaderfooterColor !important;
+  border: $sideRowBorder !important;
+  border-bottom: none !important;
+}
+.tab-inactive {
+  color: $primaryText;
+}
+
+.scan-url-link {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.no-url {
+  color: #666;
+  font-style: italic;
 }

@@ -6,7 +6,10 @@ import ImgViewer from '../ImgViewer/ImgViewer';
 import Button from '../Button/Button';
 
 import { uploadToS3 } from '../../utils/aws';
-import { sanitizeFileName } from '../../utils/commonfunctions/commonfunctions';
+import {
+  sanitizeFileName,
+  downloadFile,
+} from '../../utils/commonfunctions/commonfunctions';
 
 import { ReactComponent as DownloadIcon } from '../../assets/icons/download.svg';
 import { ReactComponent as UploadIcon } from '../../assets/icons/upload.svg';
@@ -88,16 +91,24 @@ function SingleImageUploader({
     }
   };
 
-  // Handle file download
+  // // Handle file download
+  // const handleDownload = () => {
+  //   const url = selectedFile.url;
+  //   const filename = `${label}.${labelkey === 'scans' ? 'zip' : 'jpg'}`;
+  //   const link = document.createElement('a');
+  //   link.href = url;
+  //   link.download = filename || `file.${labelkey === 'scans' ? 'zip' : 'jpg'}`;
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
+
   const handleDownload = () => {
     const url = selectedFile.url;
     const filename = `${label}.${labelkey === 'scans' ? 'zip' : 'jpg'}`;
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename || `file.${labelkey === 'scans' ? 'zip' : 'jpg'}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    // Call the shared download utility
+    downloadFile(url, filename);
   };
 
   const dataExists = formValue.file || selectedFile.url;
@@ -150,39 +161,36 @@ function SingleImageUploader({
                       imgClickHandler();
                     }}
                   />
-                  <Button
-                    onClickCallBk={clearFile}
-                    svg={<CrossIcon />}
-                    tooltip={`Remove ${label}`}
-                    ariaLabel={`Remove ${label}`}
-                    postionClass="fit-content"
-                  />
                 </div>
               ) : (
                 <div>
                   <div className="file-info">
                     <span>{formValue.file?.name || 'Scan uploaded'}</span>
                   </div>
-                  <Button
-                    onClickCallBk={clearFile}
-                    svg={<CrossIcon />}
-                    tooltip={`Remove ${label}`}
-                    ariaLabel={`Remove ${label}`}
-                    postionClass="fit-content"
-                  />
                 </div>
               )}
             </>
           )}
-          {uploadNotDone && (
-            <Button
-              onClickCallBk={uploadFile}
-              svg={<CloudUploadIcon />}
-              tooltip={`Upload ${label}`}
-              ariaLabel={`Upload ${label}`}
-              postionClass="fit-content"
-            />
-          )}
+          <div className="buttons">
+            {dataExists && (
+              <Button
+                onClickCallBk={clearFile}
+                svg={<CrossIcon />}
+                tooltip={`Remove ${label}`}
+                ariaLabel={`Remove ${label}`}
+                postionClass="fit-content"
+              />
+            )}
+            {uploadNotDone && (
+              <Button
+                onClickCallBk={uploadFile}
+                svg={<CloudUploadIcon />}
+                tooltip={`Upload ${label}`}
+                ariaLabel={`Upload ${label}`}
+                postionClass="fit-content"
+              />
+            )}
+          </div>
         </>
       ) : (
         <>
@@ -203,7 +211,7 @@ function SingleImageUploader({
                     svg={<DownloadIcon />}
                     tooltip={`Download ${label}`}
                     ariaLabel={`Download ${label}`}
-                    postionClass="fit-content"
+                    postionClass="center-position width100"
                   />
                 </div>
               ) : (
@@ -215,7 +223,9 @@ function SingleImageUploader({
               )}
             </>
           ) : (
-            <div>No {labelkey === 'scans' ? 'Scan' : 'Photo'} available</div>
+            <div className="no-url">
+              No {labelkey === 'scans' ? 'Scans' : 'Photo'} available
+            </div>
           )}
         </>
       )}

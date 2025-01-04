@@ -16,3 +16,24 @@
 //     }
 //   }
 // }
+
+.patient-details-input-fields {
+  &.photo-scans {
+    input[type='text'] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+
+      &:disabled {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+      }
+    }
+
+    .scan-url-display {
+      margin-top: 4px;
+    }
+  }
+}

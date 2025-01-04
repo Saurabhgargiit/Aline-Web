@@ -70,7 +70,7 @@
   background-color: $formBackgroundColor;
   border-radius: 4px;
 
-  input:not([type='checkbox']) {
+  input:not([type='checkbox']):not([type='file']) {
     height: 2rem;
     border: 1px solid $inputFieldBorder;
     border-radius: 5px;
@@ -109,15 +109,6 @@
       color: $positiveColor;
     }
   }
-}
-.tab-active {
-  background-color: $formBackgroundColor !important;
-  color: $backgroundheaderfooterColor !important;
-  border: $sideRowBorder !important;
-  border-bottom: none !important;
-}
-.tab-inactive {
-  color: $primaryText;
 }
 
 .rightPosEdit {

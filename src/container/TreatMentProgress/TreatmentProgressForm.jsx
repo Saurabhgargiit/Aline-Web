@@ -58,8 +58,8 @@ const TreatmentProgressForm = () => {
     date: existingData?.date
       ? CommonUtils.formatDate(existingData.date)
       : CommonUtils.formatDate(new Date()),
-    // progress: existingData?.progress || '',
     visitType: existingData?.visitType || 'firstVisit',
+    scanURL: existingData?.scanURL || '',
     alignerTracking: existingData?.alignerTracking || 'na',
     notes: existingData?.notes || '',
     photos: existingData?.photos || [],
@@ -131,6 +131,7 @@ const TreatmentProgressForm = () => {
         // progress: existingData.progress || '',
         visitType: existingData.visitType || 'firstVisit',
         alignerTracking: existingData.alignerTracking || 'na',
+        scanURL: existingData.scanURL || '',
         notes: existingData.notes || '',
         photos:
           existingData.photos?.length > 0
@@ -356,26 +357,6 @@ const TreatmentProgressForm = () => {
                 )}
               </div>
 
-              {/* <div className="mb-2 arches-container">
-                <div className="step-container">
-                  <label htmlFor="progress">
-                    Visit Name<span className="required">*</span>
-                  </label>
-                  <input
-                    id="progress"
-                    name="progress"
-                    type="text"
-                    value={formValues.progress}
-                    onChange={handleInputChange}
-                    disabled={isView}
-                    className={errors.progress ? 'input-error' : ''}
-                  />
-                  {errors.progress && (
-                    <span className="error-text">{errors.progress}</span>
-                  )}
-                </div>
-              </div> */}
-
               <div className="mb-2 arches-container">
                 <div className="step-container">
                   <label htmlFor="visitType">
@@ -392,6 +373,44 @@ const TreatmentProgressForm = () => {
                   />
                   {errors.visitType && (
                     <span className="error-text">{errors.visitType}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="mb-2 arches-container">
+                <div className="step-container">
+                  <label htmlFor="scanURL">Scan URL</label>
+                  {isView ? (
+                    formValues.scanURL ? (
+                      <a
+                        href={
+                          formValues.scanURL.includes('http')
+                            ? formValues.scanURL
+                            : 'http://' + formValues.scanURL
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="scan-url-link"
+                      >
+                        {formValues.scanURL}
+                      </a>
+                    ) : (
+                      <span className="no-url">No scan URL available</span>
+                    )
+                  ) : (
+                    <input
+                      id="scanURL"
+                      name="scanURL"
+                      type="text"
+                      value={formValues.scanURL}
+                      onChange={handleInputChange}
+                      placeholder="Enter scan URL"
+                      // disabled={
+                      //   !['scanning', 'rebootScan'].includes(
+                      //     formValues.visitType
+                      //   )
+                      // }
+                    />
                   )}
                 </div>
               </div>

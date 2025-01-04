@@ -219,3 +219,16 @@ export const sanitizeFileName = (fileName) => {
     .replace(/[^\x00-\x7F]/g, '') // Remove non-ASCII characters
     .replace(/\s+/g, '_'); // Replace spaces with underscores
 };
+
+export function downloadFile(fileUrl, fileName = 'download.file') {
+  if (!fileUrl) return;
+
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = fileName; // The name the file will have once downloaded
+
+  // Append link to body, click to initiate download, then remove it.
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

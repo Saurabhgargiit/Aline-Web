@@ -29,6 +29,7 @@ const TreatmentPlanForm = (props) => {
     redirectToLatestDraft,
     patientID,
     rebootID,
+    planInfo,
   } = props;
 
   const [errors, setErrors] = useState({});
@@ -124,7 +125,7 @@ const TreatmentPlanForm = (props) => {
   const handleFileUpload = (type, fileData) => {
     setFormValues((prevValues) => ({
       ...prevValues,
-      [type]: [...prevValues[type], fileData],
+      [type]: fileData ? [fileData] : [],
     }));
   };
 
@@ -291,13 +292,20 @@ const TreatmentPlanForm = (props) => {
           <span className="mb-2 sub-heading">IPR and Attachment Report</span>
           <div className="arches-container pdf-container">
             <FileUploader
+              key={'file-upload-IPR'}
+              id={'file-upload-IPR'}
               label="IPR_Report"
               fileType="pdf"
               onUploadComplete={(fileData) =>
                 handleFileUpload('iprAndAttachmentReports', fileData)
               }
+              uploadedFileFromProps={
+                planInfo?.iprAndAttachmentReports?.[0]?.url
+              }
               patientID={patientID}
               rebootID={rebootID}
+              styleClassName={'pdf-container'}
+              isEdit
             />
           </div>
         </div>
@@ -308,7 +316,7 @@ const TreatmentPlanForm = (props) => {
           }`}
         >
           <span className="mb-2 sub-heading">Treatment Simulation</span>
-          <div className="arches-container">
+          <div className="arches-container planURL">
             <label htmlFor="planURL" className="">
               Plan URL
             </label>
@@ -326,17 +334,23 @@ const TreatmentPlanForm = (props) => {
               }
             />
           </div>
-          <div className="arches-container pdf-container">
+          <div className="pdf-container mt-2">
             <label className="">Upload Video</label>
             <FileUploader
+              key={'video-upload'}
+              id={'video-upload'}
               label="Treatment_Video"
               fileType="video"
               onUploadComplete={(fileData) =>
                 handleFileUpload('treatmentSimulationsAttachments', fileData)
               }
+              uploadedFileFromProps={
+                planInfo?.treatmentSimulationsAttachments?.[0]?.url
+              }
               patientID={patientID}
-              styleClassName={'pdf-container'}
               rebootID={rebootID}
+              isEdit
+              // styleClassName={'pdf-container'}
             />
 
             {/* <Button
