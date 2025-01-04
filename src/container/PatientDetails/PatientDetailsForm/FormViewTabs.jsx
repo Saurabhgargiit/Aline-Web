@@ -165,7 +165,6 @@ function FormViewTabs() {
       setSubmitFlag(() => false);
     }
   }, [submitFlag]);
-  console.log(tabKey);
 
   return !isLoading ? (
     !errMsg ? (

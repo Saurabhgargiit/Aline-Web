@@ -166,6 +166,7 @@ const Header = ({ title, leftBtnHanlder }) => {
       if (data.result === 'success') {
         actionHandler('successfullyCreated');
         getRebootIDs();
+        window.location.reload();
       } else if (data.result === 'error') {
         toast.error(data.error ?? 'data.error', {
           position: 'top-right',
@@ -334,12 +335,14 @@ const Header = ({ title, leftBtnHanlder }) => {
               </div>
               {rebootIDs.length > 0 && (
                 <div className="reboot-container">
-                  {isLaptopScreen && <label className="">Plan Selected</label>}
+                  {isLaptopScreen && (
+                    <label className="font18">Plan Selected</label>
+                  )}
                   <Dropdown
                     selectedValue={selectedRebootID}
                     options={getRebootOptions()}
                     onChangeCallBk={changeRebootHandler}
-                    className="dropdown"
+                    className="rebootbtn"
                   />
                   <Button
                     title={isLaptopScreen ? 'Add Reboot' : ''}

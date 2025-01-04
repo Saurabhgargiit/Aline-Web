@@ -24,7 +24,6 @@ import {
 } from '../../utils/commonfunctions/apicallactions';
 
 import './PatientList.scss';
-import { searchInitialState } from '../../store/reducers/searchReducer';
 import { setSearchDataAction } from '../../store/actions/searchAction';
 
 const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
@@ -147,19 +146,42 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
   };
 
   const navgationHandler = (patientInfo) => {
+    dispatch(setSearchDataAction(''));
     !!patientInfo.id &&
       navigate('/patientDetails/' + patientInfo.id + '/details');
   };
+  const resetForGetPatient = () => {
+    setPageNoforwhichDataAppended(-1);
+    setPageNumber(0);
+    setPatientBasicInfo([]);
+    setLoading(true);
+    setIsFetching(true);
+    setHasMore(true);
+    setErrMsg('');
+    setIsError(false);
+    // dispatch(setSearchDataAction(''));
 
+    // Use setTimeout to ensure state updates have completed
+    setTimeout(() => {
+      getAllPatients(0);
+    }, 5);
+  };
   //@@@@@@@@@@@@@@@ useEffect @@@@@@@@@@@@@@@@@@@@
   //First time call
+
   useEffect(() => {
-    if (pageNumber > pageNoforwhichDataAppended) {
+    // dispatch(setSearchDataAction(''));
+    resetForGetPatient();
+
+    return () => {
+      observer.current?.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (pageNumber > pageNoforwhichDataAppended && !firstLoad.current) {
       getAllPatients(pageNumber);
     }
-    return () => {
-      dispatch(setSearchDataAction(''));
-    };
   }, [pageNumber]);
 
   useEffect(() => {
@@ -170,7 +192,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
       const patientList = fetchedAllPatients.data?.content || [];
       const { last } = fetchedAllPatients.data;
 
-      if (pageNoforwhichDataAppended < pageNumber && appendDataRef.current) {
+      if (appendDataRef.current) {
         setPatientBasicInfo((prevPatients) => [
           ...prevPatients,
           ...patientList,
@@ -186,6 +208,7 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         if (pageNumber > page) return pageNumber;
         else return page;
       });
+      firstLoad.current = false;
       setHasMore(!last);
       setLoading(false);
       setIsFetching(false);
@@ -200,22 +223,8 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
   useEffect(() => {
     if (!firstLoad.current) {
       resetForGetPatient();
-    } else {
-      firstLoad.current = false;
     }
   }, [searchData]);
-
-  const resetForGetPatient = () => {
-    setPageNoforwhichDataAppended(-1);
-    setPageNumber(0);
-    setPatientBasicInfo([]);
-    setLoading(true);
-    setIsFetching(true);
-    setHasMore(true);
-    setErrMsg('');
-    setIsError(false);
-    setTimeout(() => getAllPatients(0));
-  };
 
   //force relaod after adding/editing patient
   useEffect(() => {
@@ -239,7 +248,12 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore && !isFetching) {
+        if (
+          entries[0].isIntersecting &&
+          hasMore &&
+          !isFetching &&
+          !firstLoad.current
+        ) {
           setPageNumber((page) => page + 1);
           appendDataRef.current = true;
         }
@@ -252,14 +266,16 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
   const contentRender = (el, i) => {
     return (
       <>
-        <div className="img-container">
-          <img
-            src={
-              el.img ||
-              'https://d2rdbjk9w0dffy.cloudfront.net/assets/anonymous-user.jpeg'
-            }
-            alt={el.name + 'Patient'}
-          ></img>
+        <div className="img-container-top">
+          <div className="img-container">
+            <img
+              src={
+                el.profilePhoto ||
+                'https://d2rdbjk9w0dffy.cloudfront.net/assets/anonymous-user.jpeg'
+              }
+              alt={el.name + 'Patient'}
+            ></img>
+          </div>
         </div>
         <div className="home-page-name-date mt-2">
           <div className="home-page-name font700">{el.name}</div>
@@ -314,7 +330,9 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
       } else {
         return (
           <div
-            className="displayFlex home-row-container row-border pointer"
+            className={`displayFlex home-row-container row-border pointer ${
+              i === patientBasicInfo.length - 1 ? 'mb-4' : ''
+            }`}
             key={'patient-container' + i}
             onClick={(e) => navgationHandler(el)}
           >

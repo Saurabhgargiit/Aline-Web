@@ -17,7 +17,7 @@ const headers = [
     key: 'date',
     id: 'date',
     label: 'Date',
-    sortable: true,
+    sortable: false,
     hidden: false,
     order: 'asc',
   },
@@ -145,7 +145,15 @@ function TreatmentProgress() {
       ? noDataInfo
       : '';
 
-    return <Table headers={headers} rows={rows} errorMsg={errorMsg} />;
+    return (
+      <Table
+        headers={headers}
+        rows={rows}
+        errorMsg={errorMsg}
+        className="my-custom-table-wrapper"
+        tableClass="my-custom-table"
+      />
+    );
   };
 
   if (isLoading) {

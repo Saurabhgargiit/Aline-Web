@@ -1,63 +1,101 @@
 @import '../../styles/styles.scss';
 
 .home-row-container {
-    gap: 0.75rem;
+  gap: 0.75rem;
+  height: 4.9rem;
 
-    button {
-        border: none;
-        background-color: transparent;
-        padding: 0;
+  button {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  svg {
+    width: 20px;
+    height: auto;
+    margin: 0.6rem;
+
+    path {
+      fill: $icon-color;
     }
+  }
 
-    svg {
-        width: 20px;
-        height: auto;
-        margin: 0.6rem;
-
-        path {
-            fill: $icon-color;
-        }
-    }
+  .img-container-top {
+    margin: 4px;
+    border: 1px solid black;
+    border-radius: 4px;
 
     .img-container {
-        padding: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto;
+      border-radius: 4px;
+      //   border-radius: 10%;
+      overflow: hidden;
+      position: relative;
+      background-color: #f0f0f0;
 
-        img {
-            width: 70px;
-            height: 70px;
-            border: 1px solid black;
-            border-radius: 2px;
-        }
+      //   &::before {
+      //     content: '';
+      //     position: absolute;
+      //     top: 0;
+      //     left: 0;
+      //     right: 0;
+      //     bottom: 0;
+      //     backdrop-filter: blur(10px);
+      //     z-index: 1;
+      //   }
+
+      img {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+      }
     }
 
-    .home-page-name-date {
-        width: 40%;
+    // img {
+    //   width: 70px;
+    //   height: 70px;
+    //   border: 1px solid black;
+    //   border-radius: 2px;
+    // }
+  }
 
-        .home-page-name {
-        }
+  .home-page-name-date {
+    width: 40%;
 
-        .home-page-date {
-        }
+    .home-page-name {
     }
 
-    .home-page-count {
-        color: $secondaryText;
-        text-align: right;
-        margin-right: 0.6rem;
+    .home-page-date {
     }
+  }
 
-    .icon-container {
-        display: flex;
-        flex-grow: 1;
-        justify-content: end;
-        margin-right: 3rem;
-    }
-    .home-page-icons {
-        display: flex;
+  .home-page-count {
+    color: $secondaryText;
+    text-align: right;
+    margin-right: 0.6rem;
+  }
 
-        .home-page-play {
-            width: 1.75rem;
-            margin-right: 0.3rem;
-        }
+  .icon-container {
+    display: flex;
+    flex-grow: 1;
+    justify-content: end;
+    margin-right: 3rem;
+  }
+  .home-page-icons {
+    display: flex;
+
+    .home-page-play {
+      width: 1.75rem;
+      margin-right: 0.3rem;
     }
+  }
 }

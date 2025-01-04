@@ -39,7 +39,7 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
   const isProgressPage = pathname.includes('/progress');
 
   const sidenNavigatorSuffix =
-    rebootID > 0 && !isProgressPage ? ' (reboot ' + rebootID + ')' : '';
+    rebootID > 0 && !isProgressPage ? ' (Reboot ' + rebootID + ')' : '';
   const isLaptopScreen = ScreenUtils.isLaptopScreen();
 
   // State to manage the visibility of subplans

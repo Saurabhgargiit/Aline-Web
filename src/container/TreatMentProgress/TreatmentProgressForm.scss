@@ -1,5 +1,49 @@
+@import '../../styles/styles.scss';
+
 .visit-action {
   cursor: pointer;
   text-decoration: underline;
   color: blue;
+}
+
+/* Example: MyTableStyles.scss */
+
+.my-custom-table-wrapper {
+  margin-top: 1rem;
+  // padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  .my-custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    /* Table header cells */
+    thead th {
+      background-color: $backgroundheaderfooterColor !important;
+      color: white;
+      font-weight: 600;
+      border: 1px solid #ccc;
+      padding: 0.75rem;
+      text-align: left;
+      font-size: 1.1rem;
+    }
+
+    /* Table body cells */
+    tbody td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+    }
+
+    /* Hover effect on rows */
+    tbody tr:hover {
+      background-color: #fafafa;
+    }
+
+    /* Example: striping rows */
+    tbody tr:nth-of-type(even) {
+      background-color: #fdfdfd;
+    }
+  }
 }

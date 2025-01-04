@@ -2,7 +2,6 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
 import { searchInitialState } from '../store/reducers/searchReducer';
-import './Search.scss';
 
 // Example of searchInitialState (uncomment and adjust as needed)
 // export const searchInitialState = {

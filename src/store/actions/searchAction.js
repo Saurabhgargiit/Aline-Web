@@ -1,7 +1,5 @@
 import * as actionTypes from '../actionTypes';
 import { ApiRelativePaths, _agent } from '../../utils/globalURLs';
-import axiosInstance from '../../network/interceptor/interceptor';
-import { CommonUtils } from '../../utils/commonfunctions/commonfunctions';
 
 export const setSearchDataAction = (searchData) => {
   return {
