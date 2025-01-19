@@ -25,6 +25,10 @@ import {
 
 import './PatientList.scss';
 import { setSearchDataAction } from '../../store/actions/searchAction';
+import {
+  CommonUtils,
+  ScreenUtils,
+} from '../../utils/commonfunctions/commonfunctions';
 
 const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
   const [loading, setLoading] = useState(true);
@@ -279,9 +283,12 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         </div>
         <div className="home-page-name-date mt-2">
           <div className="home-page-name font700">{el.name}</div>
-          <div className="home-page-date font14">
-            {'Scan Date:' + new Date(el.dateOfScan).toLocaleDateString()}
-          </div>
+          {!ScreenUtils.isMobileScreen() && (
+            <div className="home-page-date font14">
+              {'Scan Date:' +
+                CommonUtils.formatDate(new Date(el.dateOfScan), true, 'short')}
+            </div>
+          )}
         </div>
         <Status
           patientID={el.id}

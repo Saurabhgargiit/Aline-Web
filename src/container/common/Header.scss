@@ -13,6 +13,8 @@
     width: fit-content;
     margin: 5px;
     svg {
+      width: 24px; /* Explicit width for the SVG */
+      height: 24px; /* Explicit height for the SVG */
       path {
         fill: #fff;
       }

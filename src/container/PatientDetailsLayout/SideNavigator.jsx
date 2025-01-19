@@ -189,7 +189,8 @@ const SideNavigator = ({ sideSectionShowHandler }) => {
                               setTreatmentPlanExpanded(
                                 !isTreatmentPlanExpanded
                               );
-                            } else if (!isLaptopScreen)
+                            }
+                            if (!isLaptopScreen)
                               dispatch(toggleSideNavigator());
                           }}
                         >

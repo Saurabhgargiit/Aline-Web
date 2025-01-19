@@ -336,7 +336,7 @@ const TreatmentProgressForm = () => {
       <div className="patientAddEditTopContainer mb-4">
         <div className="patient-details-tabs-container">
           <div className="patientAddEditContainer">
-            <div className="patient-details-input-fields gap-8 marginEdit">
+            <div className="patient-details-input-fields marginEdit gap-16">
               <span className="mb-2 sub-heading">Visit Details</span>
 
               <div className="label-input-container mb-2">
@@ -378,7 +378,7 @@ const TreatmentProgressForm = () => {
               </div>
 
               <div className="mb-2 arches-container">
-                <div className="step-container">
+                <div className="step-container planURL height24">
                   <label htmlFor="scanURL">Scan URL</label>
                   {isView ? (
                     formValues.scanURL ? (

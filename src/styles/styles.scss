@@ -53,6 +53,8 @@ $paginationBorderColor: $backgroundheaderfooterColor;
   position: relative;
   // top: 56px;
   margin-bottom: 112px;
+  width: 100vw;
+  max-width: 100vw;
 }
 
 .positionRelative {
@@ -96,6 +98,10 @@ $paginationBorderColor: $backgroundheaderfooterColor;
   align-items: center;
   justify-content: center;
 }
+.flexWithJustifyContent {
+  display: flex;
+  justify-content: space-between;
+}
 
 .width100 {
   width: 100%;
@@ -119,6 +125,25 @@ $paginationBorderColor: $backgroundheaderfooterColor;
 .input-error {
   // border: 2px solid $erroMsgColor !important; /* Red border to indicate error */
   background-color: #ffe6e6 !important; /* Light red background */
+}
+
+.planURL {
+  display: -webkit-box; /* Create a flexible box layout */
+  -webkit-box-orient: vertical; /* Set the orientation to vertical */
+  -webkit-line-clamp: 2; /* Limit text to 2 lines */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Display ellipsis (...) */
+  height: auto; /* Adjust height based on content */
+  line-height: 1.5rem; /* Optional: Adjust line height for spacing */
+  max-height: calc(
+    1.5rem * 2
+  ); /* Match line height times the number of lines */
+  word-wrap: break-word; /* Handle long words for better readability */
+  max-width: 100%;
+
+  input {
+    flex-grow: 1;
+  }
 }
 
 .displayFlex {
@@ -150,8 +175,14 @@ $paginationBorderColor: $backgroundheaderfooterColor;
 
 .add-parent-box {
   width: 600px;
-  // height: auto;
   background-color: #fff;
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
 }
 
 .step-container {
@@ -233,6 +264,9 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
 
 .gap-8 {
   gap: 0.5rem;
+}
+.gap-16 {
+  gap: 1rem;
 }
 
 .app-spinner {
@@ -359,4 +393,50 @@ $sizes: 10, 11, 12, 13, 14, 16, 18, 20, 24, 28;
 .no-url {
   color: #666;
   font-style: italic;
+}
+
+.add-patient-form {
+  padding: 1rem;
+
+  @media screen and (max-width: 767px) {
+    padding: 0.5rem;
+  }
+
+  .label-input-container {
+    margin-bottom: 0.5rem;
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.2rem;
+      box-sizing: border-box;
+
+      @media screen and (max-width: 767px) {
+        font-size: 16px; // Prevents zoom on iOS
+      }
+    }
+
+    label {
+      @media screen and (max-width: 767px) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// Add styles for the dropdown component
+.dropdown-container {
+  width: 100%;
+
+  select {
+    width: 100%;
+    height: 2rem;
+    border: 1px solid $inputFieldBorder;
+    border-radius: 4px;
+    background-color: white;
+
+    @media screen and (max-width: 767px) {
+      font-size: 16px;
+    }
+  }
 }

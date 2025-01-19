@@ -75,7 +75,7 @@
 
       > div {
         border-right: rem-calc(1) solid var(--ed-disabled-color);
-        min-width: rem-calc(240);
+        // min-width: fit-content;
         max-width: none;
         // background-color: white;
       }

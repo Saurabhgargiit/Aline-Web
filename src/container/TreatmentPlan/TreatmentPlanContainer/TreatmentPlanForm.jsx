@@ -263,7 +263,7 @@ const TreatmentPlanForm = (props) => {
                 }
               />
             </div>
-            <div className="step-container">
+            {/* <div className="step-container">
               <label className="">Price Quotation</label>
               <input
                 className="price-quote"
@@ -280,7 +280,7 @@ const TreatmentPlanForm = (props) => {
                   handlePriceChange({ target: { value } }, 'currency')
                 }
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -316,7 +316,7 @@ const TreatmentPlanForm = (props) => {
           }`}
         >
           <span className="mb-2 sub-heading">Treatment Simulation</span>
-          <div className="arches-container planURL">
+          <div className="flexWithJustifyContent planURL">
             <label htmlFor="planURL" className="">
               Plan URL
             </label>

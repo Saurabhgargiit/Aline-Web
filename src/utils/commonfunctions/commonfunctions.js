@@ -232,3 +232,27 @@ export function downloadFile(fileUrl, fileName = 'download.file') {
   link.click();
   document.body.removeChild(link);
 }
+
+export const ViewportUtils = {
+  // Add to existing ScreenUtils or create new object
+  adjustInputForMobile: function (inputElement) {
+    if (ScreenUtils.isMobileScreen()) {
+      // Prevent zoom on focus for iOS devices
+      inputElement.style.fontSize = '16px';
+
+      // Add smooth scrolling to input when focused
+      inputElement.addEventListener('focus', function () {
+        setTimeout(() => {
+          inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      });
+    }
+  },
+
+  // Helper function to handle orientation changes
+  handleOrientationChange: function (callback) {
+    window.addEventListener('orientationchange', () => {
+      setTimeout(callback, 100);
+    });
+  },
+};

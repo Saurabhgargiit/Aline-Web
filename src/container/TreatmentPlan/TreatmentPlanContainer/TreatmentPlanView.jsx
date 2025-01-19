@@ -6,6 +6,7 @@ import Button from '../../../components/Button/Button';
 import { steps } from '../treatmentPlanConstants';
 import { useLocation } from 'react-router-dom';
 import FileUploader from '../../../components/FileUploader/FileUploader';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import './TreatmentPlanForm.scss';
 
@@ -108,14 +109,14 @@ const TreatmentPlanView = ({
                 Plan Type: &nbsp; <span>{treatmentPlanCategory}</span>
               </label>
             </div>
-            <div className="step-container">
+            {/* <div className="step-container">
               <label className="">
                 Price Quotation: &nbsp;{' '}
                 <span>
                   {price?.price} {price?.currency?.toUpperCase()}
                 </span>
               </label>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -145,21 +146,31 @@ const TreatmentPlanView = ({
           className={`patient-details-input-fields gap-8 pdf-container marginView`}
         >
           <span className="mb-2 sub-heading">Treatment Simulation</span>
-          <div className="arches-container planURL">
-            <label className="">
+          <div className="flexWithJustifyContent planURL">
+            <label>
               Plan URL: &nbsp;
               {treatmentSimulationsURL && treatmentSimulationsURL.length > 0 ? (
-                <a
-                  href={
-                    treatmentSimulationsURL[0].startsWith('http')
-                      ? treatmentSimulationsURL[0]
-                      : `http://${treatmentSimulationsURL[0]}`
+                <OverlayTrigger
+                  key={'planurl'}
+                  placement={'top'}
+                  overlay={
+                    <Tooltip id={'planurl'}>
+                      {treatmentSimulationsURL?.[0]}
+                    </Tooltip>
                   }
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
-                  {treatmentSimulationsURL[0]}
-                </a>
+                  <a
+                    href={
+                      treatmentSimulationsURL?.[0].startsWith('http')
+                        ? treatmentSimulationsURL?.[0]
+                        : `http://${treatmentSimulationsURL?.[0]}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {treatmentSimulationsURL?.[0]}
+                  </a>
+                </OverlayTrigger>
               ) : (
                 <span className="no-url">No URL available</span>
               )}
@@ -205,7 +216,7 @@ const TreatmentPlanView = ({
           </div>
         </div> */}
 
-        <div className="arches-container">
+        <div className="flexWithJustifyContent">
           {!isLabSideUser && !isDraftPlan && (
             <Button
               title="Approve Plan"

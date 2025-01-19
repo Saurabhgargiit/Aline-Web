@@ -125,6 +125,13 @@
     width: 100%;
     max-width: 100%;
   }
+  .arches-container {
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .arches-container + label {
+    margin-top: 2rem;
+  }
 }
 
 @media (min-width: 768px) {

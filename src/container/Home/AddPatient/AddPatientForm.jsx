@@ -21,6 +21,8 @@ const AddPatientForm = forwardRef(
       gender: '',
       age: '',
       nationality: '',
+      filePatientID: '',
+      labPatientID: '',
       dateOfScan: CommonUtils.formatDate(new Date()),
     });
 
@@ -54,15 +56,9 @@ const AddPatientForm = forwardRef(
         case 'gender':
           return value.trim() !== '';
         case 'age':
-          // Ensure the age is a valid number between 1 and 120
+          if (value === '') return false;
           const ageNum = parseInt(value, 10);
           return !isNaN(ageNum) && ageNum > 0 && ageNum <= 120;
-        // case 'dateOfScan':
-        //   if (isEdit) return !!value;
-        //   // Ensure the date is not in the past while creating new patient
-        //   const today = new Date();
-        //   const selectedDate = new Date(value);
-        //   return selectedDate >= today;
         default:
           return true;
       }
@@ -70,7 +66,6 @@ const AddPatientForm = forwardRef(
 
     const handleInputChange = (field, value) => {
       const isValid = validateField(field, value);
-      if (field === 'age' && !isValid) return;
       setFormData((prev) => ({ ...prev, [field]: value }));
       setFormValidity((prev) => ({ ...prev, [`${field}Valid`]: isValid }));
     };
@@ -289,7 +284,12 @@ const AddPatientForm = forwardRef(
     });
 
     return (
-      <form onSubmit={handleSubmit} ref={ref} id="add-patient-form">
+      <form
+        onSubmit={handleSubmit}
+        ref={ref}
+        id="add-patient-form"
+        className="add-patient-form"
+      >
         <div className="label-input-container">
           <label htmlFor="patient-name">Patient Name*</label>
           <input
@@ -297,7 +297,8 @@ const AddPatientForm = forwardRef(
             type="text"
             value={formData.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
-          ></input>
+            placeholder="Enter patient name"
+          />
         </div>
         <div
           className={`error-Msg height1rem ${
@@ -307,16 +308,18 @@ const AddPatientForm = forwardRef(
           {nameErr}
         </div>
 
-        {/* Doctor Dropdown  */}
+        {/* Doctor Dropdown */}
         <div className="label-input-container">
           <label htmlFor="doctor-name">Doctor Name*</label>
-          <Dropdown
-            id="doctor-name"
-            options={doctorList}
-            selectedValue={formData.doctorID}
-            onChangeCallBk={(value) => handleInputChange('doctorID', value)}
-            disabled={CommonUtils.isDoctor(role)}
-          />
+          <div className="dropdown-container">
+            <Dropdown
+              id="doctor-name"
+              options={doctorList}
+              selectedValue={formData.doctorID}
+              onChangeCallBk={(value) => handleInputChange('doctorID', value)}
+              disabled={CommonUtils.isDoctor(role)}
+            />
+          </div>
         </div>
         <div
           className={`error-Msg height1rem ${
@@ -391,10 +394,9 @@ const AddPatientForm = forwardRef(
             id="age"
             type="number"
             value={formData.age}
-            min="1" // Set minimum value to 1
-            max="120" // Set maximum value to 120
+            min="1"
+            max="120"
             onChange={(e) => handleInputChange('age', e.target.value)}
-            // onWheel={handleWheel}
             onWheel={(e) => e.target.blur()}
           ></input>
         </div>
@@ -406,6 +408,30 @@ const AddPatientForm = forwardRef(
           {ageError}
         </div>
 
+        {/* File Patient ID */}
+        <div className="label-input-container">
+          <label htmlFor="filePatientID">
+            Patient ID (Clinic) / File Number
+          </label>
+          <input
+            id="filePatientID"
+            type="text"
+            value={formData.filePatientID}
+            onChange={(e) => handleInputChange('filePatientID', e.target.value)}
+          ></input>
+        </div>
+
+        {/* Lab Patient ID */}
+        <div className="label-input-container">
+          <label htmlFor="labPatientID">Patient ID (Lab)</label>
+          <input
+            id="labPatientID"
+            type="text"
+            value={formData.labPatientID}
+            onChange={(e) => handleInputChange('labPatientID', e.target.value)}
+          ></input>
+        </div>
+
         {/* Nationality */}
         <div className="label-input-container mb-4">
           <label htmlFor="nationality">Nationality</label>
@@ -414,7 +440,8 @@ const AddPatientForm = forwardRef(
             type="text"
             value={formData.nationality}
             onChange={(e) => handleInputChange('nationality', e.target.value)}
-          ></input>
+            placeholder="Enter nationality"
+          />
         </div>
       </form>
     );

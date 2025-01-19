@@ -33,8 +33,19 @@
 }
 
 .planURL {
-  justify-content: flex-start;
-  gap: 2rem;
+  display: -webkit-box; /* Create a flexible box layout */
+  -webkit-box-orient: vertical; /* Set the orientation to vertical */
+  -webkit-line-clamp: 2; /* Limit text to 2 lines */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Display ellipsis (...) */
+  height: auto; /* Adjust height based on content */
+  line-height: 1.5rem; /* Optional: Adjust line height for spacing */
+  max-height: calc(
+    1.5rem * 2
+  ); /* Match line height times the number of lines */
+  word-wrap: break-word; /* Handle long words for better readability */
+  max-width: 100%;
+
   input {
     flex-grow: 1;
   }
