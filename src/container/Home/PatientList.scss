@@ -70,11 +70,22 @@
 
   .home-page-name-date {
     width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
 
     .home-page-name {
+      flex-wrap: wrap;
+      word-break: break-all;
+      overflow: hidden;
+      max-width: 100%;
+      width: 100%;
+      text-overflow: ellipsis;
     }
 
     .home-page-date {
+      padding-bottom: 4px;
     }
   }
 
@@ -96,6 +107,21 @@
     .home-page-play {
       width: 1.75rem;
       margin-right: 0.3rem;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .home-row-container {
+    gap: 0.8rem;
+    .icon-container {
+      margin-right: 0;
+      flex-basis: 20%;
+      max-width: 20%;
+    }
+    .img-container-top {
+      // flex-basis: 20%;
+      // max-width: 20%;
     }
   }
 }

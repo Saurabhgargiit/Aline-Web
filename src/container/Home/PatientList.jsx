@@ -283,12 +283,16 @@ const PatientList = ({ editPatientHandler, userAdded, setUserAdded }) => {
         </div>
         <div className="home-page-name-date mt-2">
           <div className="home-page-name font700">{el.name}</div>
-          {!ScreenUtils.isMobileScreen() && (
+          {
             <div className="home-page-date font14">
-              {'Scan Date:' +
-                CommonUtils.formatDate(new Date(el.dateOfScan), true, 'short')}
+              {(!ScreenUtils.isMobileScreen() ? 'Scan Date:' : '') +
+                CommonUtils.formatDate(
+                  new Date(el.dateOfScan),
+                  true,
+                  !ScreenUtils.isMobileScreen() ? 'short' : 'numeric'
+                )}
             </div>
-          )}
+          }
         </div>
         <Status
           patientID={el.id}
