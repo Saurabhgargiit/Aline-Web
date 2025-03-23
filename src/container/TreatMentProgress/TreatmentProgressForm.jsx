@@ -41,7 +41,7 @@ const TreatmentProgressForm = () => {
     mode = 'view';
   } else {
     mode = 'view';
-    console.warn('Unexpected visitMode. Defaulting to "view" mode.');
+    // console.warn('Unexpected visitMode. Defaulting to "view" mode.');
   }
 
   const isAdd = mode === 'add';
@@ -82,7 +82,7 @@ const TreatmentProgressForm = () => {
     try {
       const res = await getCall('GET_PROGRESS_DETAIL', [
         patientID,
-        visitID || '6751f5562d4dfa31bc530d6c', // Placeholder for a real visitID
+        visitID, // Placeholder for a real visitID
       ]);
 
       if (res.result === 'success' && res.data) {
