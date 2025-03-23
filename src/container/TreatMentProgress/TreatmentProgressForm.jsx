@@ -288,7 +288,6 @@ const TreatmentProgressForm = () => {
       photos: fileObj.photos,
     }));
   };
-  console.log(formValues);
 
   useEffect(() => {
     if (Array.isArray(formValues.photos) && formValues.photos.length) {

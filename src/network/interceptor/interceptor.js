@@ -55,7 +55,7 @@ function createAxiosResponseInterceptor(axiosInstance) {
         return response;
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         // Reject promise if usual error
         if (error !== undefined && error.response !== undefined) {
           if (
