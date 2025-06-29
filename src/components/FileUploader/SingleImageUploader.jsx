@@ -1,29 +1,21 @@
 import React from 'react';
-import ImageUploader from './ImageUploader';
+import UnifiedFileUploader from './UnifiedFileUploader';
 
-function SingleImageUploader({
-  label,
-  labelkey,
-  fileTypeRestrictions,
-  patientID,
-  rebootID,
-  existingFile,
-  onFileUpload,
-  isEdit,
-  imgClickHandler,
-}) {
+/**
+ * SingleImageUploader Component - Legacy wrapper for backward compatibility
+ * 
+ * This component serves as a compatibility layer for existing code that uses
+ * the old SingleImageUploader component. It maps props to UnifiedFileUploader
+ * with multiple=false.
+ *
+ * @param {Object} props - All props are passed through to UnifiedFileUploader
+ */
+function SingleImageUploader(props) {
   return (
-    <ImageUploader
-      label={label}
-      labelkey={labelkey}
-      fileTypeRestrictions={fileTypeRestrictions}
-      patientID={patientID}
-      rebootID={rebootID}
+    <UnifiedFileUploader
+      {...props}
+      fileType="image"
       multiple={false}
-      existingFile={existingFile}
-      onFileUpload={onFileUpload}
-      isEdit={isEdit}
-      imgClickHandler={imgClickHandler}
     />
   );
 }

@@ -1,29 +1,21 @@
 import React from 'react';
-import ImageUploader from './ImageUploader';
+import UnifiedFileUploader from './UnifiedFileUploader';
 
-function MultipleImagesUploader({
-  label,
-  labelkey,
-  fileTypeRestrictions,
-  patientID,
-  folder,
-  existingFiles,
-  onFilesUpload,
-  isEdit,
-  imgClickHandler,
-}) {
+/**
+ * MultipleImagesUploader Component - Legacy wrapper for backward compatibility
+ * 
+ * This component serves as a compatibility layer for existing code that uses
+ * the old MultipleImagesUploader component. It maps props to UnifiedFileUploader
+ * with multiple=true.
+ *
+ * @param {Object} props - All props are passed through to UnifiedFileUploader
+ */
+function MultipleImagesUploader(props) {
   return (
-    <ImageUploader
-      label={label}
-      labelkey={labelkey}
-      fileTypeRestrictions={fileTypeRestrictions}
-      patientID={patientID}
-      folder={folder}
+    <UnifiedFileUploader
+      {...props}
+      fileType="image"
       multiple={true}
-      existingFiles={existingFiles}
-      onFilesUpload={onFilesUpload}
-      isEdit={isEdit}
-      imgClickHandler={imgClickHandler}
     />
   );
 }

@@ -10,6 +10,7 @@ import Download from 'yet-another-react-lightbox/plugins/download';
 import { putCall } from '../../../utils/commonfunctions/apicallactions';
 
 import SingleImageUploader from '../../../components/FileUploader/SingleImageUploader';
+import ScansUploader from '../../../components/FileUploader/ScansUploader';
 
 import './PhotosScans.scss';
 
@@ -197,22 +198,36 @@ function PhotosScans({
             .filter((k) => k !== 'scans' && k !== 'scanURL')
             .indexOf(key);
 
+          // Use ScansUploader for scans and SingleImageUploader for other files
           return (
             <div
               className="patient-details-input-fields photo-scans"
               key={`div-${idx}`}
             >
-              <SingleImageUploader
-                label={label}
-                labelkey={key}
-                fileTypeRestrictions={fileInputType}
-                patientID={patientID}
-                rebootID={rebootID}
-                existingFile={selectedFiles[key]?.[0]}
-                onFileUpload={handleFileUpload}
-                isEdit={isEdit}
-                imgClickHandler={() => openLightbox(lightboxImageIndex)}
-              />
+              {key === 'scans' ? (
+                <ScansUploader
+                  label={label}
+                  labelkey={key}
+                  fileTypeRestrictions={fileInputType}
+                  patientID={patientID}
+                  rebootID={rebootID}
+                  existingFiles={selectedFiles[key] || []}
+                  onFilesUpload={handleFileUpload}
+                  isEdit={isEdit}
+                />
+              ) : (
+                <SingleImageUploader
+                  label={label}
+                  labelkey={key}
+                  fileTypeRestrictions={fileInputType}
+                  patientID={patientID}
+                  rebootID={rebootID}
+                  existingFile={selectedFiles[key]?.[0]}
+                  onFileUpload={handleFileUpload}
+                  isEdit={isEdit}
+                  imgClickHandler={() => openLightbox(lightboxImageIndex)}
+                />
+              )}
             </div>
           );
         })}

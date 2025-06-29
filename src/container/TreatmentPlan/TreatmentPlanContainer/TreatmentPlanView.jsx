@@ -128,7 +128,8 @@ const TreatmentPlanView = ({
                 <FileUploader
                   key={'pdf-view-IPR ' + index}
                   id={'pdf-view-IPR ' + index}
-                  label="IPR_Report"
+                  // label="IPR_Report"
+                  labelkey="iprAndAttachmentReports"
                   fileType="pdf"
                   onUploadComplete={(fileData) => () => {}}
                   styleClassName={'pdf-container'}
@@ -177,13 +178,13 @@ const TreatmentPlanView = ({
             </label>
           </div>
           <div className="pdf-container mt-3">
-            <label className=""> Treatment Simulation Video: &nbsp;</label>
+            <label className="mb-2"> Treatment Simulation Video: &nbsp;</label>
             {treatmentSimulationsAttachments &&
             treatmentSimulationsAttachments.length > 0 ? (
               <FileUploader
                 key={'video-upload'}
                 id={'video-upload'}
-                label="Treatment_Video"
+                labelkey="treatmentSimulationsAttachments"
                 fileType="video"
                 onUploadComplete={(fileData) => {}}
                 uploadedFileFromProps={treatmentSimulationsAttachments[0]?.url}
@@ -194,27 +195,6 @@ const TreatmentPlanView = ({
             )}
           </div>
         </div>
-
-        {/* <div className={`patient-details-input-fields gap-8 marginView`}>
-          <span className="mb-2 sub-heading">Treatment Simulation</span>
-          <div className="arches-container">
-            <label className="">
-              Treatment Simulation Video: &nbsp;
-              {treatmentSimulationsAttachments &&
-              treatmentSimulationsAttachments.length > 0 ? (
-                <a
-                  href={treatmentSimulationsAttachments[0]?.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Video
-                </a>
-              ) : (
-                <span className="no-url">No Video available</span>
-              )}
-            </label>
-          </div>
-        </div> */}
 
         <div className="flexWithJustifyContent">
           {!isLabSideUser && !isDraftPlan && (
