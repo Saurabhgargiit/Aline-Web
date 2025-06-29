@@ -221,9 +221,7 @@ function TreatmentProgress() {
   if (isLoading) {
     return (
       <div className="patientAddEditTopContainer">
-        {/* <div className="patientAddEditContainer"> */}
         <Loader />
-        {/* </div> */}
       </div>
     );
   }
