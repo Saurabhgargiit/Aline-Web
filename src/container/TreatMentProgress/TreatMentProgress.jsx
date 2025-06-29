@@ -1,11 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import SVG from 'react-inlinesvg';
+import { toast } from 'react-toastify';
 
 import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
+import DeleteConfirmationModal from '../../components/Modal/DeleteConfirmationModal';
 import { noDataInfo } from '../../utils/globalConstants';
-import { getCall } from '../../utils/commonfunctions/apicallactions';
+import { getCall, deleteCall } from '../../utils/commonfunctions/apicallactions';
 import { visitTypes, defaultVisitTypes } from './TreatmentProgressConstants';
 
 import './TreatmentProgressForm.scss';
@@ -38,6 +40,8 @@ function TreatmentProgress() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [dataToDelete, setDataToDelete] = useState({});
 
   const getData = async () => {
     setIsLoading(true);
@@ -59,6 +63,44 @@ function TreatmentProgress() {
     }
   };
 
+  const handleDeleteClick = (item) => {
+    setDataToDelete(item);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = async (item) => {
+    try {
+      const res = await deleteCall('DELETE_PROGRESS', [patientID, item.id]);
+      if (res.result === 'success') {
+        toast.success('Progress entry deleted successfully.', {
+          position: 'top-right',
+          hideProgressBar: false,
+          autoClose: 2000,
+          closeOnClick: true,
+          theme: 'light',
+        });
+        // Refresh the data after successful deletion
+        await getData();
+      } else {
+        toast.error('Failed to delete progress entry. Please try again.', {
+          position: 'top-right',
+          hideProgressBar: false,
+          autoClose: 2000,
+          closeOnClick: true,
+          theme: 'light',
+        });
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting the progress entry.', {
+        position: 'top-right',
+        hideProgressBar: false,
+        autoClose: 2000,
+        closeOnClick: true,
+        theme: 'light',
+      });
+    }
+  };
+
   useEffect(() => {
     if (patientID) {
       getData();
@@ -69,24 +111,44 @@ function TreatmentProgress() {
     return <span>{item[key]}</span>;
   };
 
-  // Updated to add query params with id=item.id
+  // Updated to add query params with id=item.id and include delete icon
   const getActionItems = (key, item) => {
+    const deleteIcon = (
+      <span
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDeleteClick(item);
+        }}
+        className="delete-action"
+        title="Delete progress entry"
+        // style={{ marginLeft: '10px' }}
+      >
+        <SVG src={require(`../../assets/icons/deleteBin.svg`).default} />
+      </span>
+    );
+
     if (item.clickable) {
       return (
-        <span
-          onClick={() => navigate(`${location.pathname}/visit?id=${item.id}`)}
-          className="visit-action"
-        >
-          {(item[key] &&
-            visitTypes.find((el) => el.id === item[key])?.['label']) ||
-            'Click for visit update'}
+        <span className="visit-action-container">
+          <span
+            onClick={() => navigate(`${location.pathname}/visit?id=${item.id}`)}
+            className="visit-action"
+          >
+            {(item[key] &&
+              visitTypes.find((el) => el.id === item[key])?.['label']) ||
+              'Click for visit update'}
+          </span>
+          {deleteIcon}
         </span>
       );
     } else {
       return (
-        <span>
-          {defaultVisitTypes.find((el) => el.id === item[key])?.['label'] ||
-            item[key]}
+        <span className="visit-action-container">
+          <span>
+            {defaultVisitTypes.find((el) => el.id === item[key])?.['label'] ||
+              item[key]}
+          </span>
+          {deleteIcon}
         </span>
       );
     }
@@ -178,6 +240,19 @@ function TreatmentProgress() {
           tooltip={'Log Visit'}
         />
       </div>
+      
+      {deleteModalOpen && (
+        <DeleteConfirmationModal
+          modalOpen={deleteModalOpen}
+          setDeleteModalOpen={setDeleteModalOpen}
+          refetchDataFn={getData}
+          deleteUserHandlerFn={handleDelete}
+          dataToDelete={dataToDelete}
+          setDataToDelete={setDataToDelete}
+          type="progress entry"
+          setLoading={setIsLoading}
+        />
+      )}
     </div>
   );
 }

@@ -123,9 +123,19 @@ const TreatmentPlanForm = (props) => {
   };
 
   const handleFileUpload = (type, fileData) => {
+    // Handle the case where fileData comes wrapped in an object with labelkey
+    let actualFileData;
+    if (fileData && typeof fileData === 'object' && fileData[type]) {
+      // Extract the file data from the wrapper object
+      actualFileData = fileData[type];
+    } else {
+      // Handle direct file data (legacy compatibility)
+      actualFileData = fileData;
+    }
+    
     setFormValues((prevValues) => ({
       ...prevValues,
-      [type]: fileData ? [fileData] : [],
+      [type]: actualFileData ? (Array.isArray(actualFileData) ? actualFileData : [actualFileData]) : [],
     }));
   };
 
@@ -295,6 +305,7 @@ const TreatmentPlanForm = (props) => {
               key={'file-upload-IPR'}
               id={'file-upload-IPR'}
               label="IPR_Report"
+              labelkey="iprAndAttachmentReports"
               fileType="pdf"
               onUploadComplete={(fileData) =>
                 handleFileUpload('iprAndAttachmentReports', fileData)
@@ -339,7 +350,7 @@ const TreatmentPlanForm = (props) => {
             <FileUploader
               key={'video-upload'}
               id={'video-upload'}
-              label="Treatment_Video"
+              labelkey="treatmentSimulationsAttachments"
               fileType="video"
               onUploadComplete={(fileData) =>
                 handleFileUpload('treatmentSimulationsAttachments', fileData)

@@ -58,7 +58,11 @@ function PhotosScansForm() {
         if (key === 'scanURL') {
           formattedObj[key] = obj[key] || '';
         } else {
-          formattedObj[key] = [{ url: obj[key][0], key: '' }];
+          if (Array.isArray(obj[key]) && obj[key].length > 0) {
+            formattedObj[key] = obj[key].map(url => ({ url: url, key: '' }));
+          } else {
+            formattedObj[key] = [{ url: '', key: '' }];
+          }
         }
       }
     });

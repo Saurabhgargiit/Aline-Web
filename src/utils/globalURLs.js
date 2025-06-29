@@ -63,4 +63,5 @@ export class ApiRelativePaths {
   static GET_TABLE_OF_PROGRESS =
     '/api/v1/aline/treatmentProgress/getAllProgress';
   static GET_PROGRESS_DETAIL = '/api/v1/aline/treatmentProgress/getProgress';
+  static DELETE_PROGRESS = '/api/v1/aline/treatmentProgress/deleteProgress';
 }

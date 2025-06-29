@@ -1,7 +1,6 @@
 import axiosInstance from '../../network/interceptor/interceptor';
 import { ApiRelativePaths } from '../globalURLs';
 import { CommonUtils } from './commonfunctions';
-import axios from 'axios';
 
 let ApiPaths = ApiRelativePaths;
 
